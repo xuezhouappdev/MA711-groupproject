@@ -1,0 +1,29 @@
+---
+title: "Draft-assinment1"
+author: "Kun Shen, Xiang Li, Xue Zhou"
+date: "February 10, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1. Introduction
+# 2. Objective
+# 3. Dataset Preparation
+Our analysis focuses on the data of year 2012 -2013 of 23 variables. We chose the median income 6 years after graduation as our predictor variable, and eliminated many fields with bunch of missing values as well as some fields not pertainig enougn to post-graduation income. We then fosued primarily on a set of 23 variables, including gender, age, ethnic, acedemic costs, family income, completetion rates and replayment rate.  
+
+
+The following libraries have been used in the analysis: 
+```{r, message=FALSE}
+
+library(readr)
+library(dplyr)
+
+```
+
+
+We loaded ScoreCard from the US Dapartment of Education. The main dataset spans nearly 20 years of data and covering multiple sources including IPEDS, NSLDS, and Department of Treasury. To ensure the maximum data accurary and availablity, we choose the subset of year 2012 - 2013 as our ..... 
+```{r, message=FALSE}
+fulldata = read_csv("/Users/xuezhou/Desktop/MERGED2012_13_PP.csv")
