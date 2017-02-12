@@ -5,7 +5,7 @@ date: "February 10, 2017"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE,warning=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -16,7 +16,7 @@ Our analysis focuses on the data of year 2012 -2013 of 23 variables. We chose th
 
 
 The following libraries have been used in the analysis: 
-```{r, message=FALSE}
+```{r, message=FALSE,warning=FALSE}
 
 library(readr)
 library(dplyr)
@@ -27,14 +27,14 @@ library(tidyr)
 
 
 We loaded ScoreCard from the US Dapartment of Education. The main dataset spans nearly 20 years of data and covering multiple sources including IPEDS, NSLDS, and Department of Treasury. To ensure the maximum data accurary and availablity, we choose the subset of year 2012 - 2013 as our analysis sample. 
-```{r, message=FALSE}
+```{r, message=FALSE,warning=FALSE}
 
 data = read.csv("MERGED2012_13_PP.csv",header = T, na.strings = "NULL")
 
 ```
 
 The full dataset contains 1743 variables. 36 variables were intially selected to analyze.
-```{r, message=FALSE}
+```{r, message=FALSE,warning=FALSE}
 
 variable = select(data, STABBR, PREDDEG, LOCALE2, MENONLY, WOMENONLY, CONTROL, ADM_RATE, SATMTMID, SATVRMID, SATWRMID, SAT_AVG,
                   NPT4_PUB,
@@ -62,7 +62,8 @@ variable = select(data, STABBR, PREDDEG, LOCALE2, MENONLY, WOMENONLY, CONTROL, A
                   MN_EARN_WNE_P10,
                   RPY_3YR_RT_SUPP,
                   CDR3)
-head(variable)
+
+
 ```
 
 
@@ -70,8 +71,8 @@ head(variable)
 
 
 
-After loading the dataset, we change variables to correct data types. 
-```{r, message=FALSE}
+After loading the dataset, we change variables to the correct data types. 
+```{r, message=FALSE,warning=FALSE}
 
 class(as.data.frame(apply(variable[,-c(1,2,6)],2,as.numeric)))
 
@@ -85,16 +86,17 @@ variable[,-c(1,2,6)] %>%
 variable$preF=factor(variable$PREDDEG,levels=c(0,1,2,3,4),labels = c("NotClassified","Certificate-degree","Associate's-degree","Bachelor's-degree","Graduate-degree"))
 variable$ctrF=factor(variable$CONTROL,levels = c(1,2,3),labels = c("Public","Private Nonprofit","Private For-profit"))
 
-#combine
+#combine the three datafram to generate a new dataset. 
 data_new <- cbind(variable_num,variable$preF, variable$ctrF,variable$STABBR)
+dim(data_new)
+
 mean(is.na(data_new$NPT4_PUB))
 ```
 
-Deal with missing values
 
 
 
-```{r, message=FALSE}
+```{r, message=FALSE,warning=FALSE}
 
 for (i in 1:length(data_new$NPT4_PRIV)) {
    if (is.na(data_new$NPT4_PRIV[i])) {
@@ -106,21 +108,17 @@ data_new = data_new[,-9]
 colnames(data_new)[9] <- "NPT4_COMBINE"
 ```
 
-Deal with missing values
-```{r, message=FALSE}
+In order to choose the variables that have enough valid data related to the topic, we filtered and considered variables with percent missing value less than 25%. The new data set was named as “data_clean” for further analysis. 
+```{r, message=FALSE,warning=FALSE}
 
 data_clean = data_new[,colMeans(is.na(data_new)) < 0.25]
 write.csv(data_clean,"data_clean.csv")
 ```
 
 #Variable summary
-For numeric variabls, we calculate the basic summary statistics such as median, min, max, mode and quantile. We also use visualizations such hisgroms and boxplots to understand the distribution of the values. For categorical variables, we use frequency table to understand the frequcies of each categories.Box chart is used as a visualization tool.
+For numeric variabls, we calculate the basic summary statistics such as median, min, max, mode and quantile. We also use visualizations such as hisgroms and boxplots to understand the distribution of the values. For categorical variables, we use frequency table to understand the frequcies of each categories.Box chart is used as a visualization tool.
 
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-|col 3 is       | right-aligned | $1600 |
-|col 2 is       | centered      |   $12 |
-|zebra stripes  | are neat      |    $1 |
+The table below lists the variables that will be used for the further analysis: 12 of them are continuous variables while 3 of them are categorical variables. Our data set now contains 120 rows and 15 columns. 120 rows consist of 20 years’ of data for each of the chosen six countries. The 15 columns consist of country name, country code, year, and the twelve indicators.
 
 | Variable Name    | Data Type         | Categorical or Continuous         | hi       |
 | --------------  | ----------------- | --------------------------------- | -------- |
@@ -140,7 +138,56 @@ For numeric variabls, we calculate the basic summary statistics such as median, 
 | variable$ctrF    | Factor            |  Categorical                      |   n      |
 | variable$STABBR  | Factor            |  Categorical                      |   n      |
 
-    
+we will summarize the data set using dplyr functions in the variables summary section.
+
+#4 Goals
+#5 Summary of variables
+##5.1 Individual variable summary
+
+###5.1.1 Average net price for Title IV institutions(both public and private institutions)
+We are using the code below to summarize the continuous data
+
+```{R, message=FALSE, warinig = FALSE}
+
+
+summarize(group_by(data_clean, variable$STABBR),
+          minNPT4_COMBINE=min(NPT4_COMBINE ,na.rm=TRUE),
+          maxNPT4_COMBINE=max(NPT4_COMBINE,na.rm=TRUE),
+          meanNPT4_COMBINE=mean(NPT4_COMBINE,na.rm=TRUE),
+          medianNPT4_COMBINE=median(NPT4_COMBINE,na.rm=TRUE),
+          sdNPT4_COMBINE = sd(NPT4_COMBINE,na.rm=TRUE))
+
+data_clean %>%
+  group_by(variable$STABBR) %>%
+    summarise(minNPT4_COMBINE=min(NPT4_COMBINE ,na.rm=TRUE),    maxNPT4_COMBINE=max(NPT4_COMBINE,na.rm=TRUE),medianNPT4_COMBINE=median(NPT4_COMBINE,na.rm=TRUE))  %>%
+    arrange(medianNPT4_COMBINE)   %>%
+{.}  ->test
+
+test
+
+#Here is the quartile statistics :
+summary(data_clean$NPT4_COMBINE,na.rm=TRUE)
+quantile(data_clean$NPT4_COMBINE,na.rm=TRUE)
+
+
+
+
+  #histogram for NPT_COM
+  ggplot(data=data_clean , aes(NPT4_COMBINE)) + 
+    geom_histogram(breaks=seq(0, 90000, by =2000), 
+                   col="red", 
+                   aes(fill=..count..),na.rm=TRUE)+
+    labs(title="Histogram for NPT_COM") +
+    labs(x="NPT_COM", y="Count")
+```
+
+
+
+
+##5.2 Relationship between variables
+##5.3 Comparison between variables
+
+#6. Findings and Conclusion
     
 
 
