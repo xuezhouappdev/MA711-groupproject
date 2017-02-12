@@ -22,6 +22,7 @@ library(readr)
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+library(plyr)
 
 ```
 
@@ -57,10 +58,13 @@ variable = select(data, STABBR, PREDDEG, LOCALE2, MENONLY, WOMENONLY, CONTROL, A
                   PCTFLOAN,
                   GRAD_DEBT_MDN,
                   WDRAW_DEBT_MDN,
+                  APPL_SCH_PCT_GE2,
                   C150_4,
                   MD_EARN_WNE_P6,
+                  MD_EARN_WNE_P10,
                   RPY_3YR_RT_SUPP,
                   CDR3)
+
 ```
 
 
@@ -70,6 +74,7 @@ variable = select(data, STABBR, PREDDEG, LOCALE2, MENONLY, WOMENONLY, CONTROL, A
 
 After loading the dataset, we change variables to correct data types. 
 ```{r, message=FALSE}
+
 
 
 #numeric
@@ -84,6 +89,7 @@ variable$ctrF=factor(variable$CONTROL,levels = c(1,2,3),labels = c("Public","Pri
 
 #combine
 data_new <- cbind(variable_num,variable$preF, variable$ctrF,variable$STABBR)
+
 ```
 
 Deal with missing values
@@ -113,16 +119,163 @@ write.csv(data_clean,"data_clean.csv")
 For numeric variabls, we calculate the basic summary statistics such as median, min, max, mode and quantile. We also use visualizations such hisgroms and boxplots to understand the distribution of the values. For categorical variables, we use frequency table to understand the frequcies of each categories.Box chart is used as a visualization tool.
 
 
+| Variable Name    | Data Type         | Categorical or Continuous         | Group       |
 | --------------  | ----------------- | --------------------------------- | -------- |
 | NPT4_COMBINE    | Numeric           |  Continuous                       |  Cost    |
 | CDR3             | Numeric           |  Continuous                       | n        |
 | variable$qreF    | Factor            |  Categorical                      |  n       |
 | variable$ctrF    | Factor            |  Categorical                      |   n      |
 | variable$STABBR  | Factor            |  Categorical                      |   n      |
+| DEP_STAT_PCT_IND | Numeric           |  Continuous                       |     Student    |
+| PAR_ED_PCT_1STGEN| Numeric           |  Continuous                       |      Student   |
+| MD_FAMINC        | Numeric           |  Continuous                       |       Student  |
+| PCTPELL          | Numeric           |  Continuous                       |Aid         |
+| PCTFLOAN         | Numeric           |  Continuous                       | Aid        |
+| GRAD_DEBT_MDN    | Numeric           |  Continuous                       |  Aid      |
+| APPL_SCH_PCT_GE2 | Numeric           |  Continuous                       | Student        |
+| WDRAW_DEBT_MDN   | Numeric           |  Continuous                       |    Aid     |
+| MD_EARN_WNE_P6   | Numeric           |  Continuous                       |     Earning    |
+| MD_EARN_WNE_P10  | Numeric           |  Continuous                       |       Earning  |
+| RPY_3YR_RT_SUPP  | Numeric           |  Continuous                       |      Repayment   |
+| CDR3             | Numeric           |  Continuous                       | Repayment        |
+| variable$qreF    | Factor            |  Categorical                      |  School       |
+| variable$ctrF    | Factor            |  Categorical                      |   School      |
+| variable$STABBR  | Factor            |  Categorical                      |   School      |
 
+##School
+
+###1. State
+```{r, message=FALSE}
+state_freq = count(data_clean,"variable$STABBR")[order(-count(data_clean,'variable$STABBR')$freq),]
+state_freq[1:15,]
+data_clean$STABBR1 <- with(data_clean, reorder(variable$STABBR, variable$STABBR, function(x) -length(x)))
+data_clean %>% ggplot(aes(x= STABBR1)) +
+  geom_histogram(stat = "count") 
+```
+
+###2. Predominant Degree
+```{r, message=FALSE}
+prop.table(table(data_clean$`variable$preF`)) * 100
+data_clean %>% ggplot(aes(x=variable$`preF`, fill = 'blue')) + 
+  geom_histogram(stat = "count") +
+  xlab("Degree") 
+```
+
+
+###3. Control of Institution
+
+```{r, message=FALSE}
+prop.table(table(data_clean$`variable$ctrF`)) * 100
+data_clean %>% ggplot(aes(x=variable$`ctrF`, fill = 'blue')) + 
+  geom_histogram(stat = "count") +
+  xlab("Degree")
+```
+
+
+
+
+
+
+
+
+##Student
+###3. How many application do students submit?
+```{r, message=FALSE}
+college_app_2_clean = data_clean$APPL_SCH_PCT_GE2[!is.na(data_clean$APPL_SCH_PCT_GE2)]*100
+summary(college_app_2_clean)
+
+college_app_2_clean %>% as.data.frame() %>%
+    mutate(college_app_1 = 100-college_app_2_clean)%>%
+    {.}  -> college_app
+colnames(college_app)[1] <- "two_or_greater"
+
+college_app %>% gather(key = num_app, value = perc_student) %>%
+{.} -> college_app
+
+college_app %>%
+    ggplot(aes(factor(num_app), perc_student)) +
+    geom_boxplot() 
+```
+
+
+
+
+
+
+##Cost
+###1.Net Price
+
+
+
+
+
+
+##Aid
+
+
+
+
+
+
+###1. The median debt for students who have completed
+
+
+###2. The median debt for students who have not completed
+```{r, message=FALSE}
+median_debt_non_null = data_clean$WDRAW_DEBT_MDN[!is.na(data_clean$WDRAW_DEBT_MDN)]
+summary(median_debt_non_null)
+sd(median_debt_non_null)
+
+#plot a ggplot to better illustrate
+data_clean %>% ggplot(aes(x = WDRAW_DEBT_MDN)) +
+                geom_histogram(binwidth = 450) #warning?
+
+ggplot(data=data_clean,
+       aes(x=WDRAW_DEBT_MDN,
+           fill = I('red'))) +
+    geom_density(alpha=0.5) +
+    scale_x_continuous("Median Debt for Students Who Have Completed")
+```
+
+
+
+##Earning
+
+###. Earning after graduation
+```{r,message=FALSE}
+earning = select(data_clean, MD_EARN_WNE_P6, MD_EARN_WNE_P10 )
+earning_clean = na.omit(earning)
+earning_clean %>%
+    mutate(salary_increase = MD_EARN_WNE_P10-MD_EARN_WNE_P6) %>%
+    {.} -> earning_clean
+summary(earning_clean)
+apply(earning_clean, 2, sd) #dispersion increases
+
+earning_clean %>% gather(key = years_from_entry, value = salary) %>%
+    {.} -> earning_clean1
+
+earning_clean1[earning_clean1$years_from_entry != 'salary_increase',] %>% 
+    ggplot(aes(x = salary, fill =years_from_entry )) +
+    geom_density(alpha = 0.5) + 
+    xlim(0, 150000)
+```
     
     
+##Repayment
 
+###1. 3-year Repayment rate
+```{r,message=FALSE}
+repayment_clean = na.omit(data_clean$RPY_3YR_RT_SUPP)
+summary(repayment_clean)
+qplot(repayment_clean, geom = "histogram")
+```
 
+###2. 3-year Default rate
+```{r,message=FALSE}
+default_clean = na.omit(data_clean$CDR3)
+qplot(default_clean, geom = "histogram")
+
+summary(data_clean$RPY_3YR_RT_SUPP + data_clean$CDR3)
+```
 
 
