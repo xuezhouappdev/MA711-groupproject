@@ -24,6 +24,6 @@ library(dplyr)
 ```
 
 
-We loaded ScoreCard from the US Dapartment of Education. The main dataset spans nearly 20 years of data and covering multiple sources including IPEDS, NSLDS, and Department of Treasury. To ensure the maximum data accurary and availablity, we choose the subset of year 2012 - 2013 as our ..... 
+We loaded ScoreCard from the US Dapartment of Education. The main dataset spans nearly 20 years of data and covering multiple sources including IPEDS, NSLDS, and Department of Treasury. To ensure the maximum data accurary and availablity, we choose the subset of year 2012 - 2013 as our analysis sample. 
 ```{r, message=FALSE}
 fulldata = read_csv("/Users/xuezhou/Desktop/MERGED2012_13_PP.csv")
