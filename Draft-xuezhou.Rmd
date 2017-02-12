@@ -30,6 +30,7 @@ We loaded ScoreCard from the US Dapartment of Education. The main dataset spans 
 ```{r, message=FALSE}
 
 data = read.csv("MERGED2012_13_PP.csv",header = T, na.strings = "NULL")
+data = read.csv("MERGED2012_13_PP.csv",header = T, na.strings = c("NULL","PrivacySuppressed"))
 
 ```
 
@@ -56,13 +57,10 @@ variable = select(data, STABBR, PREDDEG, LOCALE2, MENONLY, WOMENONLY, CONTROL, A
                   PCTFLOAN,
                   GRAD_DEBT_MDN,
                   WDRAW_DEBT_MDN,
-                  APPL_SCH_PCT_GE5,
                   C150_4,
                   MD_EARN_WNE_P6,
-                  MN_EARN_WNE_P10,
                   RPY_3YR_RT_SUPP,
                   CDR3)
-head(variable)
 ```
 
 
@@ -73,7 +71,6 @@ head(variable)
 After loading the dataset, we change variables to correct data types. 
 ```{r, message=FALSE}
 
-class(as.data.frame(apply(variable[,-c(1,2,6)],2,as.numeric)))
 
 #numeric
 variable[,-c(1,2,6)] %>%
@@ -87,7 +84,6 @@ variable$ctrF=factor(variable$CONTROL,levels = c(1,2,3),labels = c("Public","Pri
 
 #combine
 data_new <- cbind(variable_num,variable$preF, variable$ctrF,variable$STABBR)
-mean(is.na(data_new$NPT4_PUB))
 ```
 
 Deal with missing values
@@ -116,25 +112,9 @@ write.csv(data_clean,"data_clean.csv")
 #Variable summary
 For numeric variabls, we calculate the basic summary statistics such as median, min, max, mode and quantile. We also use visualizations such hisgroms and boxplots to understand the distribution of the values. For categorical variables, we use frequency table to understand the frequcies of each categories.Box chart is used as a visualization tool.
 
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-|col 3 is       | right-aligned | $1600 |
-|col 2 is       | centered      |   $12 |
-|zebra stripes  | are neat      |    $1 |
 
-| Variable Name    | Data Type         | Categorical or Continuous         | hi       |
 | --------------  | ----------------- | --------------------------------- | -------- |
 | NPT4_COMBINE    | Numeric           |  Continuous                       |  Cost    |
-| DEP_STAT_PCT_IND | Numeric           |  Continuous                       |     n    |
-| PAR_ED_PCT_1STGEN| Numeric           |  Continuous                       |      n   |
-| MD_FAMINC        | Numeric           |  Continuous                       |       n  |
-| PCTPELL          | Numeric           |  Continuous                       |n         |
-| PCTFLOAN         | Numeric           |  Continuous                       | n        |
-| GRAD_DEBT_MDN    | Numeric           |  Continuous                       |  nn      |
-| WDRAW_DEBT_MDN   | Numeric           |  Continuous                       |    n     |
-| MD_EARN_WNE_P6   | Numeric           |  Continuous                       |     n    |
-| MN_EARN_WNE_P10  | Numeric           |  Continuous                       |       n  |
-| RPY_3YR_RT_SUPP  | Numeric           |  Continuous                       |      n   |
 | CDR3             | Numeric           |  Continuous                       | n        |
 | variable$qreF    | Factor            |  Categorical                      |  n       |
 | variable$ctrF    | Factor            |  Categorical                      |   n      |
