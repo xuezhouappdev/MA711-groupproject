@@ -20,10 +20,129 @@ The following libraries have been used in the analysis:
 
 library(readr)
 library(dplyr)
+library(ggplot2)
+library(tidyr)
 
 ```
 
 
 We loaded ScoreCard from the US Dapartment of Education. The main dataset spans nearly 20 years of data and covering multiple sources including IPEDS, NSLDS, and Department of Treasury. To ensure the maximum data accurary and availablity, we choose the subset of year 2012 - 2013 as our ..... 
 ```{r, message=FALSE}
-fulldata = read_csv("/Users/xuezhou/Desktop/MERGED2012_13_PP.csv")
+
+data = read.csv("MERGED2012_13_PP.csv",header = T, na.strings = "NULL")
+
+```
+
+The full dataset contains 1743 variables. 36 variables were intially selected to analyze.
+```{r, message=FALSE}
+
+variable = select(data, STABBR, PREDDEG, LOCALE2, MENONLY, WOMENONLY, CONTROL, ADM_RATE, SATMTMID, SATVRMID, SATWRMID, SAT_AVG,
+                  NPT4_PUB,
+                  NPT4_PRIV,
+                  UG,
+                  UG_NRA,
+                  UG_UNKN,
+                  UG_WHITENH,
+                  UG_BLACKNH,
+                  UG_API,
+                  UG_AIANOLD,
+                  UG_HISPOLD,
+                  DEP_STAT_PCT_IND,
+                  PAR_ED_PCT_1STGEN,
+                  MD_FAMINC,
+                  MEDIAN_HH_INC,
+                  POVERTY_RATE,
+                  PCTPELL,
+                  PCTFLOAN,
+                  GRAD_DEBT_MDN,
+                  WDRAW_DEBT_MDN,
+                  APPL_SCH_PCT_GE5,
+                  C150_4,
+                  MD_EARN_WNE_P6,
+                  MN_EARN_WNE_P10,
+                  RPY_3YR_RT_SUPP,
+                  CDR3)
+head(variable)
+```
+
+
+
+
+
+
+After loading the dataset, we change variables to correct data types. 
+```{r, message=FALSE}
+
+class(as.data.frame(apply(variable[,-c(1,2,6)],2,as.numeric)))
+
+#numeric
+variable[,-c(1,2,6)] %>%
+    apply(2, as.numeric) %>%
+    as.data.frame() %>%
+    {.} -> variable_num
+
+#categorical
+variable$preF=factor(variable$PREDDEG,levels=c(0,1,2,3,4),labels = c("NotClassified","Certificate-degree","Associate's-degree","Bachelor's-degree","Graduate-degree"))
+variable$ctrF=factor(variable$CONTROL,levels = c(1,2,3),labels = c("Public","Private Nonprofit","Private For-profit"))
+
+#combine
+data_new <- cbind(variable_num,variable$preF, variable$ctrF,variable$STABBR)
+mean(is.na(data_new$NPT4_PUB))
+```
+
+Deal with missing values
+
+
+
+```{r, message=FALSE}
+
+for (i in 1:length(data_new$NPT4_PRIV)) {
+   if (is.na(data_new$NPT4_PRIV[i])) {
+       data_new$NPT4_PRIV[i] = data_new$NPT4_PUB[i]
+   }
+}
+mean(is.na(data_new$NPT4_PRIV))
+data_new = data_new[,-9]
+colnames(data_new)[9] <- "NPT4_COMBINE"
+```
+
+Deal with missing values
+```{r, message=FALSE}
+
+data_clean = data_new[,colMeans(is.na(data_new)) < 0.25]
+write.csv(data_clean,"data_clean.csv")
+```
+
+#Variable summary
+For numeric variabls, we calculate the basic summary statistics such as median, min, max, mode and quantile. We also use visualizations such hisgroms and boxplots to understand the distribution of the values. For categorical variables, we use frequency table to understand the frequcies of each categories.Box chart is used as a visualization tool.
+
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+|col 3 is       | right-aligned | $1600 |
+|col 2 is       | centered      |   $12 |
+|zebra stripes  | are neat      |    $1 |
+
+| Variable Name    | Data Type         | Categorical or Continuous         | hi       |
+| --------------  | ----------------- | --------------------------------- | -------- |
+| NPT4_COMBINE    | Numeric           |  Continuous                       |  Cost    |
+| DEP_STAT_PCT_IND | Numeric           |  Continuous                       |     n    |
+| PAR_ED_PCT_1STGEN| Numeric           |  Continuous                       |      n   |
+| MD_FAMINC        | Numeric           |  Continuous                       |       n  |
+| PCTPELL          | Numeric           |  Continuous                       |n         |
+| PCTFLOAN         | Numeric           |  Continuous                       | n        |
+| GRAD_DEBT_MDN    | Numeric           |  Continuous                       |  nn      |
+| WDRAW_DEBT_MDN   | Numeric           |  Continuous                       |    n     |
+| MD_EARN_WNE_P6   | Numeric           |  Continuous                       |     n    |
+| MN_EARN_WNE_P10  | Numeric           |  Continuous                       |       n  |
+| RPY_3YR_RT_SUPP  | Numeric           |  Continuous                       |      n   |
+| CDR3             | Numeric           |  Continuous                       | n        |
+| variable$qreF    | Factor            |  Categorical                      |  n       |
+| variable$ctrF    | Factor            |  Categorical                      |   n      |
+| variable$STABBR  | Factor            |  Categorical                      |   n      |
+
+    
+    
+
+
+
+
