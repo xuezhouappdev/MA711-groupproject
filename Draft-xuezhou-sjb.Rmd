@@ -320,7 +320,7 @@ Then we grouped by the data into the control type(Private For-profit, Public, Pr
 
 data_clean %>%
   group_by(variable$ctrF) %>%
-    summarise(minDEP_STAT_PCT_IND=min(DEP_STAT_PCT_IND ,na.rm=TRUE),    
+    dplyr::summarise(minDEP_STAT_PCT_IND=min(DEP_STAT_PCT_IND ,na.rm=TRUE),    
     maxDEP_STAT_PCT_IND=max(DEP_STAT_PCT_IND,na.rm=TRUE),medianDEP_STAT_PCT_IND=median(DEP_STAT_PCT_IND,na.rm=TRUE))  %>%
        arrange(desc(medianDEP_STAT_PCT_IND))   %>%
 {.}  ->DEP_STAT_PCT_IND_CONTROL
@@ -411,7 +411,7 @@ Then we grouped by the data into the college type level to take a further analys
 
 data_clean %>%
   group_by(variable$STABBR ) %>%
-    summarise(minPCTFLOAN=min(PCTFLOAN ,na.rm=TRUE),    
+    dplyr::summarise(minPCTFLOAN=min(PCTFLOAN ,na.rm=TRUE),    
     maxPCTFLOAN=max(PCTFLOAN,na.rm=TRUE),medianPCTFLOAN=median(PCTFLOAN,na.rm=TRUE))  %>%
        arrange(medianPCTFLOAN)   %>%
 {.}  ->PCTFLOAN_STATE
@@ -421,7 +421,7 @@ PCTFLOAN_STATE
 
 data_clean %>%
   group_by(variable$ctrF ) %>%
-    dplsummarise(minPCTFLOAN=min(PCTFLOAN ,na.rm=TRUE),    
+    dplyr::summarise(minPCTFLOAN=min(PCTFLOAN ,na.rm=TRUE),    
     maxPCTFLOAN=max(PCTFLOAN,na.rm=TRUE),medianPCTFLOAN=median(PCTFLOAN,na.rm=TRUE))  %>%
        arrange(medianPCTFLOAN)   %>%
 {.}  ->PCTFLOAN_CONTROL
@@ -432,7 +432,7 @@ PCTFLOAN_CONTROL
 #stacked histogram
 data_clean %>%
   ggplot(aes(x=PCTFLOAN)) +
-  geom_bar(binwidth=5,aes(fill=variable$ctrF ))
+  geom_bar(binwidth=0.1,aes(fill=variable$ctrF ))
 
 
 
