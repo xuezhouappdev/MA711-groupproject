@@ -355,7 +355,7 @@ summarize(data_clean,
 
 ```
 From the output, we can tell that the range is between 0 to 100%.	 Among the colleges in the sample, half colleges have this rate as high as 52.7% (median value of 52.7%), which means more than half of undergraduare students are able to receive the Pell Grant to cover their costs. The standard deviation value is 22.57%,  indicating a relative high difference of this element among different colleges, which can also be noticed from the largest range (100%). Below is the code to generate a visual representation in the histgram. 
-
+   
 ```{R}
 
  
