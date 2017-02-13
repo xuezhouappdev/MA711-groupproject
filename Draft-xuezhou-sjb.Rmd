@@ -126,15 +126,15 @@ The table below lists the variables that will be used for the further analysis: 
 | PCTPELL          | Numeric           |Percentage of undergraduates who receive a Pell Grant                 |        Financial Aid            |
 | PCTFLOAN         | Numeric           |Percent of all federal undergraduate students receiving a federal student loan      |  Financial Aid    |
 | GRAD_DEBT_MDN    | Numeric           |The median debt for students who have completed                       |   Financial Aid                 |
-| WDRAW_DEBT_MDN   | Numeric           |  Continuous                       |    n     |
-| MD_EARN_WNE_P6   | Numeric           |  Continuous                       |     n    |
-| MD_EARN_WNE_P10  | Numeric           |  Continuous                       |       n  |
-| RPY_3YR_RT_SUPP  | Numeric           |  Continuous                       |      n   |
-| CDR3             | Numeric           |  Continuous                       | n        |
-| variable$qreF    | Factor            |  Categorical                      |  n       |
-| variable$ctrF    | Factor            |  Categorical                      |   n      |
-| variable$STABBR  | Factor            |  Categorical                      |   n      |
-| APPL_SCH_PCT_GE2 | Numeric           |  Continuous                       | Student        |
+| WDRAW_DEBT_MDN   | Numeric           |The median debt for sutdents who have not completed                      |Financial Aid |
+| MD_EARN_WNE_P6   | Numeric           |Median income six years after entry                       |     earning   |
+| MD_EARN_WNE_P10  | Numeric           |Median income ten years after entry                       |     earning  |
+| RPY_3YR_RT_SUPP  | Numeric           |Repayment rate 3 years after entering repayment                       |Repayment   |
+| CDR3             | Numeric           |Loan default rate 3 years afer entering repayment                       |Repayment        |
+| variable$qreF    | Factor            |Predominant degree offered                      |School       |
+| variable$ctrF    | Factor            |Control of institution                      |School     |
+| variable$STABBR  | Factor            |State                      |School     |
+| APPL_SCH_PCT_GE2 | Numeric           |Percentage of students submitting 2 or more than 2 applications                       | Student        |
 
 
 we will summarize the data set using dplyr functions in the variables summary section.
