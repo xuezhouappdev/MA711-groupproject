@@ -720,6 +720,63 @@ ggplot(data_clean, aes(x =MD_FAMINC, y = PCTPELL)) + geom_point(color="red")+  g
 ```
 From the scatter plot, it is obvious that the MD_FAMINC is in a negative linear relationship with PCTPELL: the data show a downhill pattern from left to right; As the MD_FAMINC increase, the value of PCTPELL decreases. 
 
+#6.6 cost and median debts with earning
+
+
+Next, we analyze the relationship between the amount the debt and post-graduation earning. There are variable in the dataset to summarize the median amount for student body, one for students who already graduated and one for students who have not completed their study. We decide debts for students who have not completed to study in this problem, since it may can be used as a predictor in the future modeling. First, we use scatter plot to visualize the relationship between earning and the amount of debts, the plot clearly shows a positive relationship. Then we further calculate pearson correlation to confirm our hypothesis. The resulting coefficient 0.44 indicatesa moderate linear relationship between earning and debts. 
+
+```{r, message=FALSE}
+
+
+data_clean %>% ggplot(aes(x = WDRAW_DEBT_MDN, y = MD_EARN_WNE_P6)) + 
+                geom_jitter() +
+                geom_smooth(method = "lm", se = FALSE, col = 'red')
+
+data_clean %>% select(WDRAW_DEBT_MDN, MD_EARN_WNE_P6) %>%
+      na.omit() %>%
+       {.} -> earn_debt
+
+cor(earn_debt$WDRAW_DEBT_MDN,earn_debt$MD_EARN_WNE_P6)
+
+
+```
+
+
+##6.6 default with earning
+
+Understanding the relationship between the default rate of load repayment and post-graduation earning on one hand can help federal financial commitee to improve their decision about load granting. If the the default rate increases as the earning increase, the commitee may prefer to grant more financial aid to institution whose students have higher earning. One the other hand, the default rate of repayment for a univeristy can also help predict the post-graduation earning for its students. A scatter plot is created to visualized the relationship between these two variables. From the chart, we see the earning seem to show a decreasing trend as the default rate increases, which shows a negative relationship between earning and default rate. Then we create the correlation coefficient of these two variables. The resulting r = -0.33 shows that correlation between earning and default rate is negative but the relationship is not very strong, this may be due the influences of some outliers. To conclude, the negative relationship between earning and default rate of loan repayment needs larger population or detail data processing to confirm.
+
+
+```{r, message=FALSE}
+data_clean %>% ggplot(aes(x = CDR3, y = MD_EARN_WNE_P6)) + 
+                geom_jitter() +
+                geom_smooth(method = "lm", se = FALSE, col = 'red')
+
+data_clean %>% select(CDR3, MD_EARN_WNE_P6) %>%
+      na.omit() %>%
+       {.} -> earn_default
+
+cor(earn_default$CDR3,earn_default$MD_EARN_WNE_P6)
+
+```
+
+##6.7 degree type vs. earning
+
+The higher education one receives, the higher the earning is after graduation. This is an assumption we are making when investing higher education. But is it really the case. In this question, we would like to study if it's worthwhile to invest in higher degree. From the boxplot below, we see that the higher the education, the higher the median earning 2 years after graduation. Especially, a graduate-degree give a hugh rise to one's earning.
+
+
+```{r, message=FALSE}
+
+data_clean %>%
+  ggplot(aes(x=`variable$preF`,
+             y=MD_EARN_WNE_P6)) +
+  geom_boxplot(aes(fill = `variable$preF`))
+
+
+
+
+```
+
 
 
 
@@ -750,9 +807,8 @@ ggplot(data = data_clean) +
 aid_compare -> data_clean[c(5:6)]
 class(aid_compare)
 
-#8. Findings and Conclusion
+#8. Findings and Conclusion 
     
-
 
 
 
