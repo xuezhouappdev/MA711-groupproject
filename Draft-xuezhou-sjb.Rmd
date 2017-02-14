@@ -10,7 +10,12 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
 ```
 
 #1. Introduction
+The College Scorecard project is designed to increase the transparency of the college data, working as a navigator for students to make informed decisions about their choice for higher education. The information gathered in the dataset also gives students and families more power to differentiate postsecondary institutions and get an idea about how well colleges are preparing their students to be successful. The dataset is created to address the lack of information about college costs, earnings, federal student aid, admission rate etc. The data provides insights into the performance of institutions that receive federal aid dollars, and the outcomes of the students of those institutions. It also gives extra support for students and families to weight the tradeoffs on choosing the right college according to their own needs and educational goals.
+
+These data are collected by United States Department of Education with the goal of helping students and families make more educated decisions about college and compare vital information easily. 
+
 #2. Objective
+
 #3. Dataset Preparation
 Our analysis focuses on the data of year 2012 -2013 of 23 variables. We chose the median income 6 years after graduation as our predictor variable, and eliminated many fields with bunch of missing values as well as some fields not pertainig enougn to post-graduation income. We then fosued primarily on a set of 23 variables, including gender, age, ethnic, acedemic costs, family income, completetion rates and replayment rate.  
 
@@ -110,9 +115,6 @@ data_clean = data_new[,colMeans(is.na(data_new)) < 0.25]
 write.csv(data_clean,"data_clean.csv")
 ```
 
-#4. Goals
-#5. Summary of variables
-
 For numeric variabls, we calculate the basic summary statistics such as median, min, max, mode and quantile. We also use visualizations such as hisgroms and boxplots to understand the distribution of the values. For categorical variables, we use frequency table to understand the frequcies of each categories.Box chart is used as a visualization tool.
 
 The table below lists the variables that will be used for the further analysis: 12 of them are continuous variables while 3 of them are categorical variables. Our data set now contains 120 rows and 15 columns. 120 rows consist of 20 years’ of data for each of the chosen six countries. The 15 columns consist of country name, country code, year, and the twelve indicators.
@@ -139,6 +141,9 @@ The table below lists the variables that will be used for the further analysis: 
 
 we will summarize the data set using dplyr functions in the variables summary section.
 
+
+#4. Goals
+#5. Summary of variables
 ##5.1 Individual variable summary
 
 ###5.1.1 School
@@ -781,8 +786,55 @@ data_clean %>%
 
 
 
-#7. Comparison between variables
+#6.7 predominant degree, control  and earning after 6 year of entry
+The following plot shows two factor variables (predominant degree award variable and control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry. Our team uses the function geom_tile()[ggplot2 package] to visualize the correlation matrix.
 
+```{r}
+ data_clean %>%
+ group_by(preF, ctrF) %>%
+summarize(avg.earn_p6=mean(MD_EARN_WNE_P6)) %>%
+ ggplot(aes(x=ctrF, y=preF)) +
+  geom_tile(aes(fill=avg.earn_p6))
+
+```
+Mean value of the earning is more representative for the two categories, preF and ctrF. For the range of average earning, the darkest color shows the lowest earning, while the lightest color shows the highest value. According to the plot, we realize that ‘Private For-profit college’ whose predominant degree award is ‘Graduate degree’ has the lowest average earning with the minimum average value at \$3100, while ‘Public college’ whose predominant degree award is ‘Graduate degree’ has the highest average earning with the maximum average value at $45850.
+
+
+
+
+#6.8 predominant degree + control (count)
+The following plot shows the relationship between two factor variables (predominant degree award variable and control variable). Our team uses the function geom_bar() to map the counting values to y, ctrF variable to x and the preF variable to the fill of the bar.
+
+
+```{R}
+data_clean %>%
++ ggplot(aes(x=ctrF))+
++ geom_bar(aes(fill=preF), position = 'dodge')
+```
+According to the histogram comparison of predominant degree award among three types of colleges, we realize that for public college, Associate’s-degree is most frequent awarded in the public colleges. Bachelor’s-degree is most frequent awarded in the private nonprofit colleges. Certificate-degree is most frequent awarded in private for-profit colleges.
+
+Although the ‘Graduate-degree’ awarded by public colleges shows the least frequency, it gains the highest average earnings of students working and not enrolled 6 years after entry compared with other degrees awarded by different colleges.
+
+Our team further uses the function xtabs() to calculate the exact number for each predominant degree awarded by different types of colleges.
+```{R}
+> data_clean %>%
++ xtabs(formula = ~preF+ctrF)
+```
+
+
+#6.9 control + earning
+The following plot shows one factor variable (control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry). We use the 
+geom_violin() using the default scale = “area” argument and geom_boxplot() function to explore the relationship. The plot superimposed with boxplots shows side-by-side violin plots of median earnings of students working and not enrolled 6 years after entry according to different college types.
+
+```{r}
+ data_clean %>%
++ ggplot(aes(x=ctrF, y=MD_EARN_WNE_P6)) +
++ geom_violin(aes(fill=ctrF), scale = 'area') +
++ geom_boxplot(aes(fill=ctrF), width = 0.25, outlier.size = 1.25)
+```
+Obvious differences contain in these three boxplots. The boxplot of ‘Public college’ is comparatively short, while the boxplot of ‘Private Nonprofit’ is comparatively tall. The ‘Private For-profit college’ has the lowest median earning.
+
+#7. Comparison between variables
 #7.1 PCTPELL VS PCTFLOAN
 
 ```{r}
@@ -802,10 +854,9 @@ ggplot(data = data_clean) +
 
 ```
 
-
-
 aid_compare -> data_clean[c(5:6)]
 class(aid_compare)
+
 
 #8. Findings and Conclusion 
     
