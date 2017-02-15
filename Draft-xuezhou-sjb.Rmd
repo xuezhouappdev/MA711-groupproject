@@ -9,13 +9,57 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
 ```
 
+#Table of Contents
+*1. Introduction
+*2. Goal
+*3. Dataset Preparation
+*4. Objective
+*5. Summary of variables
+    *5.1 Individual variable summary
+       *5.1.1 School
+          *5.1.1.1 State
+          *5.1.1.2 Predominant Degree
+          *5.1.1.3 Control of Institution
+       *5.1.2 Student Body
+          *5.1.2.1 Percentage first-generation students
+          *5.1.2.2 Number of applications
+       *5.1.3 Cost 
+          *5.1.3.1 Average net price for Title IV institutions(both public and private institutions)
+          *5.1.3.2 Percentage of students who are financially independent
+       *5.1.4 Financial Aid
+          *5.1.4.1 Percentage of undergraduates who receive a Pell Grant
+          *5.1.4.2 Percent of all federal undergraduate students receiving a federal student loan
+          *5.1.4.3 The median debt for students who have completed
+          *5.1.4.4 The median debt for students who have not completed
+       *5.1.5 Earning
+          *5.1.5.1 Median family income in real 2015 dollars
+          *5.1.5.2 Earning after graduation
+       *5.1.6 Repayment
+          *5.1.6.1 3-year Repayment rate
+          *5.1.6.2 3-year Default rate
+*6. Relationship between variables
+    *6.1 NPT4_COMBINE VS State
+    *6.2 Debt VS Cost
+    *6.3 Percentage of Pell Grant VS college type(CONTROL)
+    *6.4 Percentage first-generation students VS Statu
+    *6.5 family income with Pell Grant
+    *6.6 cost and median debts with earning
+    *6.7 default with earning
+    *6.8 degree type vs. earning
+    *6.9 predominant degree, control  and earning after 6 year of entry
+    *6.10 predominant degree + control (count)
+    *6.11 control + earning
+*7. Comparison between variables
+*8. Findings and Conclusion
+       
+
+
 #1. Introduction
 The College Scorecard project is designed to increase the transparency of the college data, working as a navigator for students to make informed decisions about their choice for higher education. The information gathered in the dataset also gives students and families more power to differentiate postsecondary institutions and get an idea about how well colleges are preparing their students to be successful. The dataset is created to address the lack of information about college costs, earnings, federal student aid, admission rate etc. The data provides insights into the performance of institutions that receive federal aid dollars, and the outcomes of the students of those institutions. It also gives extra support for students and families to weight the tradeoffs on choosing the right college according to their own needs and educational goals.
 
 These data are collected by United States Department of Education with the goal of helping students and families make more educated decisions about college and compare vital information easily. 
 
-#2. Objective
-
+#2. Goal
 #3. Dataset Preparation
 Our analysis focuses on the data of year 2012 -2013 of 23 variables. We chose the median income 6 years after graduation as our predictor variable, and eliminated many fields with bunch of missing values as well as some fields not pertainig enougn to post-graduation income. We then fosued primarily on a set of 23 variables, including gender, age, ethnic, acedemic costs, family income, completetion rates and replayment rate.  
 
@@ -119,7 +163,7 @@ For numeric variabls, we calculate the basic summary statistics such as median, 
 
 The table below lists the variables that will be used for the further analysis: 12 of them are continuous variables while 3 of them are categorical variables. Our data set now contains 120 rows and 15 columns. 120 rows consist of 20 years’ of data for each of the chosen six countries. The 15 columns consist of country name, country code, year, and the twelve indicators.
 
-| Variable Name    | Data Type         | Description                                                         | Categoriy in Documentation       |
+| Variable Name    | Data Type         | Description                                                          |    Category in Documentation       |
 | --------------  | ------------------ | ---------------------------------------------------------------------| --------------------------------|
 | NPT4_COMBINE    | Numeric            |average net price for TITLE IV institutions of both public and private.|  Cost                       |
 | DEP_STAT_PCT_IND | Numeric           |Percentage of students who are financially independent                |     Cost                        |
@@ -128,21 +172,21 @@ The table below lists the variables that will be used for the further analysis: 
 | PCTPELL          | Numeric           |Percentage of undergraduates who receive a Pell Grant                 |        Financial Aid            |
 | PCTFLOAN         | Numeric           |Percent of all federal undergraduate students receiving a federal student loan      |  Financial Aid    |
 | GRAD_DEBT_MDN    | Numeric           |The median debt for students who have completed                       |   Financial Aid                 |
-| WDRAW_DEBT_MDN   | Numeric           |The median debt for sutdents who have not completed                      |Financial Aid |
-| MD_EARN_WNE_P6   | Numeric           |Median income six years after entry                       |     earning   |
-| MD_EARN_WNE_P10  | Numeric           |Median income ten years after entry                       |     earning  |
+| WDRAW_DEBT_MDN   | Numeric           |The median debt for sutdents who have not completed                   |Financial Aid |
+| MD_EARN_WNE_P6   | Numeric           |Median income six years after entry                                   |     earning   |
+| MD_EARN_WNE_P10  | Numeric           |Median income ten years after entry                                   |     earning  |
 | RPY_3YR_RT_SUPP  | Numeric           |Repayment rate 3 years after entering repayment                       |Repayment   |
-| CDR3             | Numeric           |Loan default rate 3 years afer entering repayment                       |Repayment        |
-| variable$qreF    | Factor            |Predominant degree offered                      |School       |
-| variable$ctrF    | Factor            |Control of institution                      |School     |
-| variable$STABBR  | Factor            |State                      |School     |
-| APPL_SCH_PCT_GE2 | Numeric           |Percentage of students submitting 2 or more than 2 applications                       | Student        |
+| CDR3             | Numeric           |Loan default rate 3 years afer entering repayment                     |Repayment        |
+| variable$qreF    | Factor            |Predominant degree offered                                            |School       |
+| variable$ctrF    | Factor            |Control of institution                                                |School     |
+| variable$STABBR  | Factor            |State                                                                 |School     |
+| APPL_SCH_PCT_GE2 | Numeric           |Percentage of students submitting 2 or more than 2 applications       | Student        |
 
 
 we will summarize the data set using dplyr functions in the variables summary section.
 
 
-#4. Goals
+#4. Objective
 #5. Summary of variables
 ##5.1 Individual variable summary
 
@@ -510,6 +554,7 @@ ggplot(data=data_clean,
 
 
 
+
 ###5.1.5 Earning
 ####5.1.5.1 Median family income in real 2015 dollars
 This elemnt is recording the median family income of students, one of the undergraduate student demographics for earnings cohorts. 
@@ -619,7 +664,7 @@ summary(data_clean$RPY_3YR_RT_SUPP + data_clean$CDR3)
 
 
 #6. Relationship between variables
-#6.1 NPT4_COMBINE VS State
+##6.1. NPT4_COMBINE VS State
 
 To analyze the relationship between average net cost for Title IV institutions and State, we grouped the data into the state level to take a further look.
 ```{R message=FALSE, warinig = FALSE}
@@ -639,7 +684,7 @@ Baesd on the output, we can see the highest median value for avreage net price e
 
 
 
-#6.2 Debt VS Cost
+##6.2. Debt VS Cost
 We assume there would be a strong linear relationship between the average net price for Title IV institutions and the median debt for students who have completed. We hypothese that the students who completed education in colleges with high costs will have a highe value of median debt. We use the following code to generate the scatterplot between these two variables to verify our assumptions. 
 
 ```{R}
@@ -658,7 +703,7 @@ From the scatter plot, it is obvious that the NPT4_COMBINE is in positive linear
 
 
 
-#6.3 Percentage of Pell Grant VS college type(CONTROL)
+##6.3. Percentage of Pell Grant VS college type(CONTROL)
 
 To compare the percentages of Pell Grant in different control type(), we grouped the Percentage of Pell Grant data into the college type level to take a further analysis.
 
@@ -692,7 +737,7 @@ From the overlaying histograms, the percentage of students who receive Pell Gran
 
 
 
-#6.4  Percentage first-generation students VS Status
+##6.4  Percentage first-generation students VS Status
 To compare the Percentage first-generation students with the different states, we grouped data into the state level to take a further analysis.
 
 ```{R message=FALSE, warinig = FALSE}
@@ -713,7 +758,7 @@ The results showed that the universities located in ND, SD, VT, MN and MT had th
 
 
 
-#6.5 family income with Pell Grant
+##6.5 family income with Pell Grant
 We assume there would be a strong linear relationship between family income and the percentage of students who can receive the Pell Grant. We hypothese that colleges with small value of family income would tend to have high percentages of Pell Grant. The following codes are used to generate the scatter pkot between these two varaibles. 
 
 ```{r}
@@ -725,7 +770,7 @@ ggplot(data_clean, aes(x =MD_FAMINC, y = PCTPELL)) + geom_point(color="red")+  g
 ```
 From the scatter plot, it is obvious that the MD_FAMINC is in a negative linear relationship with PCTPELL: the data show a downhill pattern from left to right; As the MD_FAMINC increase, the value of PCTPELL decreases. 
 
-#6.6 cost and median debts with earning
+##6.6 cost and median debts with earning
 
 
 Next, we analyze the relationship between the amount the debt and post-graduation earning. There are variable in the dataset to summarize the median amount for student body, one for students who already graduated and one for students who have not completed their study. We decide debts for students who have not completed to study in this problem, since it may can be used as a predictor in the future modeling. First, we use scatter plot to visualize the relationship between earning and the amount of debts, the plot clearly shows a positive relationship. Then we further calculate pearson correlation to confirm our hypothesis. The resulting coefficient 0.44 indicatesa moderate linear relationship between earning and debts. 
@@ -747,7 +792,7 @@ cor(earn_debt$WDRAW_DEBT_MDN,earn_debt$MD_EARN_WNE_P6)
 ```
 
 
-##6.6 default with earning
+##6.7 default with earning
 
 Understanding the relationship between the default rate of load repayment and post-graduation earning on one hand can help federal financial commitee to improve their decision about load granting. If the the default rate increases as the earning increase, the commitee may prefer to grant more financial aid to institution whose students have higher earning. One the other hand, the default rate of repayment for a univeristy can also help predict the post-graduation earning for its students. A scatter plot is created to visualized the relationship between these two variables. From the chart, we see the earning seem to show a decreasing trend as the default rate increases, which shows a negative relationship between earning and default rate. Then we create the correlation coefficient of these two variables. The resulting r = -0.33 shows that correlation between earning and default rate is negative but the relationship is not very strong, this may be due the influences of some outliers. To conclude, the negative relationship between earning and default rate of loan repayment needs larger population or detail data processing to confirm.
 
@@ -765,7 +810,7 @@ cor(earn_default$CDR3,earn_default$MD_EARN_WNE_P6)
 
 ```
 
-##6.7 degree type vs. earning
+##6.8 degree type vs. earning
 
 The higher education one receives, the higher the earning is after graduation. This is an assumption we are making when investing higher education. But is it really the case. In this question, we would like to study if it's worthwhile to invest in higher degree. From the boxplot below, we see that the higher the education, the higher the median earning 2 years after graduation. Especially, a graduate-degree give a hugh rise to one's earning.
 
@@ -786,7 +831,7 @@ data_clean %>%
 
 
 
-#6.7 predominant degree, control  and earning after 6 year of entry
+##6.9 predominant degree, control  and earning after 6 year of entry
 The following plot shows two factor variables (predominant degree award variable and control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry. Our team uses the function geom_tile()[ggplot2 package] to visualize the correlation matrix.
 
 ```{r}
@@ -802,7 +847,7 @@ Mean value of the earning is more representative for the two categories, preF an
 
 
 
-#6.8 predominant degree + control (count)
+##6.10 predominant degree + control (count)
 The following plot shows the relationship between two factor variables (predominant degree award variable and control variable). Our team uses the function geom_bar() to map the counting values to y, ctrF variable to x and the preF variable to the fill of the bar.
 
 
@@ -817,12 +862,12 @@ Although the ‘Graduate-degree’ awarded by public colleges shows the least fr
 
 Our team further uses the function xtabs() to calculate the exact number for each predominant degree awarded by different types of colleges.
 ```{R}
-> data_clean %>%
-+ xtabs(formula = ~preF+ctrF)
+ data_clean %>%
+ xtabs(formula = ~preF+ctrF)
 ```
 
 
-#6.9 control + earning
+ #6.11 control + earning
 The following plot shows one factor variable (control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry). We use the 
 geom_violin() using the default scale = “area” argument and geom_boxplot() function to explore the relationship. The plot superimposed with boxplots shows side-by-side violin plots of median earnings of students working and not enrolled 6 years after entry according to different college types.
 
@@ -835,7 +880,7 @@ geom_violin() using the default scale = “area” argument and geom_boxplot() f
 Obvious differences contain in these three boxplots. The boxplot of ‘Public college’ is comparatively short, while the boxplot of ‘Private Nonprofit’ is comparatively tall. The ‘Private For-profit college’ has the lowest median earning.
 
 #7. Comparison between variables
-#7.1 PCTPELL VS PCTFLOAN
+ #7.1 PCTPELL VS PCTFLOAN
 
 ```{r}
 
