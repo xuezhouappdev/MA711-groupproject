@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
 ```
 
 #Table of Contents
-* 1.[Introduction](#1. Introduction)
+* 1.[Introduction](#Introduction)
 * 2.Goal
 * 3.Dataset Preparation
 * 4.Objective
@@ -54,7 +54,7 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
        
 
 
-#1. Introduction
+#1. Introduction<a id="Introduction"></a>
 The College Scorecard project is designed to increase the transparency of the college data, working as a navigator for students to make informed decisions about their choice for higher education. The information gathered in the dataset also gives students and families more power to differentiate postsecondary institutions and get an idea about how well colleges are preparing their students to be successful. The dataset is created to address the lack of information about college costs, earnings, federal student aid, admission rate etc. The data provides insights into the performance of institutions that receive federal aid dollars, and the outcomes of the students of those institutions. It also gives extra support for students and families to weight the tradeoffs on choosing the right college according to their own needs and educational goals.
 
 These data are collected by United States Department of Education with the goal of helping students and families make more educated decisions about college and compare vital information easily. 
