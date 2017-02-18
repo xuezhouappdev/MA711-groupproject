@@ -3,3 +3,6 @@
 .RData
 .Ruserdata
 MERGED2012_13_PP.csv
+.csv
+*.csv
+
