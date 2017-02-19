@@ -51,7 +51,7 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
  * 6.11 predominant degree, control  and earning after 6 year of entry
  * 6.12 predominant degree + control (count)
  * 6.13 control + earning
- * 7. Findings and Conclusion
+* 7. Findings and Conclusion
        
 
 
