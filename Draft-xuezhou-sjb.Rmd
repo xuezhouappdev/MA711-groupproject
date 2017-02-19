@@ -31,10 +31,10 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
       * 5.1.4.2 [Percent of all federal undergraduate students receiving a federal student loan](#5.1.4.2l)
       * 5.1.4.3 [The median debt for students who have completed](#5.1.4.3)
       * 5.1.4.4 The median debt for students who have not completed
-   * 5.1.5 Earning
+    * 5.1.5 Earning
       * 5.1.5.1 [Median family income in real 2015 dollars](#5.1.5.1)
       * 5.1.5.2 Earning after graduation
-   * 5.1.6 Repayment
+    * 5.1.6 Repayment
       * 5.1.6.1 3-year Repayment rate
       * 5.1.6.2 3-year Default rate
 * 6.Relationship between variables
