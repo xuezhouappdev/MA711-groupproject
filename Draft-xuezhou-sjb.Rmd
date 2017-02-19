@@ -187,7 +187,7 @@ The table below lists the variables that will be used for the further analysis: 
 
 
 | Variable Name    | Data Type |  Unit  |  Description                                                          |    Category in Documentation       |
-| --------------  | -----------|- ----|-----------------------------------------------------------------| --------------------------------|
+| --------------   | ----------|--------|-----------------------------------------------------------------------| --------------------------------|
 | NPT4_COMBINE    | Numeric   | $         |average net price for TITLE IV institutions of both public and private.|  Cost                       |
 | DEP_STAT_PCT_IND | Numeric  | $         |Percentage of students who are financially independent                |     Cost                        |
 | PAR_ED_PCT_1STGEN| Numeric  | %         |Percentage first-generation students                                  |      Sudent Body                |
@@ -204,8 +204,8 @@ The table below lists the variables that will be used for the further analysis: 
 | Control_factor    | Factor  | N/A          |Control of institution                                                |School     |
 | STABBR_factor  | Factor     | N/A       |State                                                                 |School     |
 | APPL_SCH_PCT_GE2 | Numeric  | %         |Percentage of students submitting 2 or more than 2 applications       | Student        |
-| UNITID | Numeric | N/A| Unique ID for the institutions | unknown
-| INSTNM | Factor |  N/A|name for the institutions | unknown
+| UNITID | Numeric | N/A      | Unique ID for the institutions | unknown |
+| INSTNM | Factor |  N/A      |name for the institutions       | unknown |
 
 
 we will summarize the data set using dplyr and ggplot funtions in the variables summary section.
