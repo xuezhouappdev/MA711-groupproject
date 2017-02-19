@@ -186,24 +186,26 @@ For numeric variabls, we calculate the basic summary statistics such as median, 
 The table below lists the variables that will be used for the further analysis: 12 of them are continuous variables while 3 of them are categorical variables. Our data set now contains 120 rows and 15 columns. 120 rows consist of 20 years??? of data for each of the chosen six countries. The 15 columns consist of country name, country code, year, and the twelve indicators.
 
 
-| Variable Name    | Data Type         | Description                                                          |    Category in Documentation       |
-| --------------  | ------------------ | ---------------------------------------------------------------------| --------------------------------|
-| NPT4_COMBINE    | Numeric            |average net price for TITLE IV institutions of both public and private.|  Cost                       |
-| DEP_STAT_PCT_IND | Numeric           |Percentage of students who are financially independent                |     Cost                        |
-| PAR_ED_PCT_1STGEN| Numeric           |Percentage first-generation students                                  |      Sudent Body                |
-| MD_FAMINC        | Numeric           |Median family income in real 2015 dollars                             |       Earning                   |
-| PCTPELL          | Numeric           |Percentage of undergraduates who receive a Pell Grant                 |        Financial Aid            |
-| PCTFLOAN         | Numeric           |Percent of all federal undergraduate students receiving a federal student loan      |  Financial Aid    |
-| GRAD_DEBT_MDN    | Numeric           |The median debt for students who have completed                       |   Financial Aid                 |
-| WDRAW_DEBT_MDN   | Numeric           |The median debt for sutdents who have not completed                   |Financial Aid |
-| MD_EARN_WNE_P6   | Numeric           |Median income six years after entry                                   |     earning   |
-| MD_EARN_WNE_P10  | Numeric           |Median income ten years after entry                                   |     earning  |
-| RPY_3YR_RT_SUPP  | Numeric           |Repayment rate 3 years after entering repayment                       |Repayment   |
-| CDR3             | Numeric           |Loan default rate 3 years afer entering repayment                     |Repayment        |
-| variable$qreF    | Factor            |Predominant degree offered                                            |School       |
-| variable$ctrF    | Factor            |Control of institution                                                |School     |
-| variable$STABBR  | Factor            |State                                                                 |School     |
-| APPL_SCH_PCT_GE2 | Numeric           |Percentage of students submitting 2 or more than 2 applications       | Student        |
+| Variable Name    | Data Type |  Unit  |  Description                                                          |    Category in Documentation       |
+| --------------  | -----------|- ----|-----------------------------------------------------------------| --------------------------------|
+| NPT4_COMBINE    | Numeric   | $         |average net price for TITLE IV institutions of both public and private.|  Cost                       |
+| DEP_STAT_PCT_IND | Numeric  | $         |Percentage of students who are financially independent                |     Cost                        |
+| PAR_ED_PCT_1STGEN| Numeric  | %         |Percentage first-generation students                                  |      Sudent Body                |
+| MD_FAMINC        | Numeric  | $         |Median family income in real 2015 dollars                             |       Earning                   |
+| PCTPELL          | Numeric  | %         |Percentage of undergraduates who receive a Pell Grant                 |        Financial Aid            |
+| PCTFLOAN         | Numeric  | %         |Percent of all federal undergraduate students receiving a federal student loan      |  Financial Aid    |
+| GRAD_DEBT_MDN    | Numeric  | $         |The median debt for students who have completed                       |   Financial Aid                 |
+| WDRAW_DEBT_MDN   | Numeric  | $         |The median debt for sutdents who have not completed                   |Financial Aid |
+| MD_EARN_WNE_P6   | Numeric  | $         |Median income six years after entry                                   |     earning   |
+| MD_EARN_WNE_P10  | Numeric  | $         |Median income ten years after entry                                   |     earning  |
+| RPY_3YR_RT_SUPP  | Numeric  | %         |Repayment rate 3 years after entering repayment                       |Repayment   |
+| CDR3             | Numeric  | %         |Loan default rate 3 years afer entering repayment                     |Repayment        |
+| PREDDEG_factor    | Factor  | N/A          |Predominant degree offered                                            |School       |
+| Control_factor    | Factor  | N/A          |Control of institution                                                |School     |
+| STABBR_factor  | Factor     | N/A       |State                                                                 |School     |
+| APPL_SCH_PCT_GE2 | Numeric  | %         |Percentage of students submitting 2 or more than 2 applications       | Student        |
+| UNITID | Numeric | N/A| Unique ID for the institutions | unknown
+| INSTNM | Factor |  N/A|name for the institutions | unknown
 
 
 we will summarize the data set using dplyr and ggplot funtions in the variables summary section.
