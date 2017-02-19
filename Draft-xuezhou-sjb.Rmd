@@ -218,11 +218,11 @@ Over years, Many students see college as an investment to help them earn more an
 Our objective in this stage is to conduct an exploration analysis on the CollegeScore dataset, investigating the individual variable's summary statistics and the relationship between these variabls, so as to better prepare for further analaysis on the factors affecting students' post college earnings with some advanced data mining techniques. 
 
 
-#5. Summary of variables<a id="variablesummary"></a>
-##5.1 Individual variable summary
+#5. Summary of variables<a id="5"></a>
+##5.1 Individual variable summary<a id="5.1"></a> 
 
-###5.1.1 School
-####5.1.1.1. State
+###5.1.1 School<a id="5.1.1"></a> 
+####5.1.1.1. State<a id="5.1.1.1"></a> 
 State variable has 59 levels, which include 55 states in the United States, as well as......... From the following frequncy table, we see that California has the most University-equivalent institutions across the nation, followed by Texas and Ner York. It has about 800 universities! A bar chart is plotted below to show the top states with the most universities. Then summary of frequency table also shows that the state having the least university only has one, and 50% of state has more than 132 universities in the state.
 ```{r, message=FALSE}
 
@@ -234,7 +234,7 @@ state_freq[1:15,] %>% ggplot(aes(x=factor(variable.STABBR), y=freq)) +
 
 ```
 
-####5.1.1.2. Predominant Degree
+####5.1.1.2. Predominant Degree<a id="5.1.1.2"></a> 
 Then we analyze the type of degree universities mainly offer. There are four types of degree taken into accout: Certificate-degree, Associate's degree, Bachelor's degree, and Graduate Degree. About 5% of the population are classified in terms of the predomiant degree they offer.  43.2% offer Certificate degree as their predominant degree, 27.3% predominantly offer Bachelor degree and only 4.23% are classified as Graduate degree predominant.
 
 ```{r, message=FALSE}
@@ -246,7 +246,7 @@ data_clean %>% ggplot(aes(x=variable$`preF`, fill = 'blue')) +
 
 
 
-####5.1.1.3. Control of Institution
+####5.1.1.3. Control of Institution<a id="5.1.1.3"></a> 
 In addition to State and predominant degree, control of institution is another categorical variable in the dataset. The label of Control is to indicate whether or not a institution is institution is privately owned and whether or not it is a for-profit organization. There are three levels of this variable: Public, Private Nonprofit, and Private-profit. Public school is assumed to be non-profit so it was not further divided into two subgroups. Below we show the percentage summary of each category and a bar char is plotted to facilitate understanding. About 50% out of all institution are private for-profit university, which is the *most dominant type*. Public and Private Nonprofit are pretty tie in terms of number of observation in each category.
 
 ```{r, message=FALSE}
@@ -265,7 +265,7 @@ data_clean %>% ggplot(aes(x=variable$`ctrF`, fill = 'blue')) +
 
 
 
-###5.1.2 Student Body
+###5.1.2 Student Body<a id="5.1.2"></a> 
 ####5.1.2.1 Percentage first-generation students<a id="5.1.2.1"></a>
 This element identifies the share of federally aided students at the institution who report that they are first generaion on the FAFSA (Free Application for Federal Student Aid). First generation students are defined as sudents in which neither parents completed college. 
 
@@ -410,7 +410,7 @@ From the histogram, we notice that the value between 0.7 to 0.8 are quite freque
 
 
 
-###5.1.4 Financial Aid 
+###5.1.4 Financial Aid<a id="5.1.4"></a>  
 ####5.1.4.1 Percentage of undergraduates who receive a Pell Grant<a id="5.1.4.1"></a>
 
 This elemnt, pulled from the IPEDS student Financial Aid Component, shows the share of undergraduate students who received Pell Grants in a given year, which is an important measure of the access an insiitution provides to low-income students. 
@@ -555,7 +555,7 @@ ggplot(data=data_clean,
 
 
 
-###5.1.5 Earning
+###5.1.5 Earning<a id="5.1.5"></a> 
 ####5.1.5.1 Median family income in real 2015 dollars<a id="5.1.5.1"></a>
 This elemnt is recording the median family income of students, one of the undergraduate student demographics for earnings cohorts. 
 
@@ -810,7 +810,7 @@ From the stacked histogram, we can tell that for all the three college type inst
 
 
 
-##6.8 cost and median debts with earning
+##6.8 cost and median debts with earning<a id="6.8"></a> 
 Next, we analyze the relationship between the amount the debt and post-graduation earning. There are variable in the dataset to summarize the median amount for student body, one for students who already graduated and one for students who have not completed their study. We decide debts for students who have not completed to study in this problem, since it may can be used as a predictor in the future modeling. First, we use scatter plot to visualize the relationship between earning and the amount of debts, the plot clearly shows a positive relationship. Then we further calculate pearson correlation to confirm our hypothesis. The resulting coefficient 0.44 indicatesa moderate linear relationship between earning and debts. 
 
 ```{r, message=FALSE}
@@ -830,7 +830,7 @@ cor(earn_debt$WDRAW_DEBT_MDN,earn_debt$MD_EARN_WNE_P6)
 ```
 
 
-##6.9 default with earning
+##6.9 default with earning<a id="6.9"></a> 
 
 Understanding the relationship between the default rate of load repayment and post-graduation earning on one hand can help federal financial commitee to improve their decision about load granting. If the the default rate increases as the earning increase, the commitee may prefer to grant more financial aid to institution whose students have higher earning. One the other hand, the default rate of repayment for a univeristy can also help predict the post-graduation earning for its students. A scatter plot is created to visualized the relationship between these two variables. From the chart, we see the earning seem to show a decreasing trend as the default rate increases, which shows a negative relationship between earning and default rate. Then we create the correlation coefficient of these two variables. The resulting r = -0.33 shows that correlation between earning and default rate is negative but the relationship is not very strong, this may be due the influences of some outliers. To conclude, the negative relationship between earning and default rate of loan repayment needs larger population or detail data processing to confirm.
 
@@ -848,7 +848,7 @@ cor(earn_default$CDR3,earn_default$MD_EARN_WNE_P6)
 
 ```
 
-##6.10 degree type vs. earning
+##6.10 degree type vs. earning<a id="6.10"></a> 
 
 The higher education one receives, the higher the earning is after graduation. This is an assumption we are making when investing higher education. But is it really the case. In this question, we would like to study if it's worthwhile to invest in higher degree. From the boxplot below, we see that the higher the education, the higher the median earning 2 years after graduation. Especially, a graduate-degree give a hugh rise to one's earning.
 
@@ -867,7 +867,7 @@ data_clean %>%
 
 
 
-##6.11 predominant degree, control  and earning after 6 year of entry
+##6.11 predominant degree, control  and earning after 6 year of entry<a id="6.11"></a> 
 The following plot shows two factor variables (predominant degree award variable and control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry. Our team uses the function geom_tile()[ggplot2 package] to visualize the correlation matrix.
 
 ```{r}
@@ -881,7 +881,7 @@ summarize(avg.earn_p6=mean(MD_EARN_WNE_P6)) %>%
 Mean value of the earning is more representative for the two categories, preF and ctrF. For the range of average earning, the darkest color shows the lowest earning, while the lightest color shows the highest value. According to the plot, we realize that ???Private For-profit college??? whose predominant degree award is ???Graduate degree??? has the lowest average earning with the minimum average value at \$3100, while ???Public college??? whose predominant degree award is ???Graduate degree??? has the highest average earning with the maximum average value at $45850.
 
 
-##6.12 predominant degree + control (count)
+##6.12 predominant degree + control (count)<a id="6.12"></a> 
 The following plot shows the relationship between two factor variables (predominant degree award variable and control variable). Our team uses the function geom_bar() to map the counting values to y, ctrF variable to x and the preF variable to the fill of the bar.
 
 
@@ -901,7 +901,7 @@ Our team further uses the function xtabs() to calculate the exact number for eac
 ```
 
 
- #6.11 control + earning
+ #6.13 control + earning<a id="6.13"></a> 
 The following plot shows one factor variable (control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry). We use the 
 geom_violin() using the default scale = ???area??? argument and geom_boxplot() function to explore the relationship. The plot superimposed with boxplots shows side-by-side violin plots of median earnings of students working and not enrolled 6 years after entry according to different college types.
 
@@ -915,7 +915,7 @@ Obvious differences contain in these three boxplots. The boxplot of ???Public co
 
 
 
-#7. Findings and Conclusion 
+#7. Findings and Conclusion<a id="7"></a> 
     
 
 
