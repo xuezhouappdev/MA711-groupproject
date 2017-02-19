@@ -11,46 +11,47 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
 
 #Table of Contents
 * 1.[Introduction](#Introduction)
-* 2.Goal
-* 3.Dataset Preparation
-* 4.Objective
-* 5.Summary of variables
+* 2.[Goal](#Goal)
+* 3.[Dataset Preparation](#dataprep)
+* 4.[Objective](#objective)
+* 5.[Summary of variables](#variablesummary)
  * 5.1 Individual variable summary
   * 5.1.1 School
     * 5.1.1.1 State
     * 5.1.1.2 Predominant Degree
     * 5.1.1.3 Control of Institution
   * 5.1.2 Student Body
-    * 5.1.2.1 Percentage first-generation students
+    * 5.1.2.1 [Percentage first-generation students](#5.1.2.1)
     * 5.1.2.2 Number of applications
   * 5.1.3 Cost 
-    * 5.1.3.1 Average net price for Title IV institutions(both public and private institutions)
-    * 5.1.3.2 Percentage of students who are financially independent
+    * 5.1.3.1 [Average net price for Title IV institutions(both public and private institutions)](#5.1.3.1)
+    * 5.1.3.2 [Percentage of students who are financially independent](#5.1.3.2)
   * 5.1.4 Financial Aid
-    * 5.1.4.1 Percentage of undergraduates who receive a Pell Grant
-    * 5.1.4.2 Percent of all federal undergraduate students receiving a federal student loan
-    * 5.1.4.3 The median debt for students who have completed
+    * 5.1.4.1 [Percentage of undergraduates who receive a Pell Grant](#5.1.4.1)
+    * 5.1.4.2 [Percent of all federal undergraduate students receiving a federal student loan](#5.1.4.2l)
+    * 5.1.4.3 [The median debt for students who have completed](#5.1.4.3)
     * 5.1.4.4 The median debt for students who have not completed
   * 5.1.5 Earning
-    * 5.1.5.1 Median family income in real 2015 dollars
+    * 5.1.5.1 [Median family income in real 2015 dollars](#5.1.5.1)
     * 5.1.5.2 Earning after graduation
   * 5.1.6 Repayment
     * 5.1.6.1 3-year Repayment rate
     * 5.1.6.2 3-year Default rate
 * 6.Relationship between variables
- * 6.1 NPT4_COMBINE VS State
- * 6.2 Debt VS Cost
- * 6.3 Percentage of Pell Grant VS college type(CONTROL)
- * 6.4 Percentage first-generation students VS Statu
- * 6.5 family income with Pell Grant
- * 6.6 cost and median debts with earning
- * 6.7 default with earning
- * 6.8 degree type vs. earning
- * 6.9 predominant degree, control  and earning after 6 year of entry
- * 6.10 predominant degree + control (count)
- * 6.11 control + earning
-* 7. Comparison between variables
-* 8. Findings and Conclusion
+ * 6.1 [The relationship between NPT4_COMBINE and State](#6.1)
+ * 6.2 [The relationship between Debt and Cost](#6.2)
+ * 6.3 [The relationship between Percentage of Pell Grant and college type(CONTROL)](#6.3)
+ * 6.4 [The relationship between Percentage first-generation students and States](#6.4)
+ * 6.5 [The relationship between family income and percentage of Pell Grant](#6.5)
+ * 6.6 [The relationship between DEP_STAT_PCT_IND and Control](#6.6)
+ * 6.7 [The relationship between PCTLOAN and Control](#6.7)
+ * 6.8 cost and median debts with earning
+ * 6.9 default with earning
+ * 6.10 degree type vs. earning
+ * 6.11 predominant degree, control  and earning after 6 year of entry
+ * 6.12 predominant degree + control (count)
+ * 6.13 control + earning
+ * 7. Findings and Conclusion
        
 
 
@@ -59,8 +60,8 @@ The College Scorecard project is designed to increase the transparency of the co
 
 These data are collected by United States Department of Education with the goal of helping students and families make more educated decisions about college and compare vital information easily. 
 
-#2. Goal
-#3. Dataset Preparation
+#2. Goal<a id="Goal"></a>
+#3. Dataset Preparation<a id="dataprep"></a>
 Our analysis focuses on the data of year 2012 -2013 of 23 variables. We chose the median income 6 years after graduation as our predictor variable, and eliminated many fields with bunch of missing values as well as some fields not pertainig enougn to post-graduation income. We then fosued primarily on a set of 23 variables, including gender, age, ethnic, acedemic costs, family income, completetion rates and replayment rate.  
 
 
@@ -84,10 +85,15 @@ data = read.csv("MERGED2012_13_PP.csv",header = T, na.strings = c("NULL","Privac
 
 ```
 
+Considering there is some special characters in the ID coloumn, we first rename the first column's name to be selectable. 
+```{R}
+colnames(data)[1] = 'UNITID'
+```
+
 The full dataset contains 1743 variables. 36 variables were intially selected to analyze.
 ```{r, message=FALSE,warning=FALSE}
 
-variable = select(data, STABBR, PREDDEG, LOCALE2, MENONLY, WOMENONLY, CONTROL, ADM_RATE, SATMTMID, SATVRMID, SATWRMID, SAT_AVG,
+variable = select(data, UNITID, INSTNM, STABBR, PREDDEG, LOCALE2, MENONLY, WOMENONLY, CONTROL, ADM_RATE, SATMTMID, SATVRMID, SATWRMID, SAT_AVG,
                   NPT4_PUB,
                   NPT4_PRIV,
                   UG,
@@ -120,22 +126,30 @@ variable = select(data, STABBR, PREDDEG, LOCALE2, MENONLY, WOMENONLY, CONTROL, A
 After loading the dataset, we change variables to the correct data types. 
 ```{r, message=FALSE,warning=FALSE}
 
-class(as.data.frame(apply(variable[,-c(1,2,6)],2,as.numeric)))
+#need to be commented out 
+class(as.data.frame(apply(variable[,-c(2,3,4,8)],2,as.numeric)))
 
-#numeric
-variable[,-c(1,2,6)] %>%
+#get rid of factor variables: INSTNM, STABBR, PREDDEG, CONTROL and change the data types to numeric 
+variable[,-c(2,3,4,8)] %>%
     apply(2, as.numeric) %>%
     as.data.frame() %>%
     {.} -> variable_num
 
-#categorical
+#change the categorical level of the categorical variables:PREDDEG, CONTROL
 variable$preF=factor(variable$PREDDEG,levels=c(0,1,2,3,4),labels = c("NotClassified","Certificate-degree","Associate's-degree","Bachelor's-degree","Graduate-degree"))
+
 variable$ctrF=factor(variable$CONTROL,levels = c(1,2,3),labels = c("Public","Private Nonprofit","Private For-profit"))
 
 #combine the three datafram to generate a new dataset. 
-data_new <- cbind(variable_num, variable$preF, variable$ctrF,variable$STABBR)
-dim(data_new)
+data_new <- cbind(variable_num, variable$preF, variable$ctrF,variable$INSTNM, variable$STABBR)
 
+#rename the categorical varaibles to approriate readable names
+colnames(data_new)[35] = 'PREDDEG_factor'
+colnames(data_new)[36] = 'Control_factor'
+colnames(data_new)[37] = 'INSTNM_factor'
+colnames(data_new)[38] = 'STABBR_factor'
+
+#need to be commented out
 mean(is.na(data_new$NPT4_PUB))
 ```
 
@@ -148,20 +162,29 @@ for (i in 1:length(data_new$NPT4_PRIV)) {
    }
 }
 mean(is.na(data_new$NPT4_PRIV))
-data_new = data_new[,-9] 
-colnames(data_new)[9] <- "NPT4_COMBINE"
+data_new = data_new[,-10] 
+colnames(data_new)[10] <- "NPT4_COMBINE"
+
+mean(is.na(data_new$NPT4_COMBINE))
 ```
 
-In order to choose the variables that have enough valid data related to the topic, we filtered and considered variables with percent missing value less than 25%. The new data set was named as “data_clean” for further analysis. 
+In order to choose the variables that have enough valid data related to the topic, we filtered and considered variables with percent missing value less than 25%. The new data set was named as ???data_clean??? for further analysis. 
 ```{r, message=FALSE,warning=FALSE}
 
 data_clean = data_new[,colMeans(is.na(data_new)) < 0.25]
+
+#rearrange the coloumn names
+data_clean = data_clean[c(1,17,18,15,16,2:14)]
+
 write.csv(data_clean,"data_clean.csv")
 ```
+The data_clean will be the cleaned dataset we used in the further variable summaries and comparisons
+
 
 For numeric variabls, we calculate the basic summary statistics such as median, min, max, mode and quantile. We also use visualizations such as hisgroms and boxplots to understand the distribution of the values. For categorical variables, we use frequency table to understand the frequcies of each categories.Box chart is used as a visualization tool.
 
-The table below lists the variables that will be used for the further analysis: 12 of them are continuous variables while 3 of them are categorical variables. Our data set now contains 120 rows and 15 columns. 120 rows consist of 20 years’ of data for each of the chosen six countries. The 15 columns consist of country name, country code, year, and the twelve indicators.
+The table below lists the variables that will be used for the further analysis: 12 of them are continuous variables while 3 of them are categorical variables. Our data set now contains 120 rows and 15 columns. 120 rows consist of 20 years??? of data for each of the chosen six countries. The 15 columns consist of country name, country code, year, and the twelve indicators.
+
 
 | Variable Name    | Data Type         | Description                                                          |    Category in Documentation       |
 | --------------  | ------------------ | ---------------------------------------------------------------------| --------------------------------|
@@ -183,11 +206,16 @@ The table below lists the variables that will be used for the further analysis: 
 | APPL_SCH_PCT_GE2 | Numeric           |Percentage of students submitting 2 or more than 2 applications       | Student        |
 
 
-we will summarize the data set using dplyr functions in the variables summary section.
+we will summarize the data set using dplyr and ggplot funtions in the variables summary section.
 
 
-#4. Objective
-#5. Summary of variables
+#4. Objective<a id="objective"></a>
+Over years, Many students see college as an investment to help them earn more and live better lives after graduation. Amount of findints have been conducted to analyze the influence of college quality on students' post graudation earning based on *colleges characterestis, student's demographic information, as well as family charateristics as well as federal finanical support to low-income students.  It has become more and more important to understand the fac- tors that contribute to post-graduation earnings and the ability to repay student loans.
+
+Our objective in this stage is to conduct an exploration analysis on the CollegeScore dataset, investigating the individual variable's summary statistics and the relationship between these variabls, so as to better prepare for further analaysis on the factors affecting students' post college earnings with some advanced data mining techniques. 
+
+
+#5. Summary of variables<a id="variablesummary"></a>
 ##5.1 Individual variable summary
 
 ###5.1.1 School
@@ -238,9 +266,13 @@ data_clean %>% ggplot(aes(x=variable$`ctrF`, fill = 'blue')) +
 ####5.1.2.1 Percentage first-generation students
 This element identifies the share of federally aided students at the institution who report that they are first generaion on the FAFSA (Free Application for Federal Student Aid). First generation students are defined as sudents in which neither parents completed college. 
 
-We are using the code below to summarize this variable. 
-
+With the followin codes, we extracted the institions with the highest and lowest percentage of first-generation students. Then we observed this varibles's basic summary statistics: min, max, mean, median and standard deviation.
 ```{R, message=FALSE, warinig = FALSE}
+
+#the institions with the highest and lowest percentage of first-generation students
+data_clean %>%
+ slice(c(which.min(PAR_ED_PCT_1STGEN),which.max(PAR_ED_PCT_1STGEN))) %>%
+  select (c(1,2,3,8))
 
 
 summarize(data_clean,
@@ -253,7 +285,7 @@ summarize(data_clean,
 
 
 ```
-From the output, we can tell that the highest value is 95.25% while the lowest value is 6.87%. From the mean value of 48.08%, we can tell that about for federally aided students in most colleges, around half (50.8%) of the students' parents did not complete the college. The standard deviation value of 12.2% indicated a relative high difference of this element among different colleges. 
+From the output, we can tell that the highest value existed in  La Belle Beauty Academy with the value of 95.25%. The lowest value is 6.87%, which existed in Wheaton College. From the mean value of 48.08%, we can tell that about for federally aided students in most colleges, around half (50.8%) of the students' parents did not complete the college. The standard deviation value of 12.2% indicated a relative high difference of this element among different colleges.  
 
 Below is the code to generate a visual representation in the histgram. 
 ```{R}
@@ -300,9 +332,13 @@ college_app %>%
 ###5.1.3 Cost
 ####5.1.3.1 Average net price for Title IV institutions(both public and private institutions)
 
-We are using the code below to summarize the variable. 
+With the followin codes, we extracted the IV institutions with the highest and lowest Average net price. Then we observed this varibles's basic summary statistics: min, max, mean, median and standard deviation.
+ 
 ```{R, message=FALSE, warinig = FALSE}
 
+data_clean %>%
+ slice(c(which.min(NPT4_COMBINE),which.max(NPT4_COMBINE))) %>%
+  select (c(1,2,3,6))
 
 summarize(data_clean,
           minNPT4_COMBINE=min(NPT4_COMBINE ,na.rm=TRUE),
@@ -314,7 +350,7 @@ summarize(data_clean,
 
 
 ```
-From the summary results, we learned that the maximum value of the variable is \$87,414 while the minimum value is about \$-19,360. Considering the elements are collected from Title IV institutions, we reasoned that the negative values may be due to the fact that some intituions's finainal aid supoort can cover the students' all the costs, meanwhile overbalancing the cost amount. There are not much differerences between mean value and median value, which is around \$15,000. We can conclude that the average net price costs for most institutuins are falling into the this range. The standard deviation value is 7604.884 which is relatively large, indicating a great spread in the data. 
+From the summary results, we learned that the maximum value of the variable is $87,414, which is for Aerosim Flight Academy located in FL. while the minimum value is about $-19,360 - the value for Berea College located in KY. Considering the elements are collected from Title IV institutions, we reasoned that the negative values may be due to the fact that some intituions's finainal aid supoort can cover the students' all the costs, meanwhile overbalancing the cost amount. There are not much differerences between mean value and median value, which is around $15,000. We can conclude that the average net price costs for most institutuins are falling into the this range. The standard deviation value is 7604.884 which is relatively large, indicating a great spread in the data. 
 
 
 Below is the histogram for this variable which is able to provide us with a visual distrubution presentation. 
@@ -336,9 +372,12 @@ From the histogram, we notice that the average net cost for IV institutions typi
 
 ####5.1.3.2 Percentage of students who are financially independent
 
-Here is the code to generate the summary statistics: 
+With the followin codes, we extracted the institions which have the highest and lowest percentage of students who are financially independent. Then we observed this varibles's basic summary statistics: min, max, mean, median and standard deviation.
 ```{R}
 
+data_clean %>%
+ slice(c(which.min(DEP_STAT_PCT_IND),which.max(DEP_STAT_PCT_IND))) %>%
+  select (c(1,2,3,7))
 
 summarize(data_clean,
           minDEP_STAT_PCT_IND=min(DEP_STAT_PCT_IND*100 ,na.rm=TRUE),
@@ -350,7 +389,8 @@ summarize(data_clean,
 
 
 ```
-From the summary results, we learned that the maximum value of the variable is 98.56% while the minimum value is about 0，73%. From the mean value, we can tell that about in most colleges, around 56% of the students are financially independent. The standatd deviation value of 23.3% indicates a relative high different among different colleges, which can also be concluded from the difference between maximum value and minimum value. Below is the code to generate a visual representation in the histgram. 
+From the summary results, we learned that the maximum value of the variable is 98.56%(Capella University) while the minimum value is about 0.73%(University of Notre Dame). From the mean value, we can tell that about in most colleges, around 56% of the students are financially independent. The standatd deviation value of 23.3% indicates a relative high different among different colleges, which can also be concluded from the difference between maximum value and minimum value. Below is the code to generate a visual representation in the histgram.
+
 ```{R}
 
   #histogram for NPT_COM
@@ -364,23 +404,6 @@ From the summary results, we learned that the maximum value of the variable is 9
 ```
 From the histogram, we notice that the value between 0.7 to 0.8 are quite frequent. There was no obvious extrme value in the sample, thus the histogram is normally distributed. 
 
-Then we grouped by the data into the control type(Private For-profit, Public, Private Nonprofit) to take a further analysis.
-```{R message=FALSE, warinig = FALSE}
-
-data_clean %>%
-  group_by(variable$ctrF) %>%
-    dplyr::summarise(minDEP_STAT_PCT_IND=min(DEP_STAT_PCT_IND ,na.rm=TRUE),    
-    maxDEP_STAT_PCT_IND=max(DEP_STAT_PCT_IND,na.rm=TRUE),medianDEP_STAT_PCT_IND=median(DEP_STAT_PCT_IND,na.rm=TRUE))  %>%
-       arrange(desc(medianDEP_STAT_PCT_IND))   %>%
-{.}  ->DEP_STAT_PCT_IND_CONTROL
-
-DEP_STAT_PCT_IND_CONTROL
-
-```
-From the result, we can tell the highest median value is in Privately For-profit colleges, which means that in most private for-profit colleges, the students are more likely to be financial independent. 
-
-
-
 
 
 
@@ -388,10 +411,14 @@ From the result, we can tell the highest median value is in Privately For-profit
 ####5.1.4.1 Percentage of undergraduates who receive a Pell Grant
 
 This elemnt, pulled from the IPEDS student Financial Aid Component, shows the share of undergraduate students who received Pell Grants in a given year, which is an important measure of the access an insiitution provides to low-income students. 
-We are using the code below to summarize this variable. 
+
+We are using the code below to summarize this variable and extraced the instition with the highest and lowest value. 
 
 ```{R, message=FALSE, warinig = FALSE}
 
+data_clean %>%
+ slice(c(which.min(PCTPELL),which.max(PCTPELL))) %>%
+  select (c(1,2,3,10))
 
 summarize(data_clean,
           minPCTPELL=min(PCTPELL*100 ,na.rm=TRUE),
@@ -403,7 +430,7 @@ summarize(data_clean,
 
 
 ```
-From the output, we can tell that the range is between 0 to 100%.	 Among the colleges in the sample, half colleges have this rate as high as 52.7% (median value of 52.7%), which means more than half of undergraduare students are able to receive the Pell Grant to cover their costs. The standard deviation value is 22.57%,  indicating a relative high difference of this element among different colleges, which can also be noticed from the largest range (100%). Below is the code to generate a visual representation in the histgram. 
+From the output, we can tell that the range is between 0 to 100%.	No students in Thunderbird School of Global Management has received the Pell grant while all of the students in American Conservatory Theater have receiced the Pell Grant. Among the colleges in the sample, half colleges have this rate as high as 52.7% (median value of 52.7%), which means more than half of undergraduare students are able to receive the Pell Grant to cover their costs. The standard deviation value is 22.57%,  indicating a relative high difference of this element among different colleges, which can also be noticed from the largest range (100%). Below is the code to generate a visual representation in the histgram. 
    
 ```{R}
 
@@ -424,10 +451,13 @@ From the histogram, we are able to conclude that in most colleges, 40% to 50% of
 ####5.1.4.2 Percent of all federal undergraduate students receiving a federal student loan
 
 This elemnt, as reported in the IPEDs Student Finaicial Aid component, show the share of undergraduate students who received federal loans in a given year. It can provide important context to figures related to debt, repayment and non-repayment.  
-We are using the code below to summarize this variable. 
+We are using the code below to summarize this variable and extracted the institutions with highest and lowest value. 
 
 ```{R, message=FALSE, warinig = FALSE}
 
+data_clean %>%
+ slice(c(which.min(PCTFLOAN),which.max(PCTFLOAN))) %>%
+  select (c(1,2,3,11))
 
 summarize(data_clean,
           minPCTFLOAN=min(PCTFLOAN*100 ,na.rm=TRUE),
@@ -439,7 +469,7 @@ summarize(data_clean,
 
 
 ```
-From the output, we can tell that the range is between 0 to 100%.	 Among the colleges in the sample, half colleges have this rate as high as 60.08% , which means around 60% of undergraduare students are able to receive the fedaral student loans. The standard deviation value is 29.26%,  indicating a relative high difference of this element among different colleges, which can also be noticed from the largest range (100%). Below is the code to generate a visual representation in the histgram. 
+From the output, we can tell that the range is between 0 to 100%.	As we can recall from the previous variable(PCTPELL), American Conservatory Theater has both the PCTLOAN and PCTPELL the value of 100%. Gadsden State Community College has no students reveiced federal loans in the given year. Among the colleges in the sample, half colleges have this rate as high as 60.08% , which means around 60% of undergraduare students are able to receive the fedaral student loans. The standard deviation value is 29.26%,  indicating a relative high difference of this element among different colleges, which can also be noticed from the largest range (100%). Below is the code to generate a visual representation in the histgram. 
 
 ```{R}
 
@@ -455,49 +485,16 @@ From the output, we can tell that the range is between 0 to 100%.	 Among the col
 From the histogram, it's obvious that there are two peaks in the graph. The rates between 0- 10% and the rates between 60% to 80% are similarly frequent compated to the other ranges.  
  
 
-Then we grouped by the data into the college type level to take a further analysis.
-```{R message=FALSE, warinig = FALSE}
-
-data_clean %>%
-  group_by(variable$STABBR ) %>%
-    dplyr::summarise(minPCTFLOAN=min(PCTFLOAN ,na.rm=TRUE),    
-    maxPCTFLOAN=max(PCTFLOAN,na.rm=TRUE),medianPCTFLOAN=median(PCTFLOAN,na.rm=TRUE))  %>%
-       arrange(medianPCTFLOAN)   %>%
-{.}  ->PCTFLOAN_STATE
-
-PCTFLOAN_STATE
-
-
-data_clean %>%
-  group_by(variable$ctrF ) %>%
-    dplyr::summarise(minPCTFLOAN=min(PCTFLOAN ,na.rm=TRUE),    
-    maxPCTFLOAN=max(PCTFLOAN,na.rm=TRUE),medianPCTFLOAN=median(PCTFLOAN,na.rm=TRUE))  %>%
-       arrange(medianPCTFLOAN)   %>%
-{.}  ->PCTFLOAN_CONTROL
-
-PCTFLOAN_CONTROL
-
-
-#stacked histogram
-data_clean %>%
-  ggplot(aes(x=PCTFLOAN)) +
-  geom_bar(binwidth=0.1,aes(fill=variable$ctrF ))
-
-
-
-```
-
-From the result, the Private institutions have a much larger value than the public institutions. With a much higher costs burden, it makes sence that the low-income sutdents in private institutions are much more likely to seek financial aid than the public institution students. 
-
-
-
 
 
 ####5.1.4.3 The median debt for students who have completed
 
-This element is the median loan debt acculated at the institution by all student borrowers of federal lonans who have habe completed the education.We are using the code below to summarize this variable. 
+This element is the median loan debt acculated at the institution by all student borrowers of federal lonans who have habe completed the education. We are using the code below to summarize this variable. 
 ```{R, message=FALSE, warinig = FALSE}
 
+data_clean %>%
+ slice(c(which.min(GRAD_DEBT_MDN),which.max(GRAD_DEBT_MDN))) %>%
+  select (c(1,2,3,12))
 
 summarize(data_clean,
           minGRAD_DEBT_MDN=min(GRAD_DEBT_MDN ,na.rm=TRUE),
@@ -508,7 +505,7 @@ summarize(data_clean,
 
 
 ```
-From the output, we can tell that the highest value is 48,250	 while the lowest value is 1448. From the median value of 14000, we can tell that among the colleges in the sample, the students who have completed the deducaiton from half of them had the median loan debt of 14000. The standard deviation value is 8020.958,  indicating a relative high difference of this element among different colleges. Below is the code to generate a visual representation in the histgram. 
+From the output, we can tell that the highest value is 48,250 - Southwest University of Visual Arts-Tucson, while the lowest value is 1448 - South Florida Institute of Technology. From the median value of 14000, we can tell that among the colleges in the sample, the students who have completed the deducaiton from half of them had the median loan debt of 14000. The standard deviation value is 8020.958,  indicating a relative high difference of this element among different colleges. Below is the code to generate a visual representation in the histgram. 
 
 ```{r}
 
@@ -530,7 +527,7 @@ From the histogram, it is obvious that most students in the sampled colleges sti
 
 
 
-####5.1.4.4 The median debt for students who have not completed
+####5.1.4.4 The median debt for students who have not completed<a id="5.1.4.4"></a>
 WDRAW_DEBT_MDN describe the median number of debt fot students who ahve not completed their study. In other words, they are still attending the university. The summary statistics show that student in 50% of institution have a median debt of 5500.The median debt for attending students can be as much as 27620 for some school and as low as 600 for other. So we also calculate standard deviation to measure the dispenser of the distribution. The standard deviation is 2415.623 about 95% of institution have a median debt ranging from 1167.754  to 10830.246. The histogram that the distribution of the median roughly follows a standard distribution with a sharp peak and slightly heavy tail.
 ```{r, message=FALSE}
 median_debt_non_null = data_clean$WDRAW_DEBT_MDN[!is.na(data_clean$WDRAW_DEBT_MDN)]
@@ -556,13 +553,16 @@ ggplot(data=data_clean,
 
 
 ###5.1.5 Earning
-####5.1.5.1 Median family income in real 2015 dollars
+####5.1.5.1 Median family income in real 2015 dollars<a id="5.1.5.1"></a>
 This elemnt is recording the median family income of students, one of the undergraduate student demographics for earnings cohorts. 
 
 We are using the code below to summarize this variable. 
 
 ```{R, message=FALSE, warinig = FALSE}
 
+data_clean %>%
+ slice(c(which.min(MD_FAMINC),which.max(MD_FAMINC))) %>%
+  select (c(1,2,3,9))
 
 summarize(data_clean,
           minMD_FAMINC=min(MD_FAMINC ,na.rm=TRUE),
@@ -574,7 +574,7 @@ summarize(data_clean,
 
 
 ```
-From the output, we can tell that the highest value is 155,606.6	 while the lowest value is 0. From the median value of 19,262.26, we can tell that among the colleges in the sample, the students in half of them had the family income below 19,262.26	. The standard deviation value is 18,824.31,  indicating a relative high difference of this element among different colleges. Below is the code to generate a visual representation in the histgram. 
+From the output, we can tell that the highest value is 155,606.6 -Jewish Theological Seminary of America, while the lowest value is 0 -Associated Technical College-Los Angeles. From the median value of 19,262.26, we can tell that among the colleges in the sample, the students in half of them had the family income below 19,262.26	. The standard deviation value is 18,824.31,  indicating a relative high difference of this element among different colleges. Below is the code to generate a visual representation in the histgram. 
 
 ```{R}
 
@@ -650,23 +650,11 @@ summary(data_clean$RPY_3YR_RT_SUPP + data_clean$CDR3)
 
 
 
+#6. Relationship between variables<a id="6"></a>
 
+##6.1. The relationship between NPT4_COMBINE and State<a id="6.1"></a>
 
-
-
-
-
-
-
-
-
-
-
-
-#6. Relationship between variables
-##6.1. NPT4_COMBINE VS State
-
-To analyze the relationship between average net cost for Title IV institutions and State, we grouped the data into the state level to take a further look.
+To analyze the relationship between average net cost for Title IV institutions and State, we grouped the data into the state level to take a further look. We would like to investigate the state distribution of the Title IV instituions based on the average net costs.   
 ```{R message=FALSE, warinig = FALSE}
 
 data_clean %>%
@@ -684,7 +672,7 @@ Baesd on the output, we can see the highest median value for avreage net price e
 
 
 
-##6.2. Debt VS Cost
+##6.2. The relationship between Debt and Cost<a id="6.2"></a>
 We assume there would be a strong linear relationship between the average net price for Title IV institutions and the median debt for students who have completed. We hypothese that the students who completed education in colleges with high costs will have a highe value of median debt. We use the following code to generate the scatterplot between these two variables to verify our assumptions. 
 
 ```{R}
@@ -703,9 +691,9 @@ From the scatter plot, it is obvious that the NPT4_COMBINE is in positive linear
 
 
 
-##6.3. Percentage of Pell Grant VS college type(CONTROL)
+##6.3. The relationship between Percentage of Pell Grant and college type(CONTROL)<a id="6.3"></a>
 
-To compare the percentages of Pell Grant in different control type(), we grouped the Percentage of Pell Grant data into the college type level to take a further analysis.
+To compare the percentages of Pell Grant in different control type, we grouped the Percentage of Pell Grant data into the college type level to take a further analysis. We would like to investigate the percentage of Pell Grant based on the  college type. 
 
 ```{R message=FALSE, warinig = FALSE}
 
@@ -715,10 +703,7 @@ data_clean %>%
     maxPCTPELL=max(PCTPELL,na.rm=TRUE),medianPCTPELL=median(PCTPELL,na.rm=TRUE))  %>%
        arrange(medianPCTPELL)   %>%
 {.}  ->PCTPELL_CONTROL
-
 PCTPELL_CONTROL
-
-
 
 ```
 From the result, the Private Nonprofit institutions and Public institutions have a similar low median values while the provate For- profit institutions have a hgihest value. This is resonable because generally speanking, the private for-profit colleges may have much higher costs than the private nonprofit and public institutions. The low-income students were more likely to seek a Pell Grant for assistant. Additionally, in some states, state financial aid may be sufficient to cover costs at community colleges; thus the students in thoes schools may not need to seek for addtional financial aid like Pell Grant.
@@ -735,10 +720,8 @@ ggplot(data_clean, aes(x=PCTPELL, fill=variable$ctrF)) + geom_histogram(alpha=0.
 From the overlaying histograms, the percentage of students who receive Pell Grant are quite frequent for Private For-profit institutions between 0.7 and 0.75 ; the percentage of students who receive Pell Grant are quite frequent around 0.4 for Public institutions and Private Nonprofit institutions. The histogram for private for profit is slightly left skewed due to atypical small value near 0. The histogram for public and private nonprofit institions are reasonably symmetric
 
 
-
-
-##6.4  Percentage first-generation students VS Status
-To compare the Percentage first-generation students with the different states, we grouped data into the state level to take a further analysis.
+##6.4. The relationship between Percentage first-generation students and States<a id="6.4"></a>
+To compare the Percentage first-generation students with the different states, we grouped data into the state level to take a further analysis.We would like to investigate the percentage of first-generation students based on the status distribution. 
 
 ```{R message=FALSE, warinig = FALSE}
 
@@ -757,9 +740,8 @@ The results showed that the universities located in ND, SD, VT, MN and MT had th
 
 
 
-
-##6.5 family income with Pell Grant
-We assume there would be a strong linear relationship between family income and the percentage of students who can receive the Pell Grant. We hypothese that colleges with small value of family income would tend to have high percentages of Pell Grant. The following codes are used to generate the scatter pkot between these two varaibles. 
+##6.5. The relationship between family income and percentage of Pell Grant<a id="6.5"></a>
+ We assume there would be a strong linear relationship between family income and the percentage of students who can receive the Pell Grant. We hypothese that colleges with small value of family income would tend to have high percentages of Pell Grant. The following codes are used to generate the scatter pkot between these two varaibles. 
 
 ```{r}
 
@@ -768,11 +750,64 @@ ggplot(data_clean, aes(x =MD_FAMINC, y = PCTPELL)) + geom_point(color="red")+  g
     theme(plot.title = element_text(hjust = 0.5))
       
 ```
-From the scatter plot, it is obvious that the MD_FAMINC is in a negative linear relationship with PCTPELL: the data show a downhill pattern from left to right; As the MD_FAMINC increase, the value of PCTPELL decreases. 
-
-##6.6 cost and median debts with earning
+From the scatter plot, it is obvious that the MD_FAMINC is in a negative linear relationship with PCTPELL: the data show a downhill pattern from left to right; As the MD_FAMINC increase, the value of PCTPELL decreases. It makes sense in the real world applcation: for institutions with low percentage of students who receive the Pell Grant, the financial aids like Pell Grant may not be as necessary as they are in the instituions with high value of PCTPELL, thus these collges students will tend to have a high median family income after they graduate. 
 
 
+
+
+
+
+##6.6. The relationship between DEP_STAT_PCT_IND and Control<a id="6.6"></a>
+
+
+To compare the percentage of financially-independent students in institutions with different college type, we grouped by the data into the control type(Private For-profit, Public, Private Nonprofit) to take a further analysis.
+```{R message=FALSE, warinig = FALSE}
+
+data_clean %>%
+  group_by(variable$ctrF) %>%
+    dplyr::summarise(minDEP_STAT_PCT_IND=min(DEP_STAT_PCT_IND ,na.rm=TRUE),    
+    maxDEP_STAT_PCT_IND=max(DEP_STAT_PCT_IND,na.rm=TRUE),medianDEP_STAT_PCT_IND=median(DEP_STAT_PCT_IND,na.rm=TRUE))  %>%
+       arrange(desc(medianDEP_STAT_PCT_IND))   %>%
+{.}  ->DEP_STAT_PCT_IND_CONTROL
+
+DEP_STAT_PCT_IND_CONTROL
+
+```
+From the result, we can tell the highest median value is in Privately For-profit colleges, which means that in most private for-profit colleges, the students are more likely to be financial independent. 
+
+##6.7. The relationship between PCTLOAN and Control.<a id="6.7"></a> 
+
+
+To compare the percentage of students who receive the federal loans in the given year based on the schools control type,we grouped by the data into the control type(Private For-profit, Public, Private Nonprofit) to take a further analysis. A stacked histogram is also requested to generate a more vidual presentation. 
+
+```{R message=FALSE, warinig = FALSE}
+
+
+data_clean %>%
+  group_by(variable$ctrF ) %>%
+    dplyr::summarise(minPCTFLOAN=min(PCTFLOAN ,na.rm=TRUE),    
+    maxPCTFLOAN=max(PCTFLOAN,na.rm=TRUE),medianPCTFLOAN=median(PCTFLOAN,na.rm=TRUE))  %>%
+       arrange(medianPCTFLOAN)   %>%
+{.}  ->PCTFLOAN_CONTROL
+
+PCTFLOAN_CONTROL
+
+
+#stacked histogram
+data_clean %>%
+  ggplot(aes(x=PCTFLOAN)) +
+  geom_bar(binwidth=0.1,aes(fill=Control_factor ))
+
+
+
+```
+
+From the result, the Private institutions have a much larger median value than the public institutions. With a much higher costs burden, it makes sence that the low-income sutdents in private institutions are much more likely to seek financial aid than the public institution students. 
+From the stacked histogram, we can tell that for all the three college type institutions, the most frequent ranges appear between 0.6 and 0.8, which is consistent with the findings we observe in the individual variable summary section. 
+
+
+
+##6.8 cost and median debts with earning
 Next, we analyze the relationship between the amount the debt and post-graduation earning. There are variable in the dataset to summarize the median amount for student body, one for students who already graduated and one for students who have not completed their study. We decide debts for students who have not completed to study in this problem, since it may can be used as a predictor in the future modeling. First, we use scatter plot to visualize the relationship between earning and the amount of debts, the plot clearly shows a positive relationship. Then we further calculate pearson correlation to confirm our hypothesis. The resulting coefficient 0.44 indicatesa moderate linear relationship between earning and debts. 
 
 ```{r, message=FALSE}
@@ -792,7 +827,7 @@ cor(earn_debt$WDRAW_DEBT_MDN,earn_debt$MD_EARN_WNE_P6)
 ```
 
 
-##6.7 default with earning
+##6.9 default with earning
 
 Understanding the relationship between the default rate of load repayment and post-graduation earning on one hand can help federal financial commitee to improve their decision about load granting. If the the default rate increases as the earning increase, the commitee may prefer to grant more financial aid to institution whose students have higher earning. One the other hand, the default rate of repayment for a univeristy can also help predict the post-graduation earning for its students. A scatter plot is created to visualized the relationship between these two variables. From the chart, we see the earning seem to show a decreasing trend as the default rate increases, which shows a negative relationship between earning and default rate. Then we create the correlation coefficient of these two variables. The resulting r = -0.33 shows that correlation between earning and default rate is negative but the relationship is not very strong, this may be due the influences of some outliers. To conclude, the negative relationship between earning and default rate of loan repayment needs larger population or detail data processing to confirm.
 
@@ -810,7 +845,7 @@ cor(earn_default$CDR3,earn_default$MD_EARN_WNE_P6)
 
 ```
 
-##6.8 degree type vs. earning
+##6.10 degree type vs. earning
 
 The higher education one receives, the higher the earning is after graduation. This is an assumption we are making when investing higher education. But is it really the case. In this question, we would like to study if it's worthwhile to invest in higher degree. From the boxplot below, we see that the higher the education, the higher the median earning 2 years after graduation. Especially, a graduate-degree give a hugh rise to one's earning.
 
@@ -829,9 +864,7 @@ data_clean %>%
 
 
 
-
-
-##6.9 predominant degree, control  and earning after 6 year of entry
+##6.11 predominant degree, control  and earning after 6 year of entry
 The following plot shows two factor variables (predominant degree award variable and control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry. Our team uses the function geom_tile()[ggplot2 package] to visualize the correlation matrix.
 
 ```{r}
@@ -842,12 +875,10 @@ summarize(avg.earn_p6=mean(MD_EARN_WNE_P6)) %>%
   geom_tile(aes(fill=avg.earn_p6))
 
 ```
-Mean value of the earning is more representative for the two categories, preF and ctrF. For the range of average earning, the darkest color shows the lowest earning, while the lightest color shows the highest value. According to the plot, we realize that ‘Private For-profit college’ whose predominant degree award is ‘Graduate degree’ has the lowest average earning with the minimum average value at \$3100, while ‘Public college’ whose predominant degree award is ‘Graduate degree’ has the highest average earning with the maximum average value at $45850.
+Mean value of the earning is more representative for the two categories, preF and ctrF. For the range of average earning, the darkest color shows the lowest earning, while the lightest color shows the highest value. According to the plot, we realize that ???Private For-profit college??? whose predominant degree award is ???Graduate degree??? has the lowest average earning with the minimum average value at \$3100, while ???Public college??? whose predominant degree award is ???Graduate degree??? has the highest average earning with the maximum average value at $45850.
 
 
-
-
-##6.10 predominant degree + control (count)
+##6.12 predominant degree + control (count)
 The following plot shows the relationship between two factor variables (predominant degree award variable and control variable). Our team uses the function geom_bar() to map the counting values to y, ctrF variable to x and the preF variable to the fill of the bar.
 
 
@@ -856,9 +887,9 @@ data_clean %>%
 + ggplot(aes(x=ctrF))+
 + geom_bar(aes(fill=preF), position = 'dodge')
 ```
-According to the histogram comparison of predominant degree award among three types of colleges, we realize that for public college, Associate’s-degree is most frequent awarded in the public colleges. Bachelor’s-degree is most frequent awarded in the private nonprofit colleges. Certificate-degree is most frequent awarded in private for-profit colleges.
+According to the histogram comparison of predominant degree award among three types of colleges, we realize that for public college, Associate???s-degree is most frequent awarded in the public colleges. Bachelor???s-degree is most frequent awarded in the private nonprofit colleges. Certificate-degree is most frequent awarded in private for-profit colleges.
 
-Although the ‘Graduate-degree’ awarded by public colleges shows the least frequency, it gains the highest average earnings of students working and not enrolled 6 years after entry compared with other degrees awarded by different colleges.
+Although the ???Graduate-degree??? awarded by public colleges shows the least frequency, it gains the highest average earnings of students working and not enrolled 6 years after entry compared with other degrees awarded by different colleges.
 
 Our team further uses the function xtabs() to calculate the exact number for each predominant degree awarded by different types of colleges.
 ```{R}
@@ -869,7 +900,7 @@ Our team further uses the function xtabs() to calculate the exact number for eac
 
  #6.11 control + earning
 The following plot shows one factor variable (control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry). We use the 
-geom_violin() using the default scale = “area” argument and geom_boxplot() function to explore the relationship. The plot superimposed with boxplots shows side-by-side violin plots of median earnings of students working and not enrolled 6 years after entry according to different college types.
+geom_violin() using the default scale = ???area??? argument and geom_boxplot() function to explore the relationship. The plot superimposed with boxplots shows side-by-side violin plots of median earnings of students working and not enrolled 6 years after entry according to different college types.
 
 ```{r}
  data_clean %>%
@@ -877,33 +908,11 @@ geom_violin() using the default scale = “area” argument and geom_boxplot() f
 + geom_violin(aes(fill=ctrF), scale = 'area') +
 + geom_boxplot(aes(fill=ctrF), width = 0.25, outlier.size = 1.25)
 ```
-Obvious differences contain in these three boxplots. The boxplot of ‘Public college’ is comparatively short, while the boxplot of ‘Private Nonprofit’ is comparatively tall. The ‘Private For-profit college’ has the lowest median earning.
-
-#7. Comparison between variables
- #7.1 PCTPELL VS PCTFLOAN
-
-```{r}
-
-library(ggplot2)
-ggplot(data = data_clean) +
-  geom_histogram(breaks=seq(0, 1, by =0.05),aes(x = PCTPELL, y=(..count..)), 
-                       alpha=0.9, fill ="red",position="dodge") +
-  geom_histogram(breaks=seq(0, 1, by =0.05),aes(x = PCTFLOAN, y=(..count..)), 
-                       alpha=0.9,fill ="blue",position="dodge") +
-  labs(title="Overlaying Histogram of PCTPELL and PCTFLOAN ") +
-    theme(plot.title = element_text(hjust = 0.5)) + 
-  scale_colour_manual("", 
-                      breaks = c("PCTPELL", "PCTFLOAN"),
-                      values = c("PCTPELL"="red", "PCTFLOAN"="blue")) 
+Obvious differences contain in these three boxplots. The boxplot of ???Public college??? is comparatively short, while the boxplot of ???Private Nonprofit??? is comparatively tall. The ???Private For-profit college??? has the lowest median earning.
 
 
-```
 
-aid_compare -> data_clean[c(5:6)]
-class(aid_compare)
-
-
-#8. Findings and Conclusion 
+#7. Findings and Conclusion 
     
 
 
