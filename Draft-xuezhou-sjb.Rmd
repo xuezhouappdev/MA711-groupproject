@@ -12,6 +12,13 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
 #Table of Contents
 * 1.[Introduction](#Introduction)
 * 2.Goal
+
+College is an investment. It's well-known that a major motivation for students to attend a university is higher post-graduation earning. So will your school make sure you get a return? With collge costs and student-debt levels reaching an all-time high, it's important to know which schools produce the highest earning alumni and what factors can help us predict post-graduate earnings for students in a university.
+
+The goal of our study is to understand what factors are predictive of students' post-graduate earning through individual variable analysis and relationship detection. To this end, we first explore a set of variables that are carefully selected to represent a school's profile, getting to know the distribution of each variable. Then we further analyze how these variables are related, particually the relationship between earning and other variables.
+
+
+
 * 3.Dataset Preparation
 * 4.Objective
 * 5.Summary of variables
@@ -192,19 +199,24 @@ we will summarize the data set using dplyr functions in the variables summary se
 
 ###5.1.1 School
 ####5.1.1.1. State
-State variable has 59 levels, which include 55 states in the United States, as well as......... From the following frequncy table, we see that California has the most University-equivalent institutions across the nation, followed by Texas and Ner York. It has about 800 universities! A bar chart is plotted below to show the top states with the most universities. Then summary of frequency table also shows that the state having the least university only has one, and 50% of state has more than 132 universities in the state.
+State variable has 59 levels, which include 55 states in the United States and 4 districts outside mainland US. To better understand how many universities each state has, we create a frequency table as shown below, and also a bar chart to visuzalize the top 15 states having the most universities. Some basic summary statistics are also displayed.
 ```{r, message=FALSE}
 
 state_freq = count(data_clean,"variable$STABBR")[order(-count(data_clean,'variable$STABBR')$freq),]
-state_freq[1:15,]
+state_freq
 summary(state_freq)
 state_freq[1:15,] %>% ggplot(aes(x=factor(variable.STABBR), y=freq)) +
   geom_bar(stat = 'identity')
 
 ```
+The frequency table counts the number of records belonging to each state, since each records represents a institution, each cell also equals to the number of university in that state.
+
+From frequncy table, we see that California has the most  institutions across the nation, followed by Texas and Ner York. It has about 800 universities! A bar chart is plotted below to show the top 15 states in the frequency table. Then summary of frequency table also shows that the state having the least university only has one, and 50% of state has more than 132 universities in the state.
+
+
 
 ####5.1.1.2. Predominant Degree
-Then we analyze the type of degree universities mainly offer. There are four types of degree taken into accout: Certificate-degree, Associate's degree, Bachelor's degree, and Graduate Degree. About 5% of the population are classified in terms of the predomiant degree they offer.  43.2% offer Certificate degree as their predominant degree, 27.3% predominantly offer Bachelor degree and only 4.23% are classified as Graduate degree predominant.
+Then we analyze the type of degree universities mainly offer. There are four types of degree taken into accout: Certificate-degree, Associate's degree, Bachelor's degree, and Graduate Degree. A frequency table in a format of percentage and a histogram are used to help understand the distributiton of the Prodominant Degree.
 
 ```{r, message=FALSE}
 prop.table(table(data_clean$`variable$preF`)) * 100
@@ -212,11 +224,13 @@ data_clean %>% ggplot(aes(x=variable$`preF`, fill = 'blue')) +
   geom_histogram(stat = "count") +
   xlab("Degree") 
 ```
+From above frequency table, we see that about 5% of the population are unclassified in terms of the predomiant degree they offer.  43.2% offer Certificate degree as their predominant degree, 27.3% predominantly offer Bachelor degree and only 4.23% are classified as Graduate degree predominant.
 
 
 
 ####5.1.1.3. Control of Institution
-In addition to State and predominant degree, control of institution is another categorical variable in the dataset. The label of Control is to indicate whether or not a institution is institution is privately owned and whether or not it is a for-profit organization. There are three levels of this variable: Public, Private Nonprofit, and Private-profit. Public school is assumed to be non-profit so it was not further divided into two subgroups. Below we show the percentage summary of each category and a bar char is plotted to facilitate understanding. About 50% out of all institution are private for-profit university, which is the *most dominant type*. Public and Private Nonprofit are pretty tie in terms of number of observation in each category.
+
+In addition to State and predominant degree, control of institution is another categorical variable in the dataset. The label of Control is to indicate whether or not a institution is privately owned and whether or not it is a for-profit organization. There are three levels of this variable: Public, Private Nonprofit, and Private-profit. Public school is assumed to be non-profit so it is not further divided into two subgroups. Below we show the percentage summary of each category and a bar char is plotted to facilitate understanding. 
 
 ```{r, message=FALSE}
 prop.table(table(data_clean$`variable$ctrF`)) * 100
@@ -225,13 +239,7 @@ data_clean %>% ggplot(aes(x=variable$`ctrF`, fill = 'blue')) +
   xlab("Degree")
 ```
 
-
-
-
-
-
-
-
+About 50% out of all institution are private for-profit university, which is the *most dominant type*. Public and Private Nonprofit are pretty tiex in terms of the number of observation in each category.
 
 
 ###5.1.2 Student Body
@@ -272,9 +280,8 @@ From the histogram, we can tell the share of first generarion students is most f
 
 
 ####5.1.2.2 Number of applications
-The variable APPL_SCH_PCT_GE2 is to describe the percentage of students who list two and more than two institutions when he apply for financial aid when apply for universities. This information is only available to students who submit their applications for federal aid, and not cover the whole student body. Nevertheless, this variable still can provides some useful insights about how many universities a student usually apply to. 
 
-The summry statistics show that median percentage of student submitting two or more than two application is 41.67 across all univerisities. The institution having the least percentage only has 4% of student applying to more than one university, while the school with the highest percent has as high as 90% of student applying to more than one university. The boxplot compare the the percent of student applying to only one university and that of student applying to more than 1. We can clearly see that a larger portion of students only list one instituiton when submitting their application for financial aid.
+The variable APPL_SCH_PCT_GE2 is to describe the percentage of students who list two and more than two institutions when he applied for financial aid when submitting application for university. This information is only available to students who submitted their applications for federal aid, and does not cover the whole student body. Nevertheless, this variable still can provides some useful insights about how many universities a student usually apply for. 
 
 
 ```{r, message=FALSE}
@@ -294,10 +301,12 @@ college_app %>%
     geom_boxplot() 
 ```
 
+The summry statistics show that median percentage of student submitting two or more than two application is 41.67% across all univerisities. The institution having the least percentage only has 4% of student applying to more than one university, while the school with the highest percent has as high as 90% of student applying to more than one university. The boxplot compares the the percent of student applying to only one university with that of student applying for more than one. We can clearly see that a larger portion of students only listed one instituiton when submitting their application for financial aid.
 
 
 
 ###5.1.3 Cost
+
 ####5.1.3.1 Average net price for Title IV institutions(both public and private institutions)
 
 We are using the code below to summarize the variable. 
@@ -531,7 +540,9 @@ From the histogram, it is obvious that most students in the sampled colleges sti
 
 
 ####5.1.4.4 The median debt for students who have not completed
-WDRAW_DEBT_MDN describe the median number of debt fot students who ahve not completed their study. In other words, they are still attending the university. The summary statistics show that student in 50% of institution have a median debt of 5500.The median debt for attending students can be as much as 27620 for some school and as low as 600 for other. So we also calculate standard deviation to measure the dispenser of the distribution. The standard deviation is 2415.623 about 95% of institution have a median debt ranging from 1167.754  to 10830.246. The histogram that the distribution of the median roughly follows a standard distribution with a sharp peak and slightly heavy tail.
+
+WDRAW_DEBT_MDN describes the median amount of debt fot students who ahve not completed their study. In other words, they are still attending the university. 
+
 ```{r, message=FALSE}
 median_debt_non_null = data_clean$WDRAW_DEBT_MDN[!is.na(data_clean$WDRAW_DEBT_MDN)]
 summary(median_debt_non_null)
@@ -548,8 +559,9 @@ ggplot(data=data_clean,
     scale_x_continuous("Median Debt for Students Who Have Completed")
 
 ```
+We use summary statistics, standard deviation and histogram to understand the distribution of this variable.
 
-
+The summary statistics show that students in 50% of institution have a median debt of more than 5500, which is not very unaffordable. The median debt for attending students can be as much as 27620 for some school and as low as 600 for others, which indicates it may have a large variance. So we also calculate standard deviation to measure the dispersion of the distribution. The standard deviation is 2415.623 about 95% of institution have a median debt ranging from 1167.754  to 10830.246. The histogram shows that the distribution of the median roughly follows a standard distribution with a sharp peak and slightly heavy tail.
 
 
 
@@ -587,15 +599,17 @@ From the output, we can tell that the highest value is 155,606.6	 while the lowe
     labs(x="MD_FAMINC", y="Count") +
     theme(plot.title = element_text(hjust = 0.5))
 ```
+
 From the histogram, we are able to conclude that in most colleges, students' family income are falling into the range of 12,000 - 18,000. Due to the atypical large values, the histogram is obviouslu skewed to right. The value larger than 18,000 are tend to be extreme and the cases larger than 75000 are rare and atypical, which means rare colleges have the students with family income more than 75000.
 
 
 
 
 ####5.1.5.2 Earning after graduation
-We selected two variables MD_EARN_WNE_P6, MD_EARN_WNE_P10 in the earning group to study students' post-graduation earning. MD_EARN_WNE_P6 is the median earning for students six years after their entry, which corresponds to two years after gradutaion. Likewise, MD_EARN_WNE_P10 is the median earning ten years after their entry, which corresponds to four years after graduation. These two metrics give us an idea of how much money students are making after their graduation, in both short and medium terms,
 
-In addition to these two variables, a derived variable is also calculated as the difference between the salary 2 years post-graduation and another two years later. The median earning of 50% institutions is below the 25300 below, while the maximum median earining is 120200. After two years, the median earning increase by about $5500. The histogram gives a more clear idea of the earning distribution. Most of institution with students having a median earining between 10000 to 50000 two years after graduation. The distribution of earining 4 years after graduation falls at the right of the distribution of 2 years post-graduation, which means that the earning increases as students' experience increase. Beside, the fout-year post-graduation earning has a wider spread than that of two years. That indicate that the there is a greater gap between who are earning more and who are earning less, which can be confirmed by the increase in standard deviation.
+We selected two variables MD_EARN_WNE_P6, MD_EARN_WNE_P10 in the earning group to study students' post-graduation earning. MD_EARN_WNE_P6 is the median earning for students after six years of their entry, which corresponds to two years after gradutaion for a four-year program. Likewise, MD_EARN_WNE_P10 is the median earning ten years after their entry, which corresponds to four years after graduation usually. These two metrics give us an idea of how much money students are making after their graduation, in both short and medium terms.
+
+In addition to these two variables, a derived variable is also calculated as the difference between  MD_EARN_WNE_P6 and MD_EARN_WNE_P10. The six-year-after-entry median earning of 50% institutions is below the 25300 below, while the maximum median earining is 120200, while ten-year-after-entry median earning is higher by about $5500. The histogram gives a more clear idea of the earning distribution. Most of institution with students having a median earining between 10000 to 50000 six years after entry. The distribution of ten-year-after-entry falls at the right side of the six-year distribution , which means that the earning increases as students' experience increase. Beside, the ten-year post-graduation earning has a wider spread than that of six years. That indicate that the there is a greater gap between who are earning more and who are earning less, which can be confirmed by an increase in standard deviation.
 
 ```{r,message=FALSE}
 earning = select(data_clean, MD_EARN_WNE_P6, MD_EARN_WNE_P10 )
@@ -621,7 +635,7 @@ earning_clean1[earning_clean1$years_from_entry != 'salary_increase',] %>%
 
 ###5.1.6 Repayment 
 ####5.1.6.1 3-year Repayment rate
-The variable RPY_3YR_RT_SUPP measure the percentage of student who entered repayemtn from October 1, 2010 to September 30, 2011, and made progress in the following three years. Repayment rates are generally considered most sensitive than default rates(we study later), which measure only the worse-case scenario for repayment outcomes. From the summary statistics, we see that 50% institutions have 40% of students who are making progress in their repayment. A histogram is also plotted to show the distribution, clearly with a heavy tail. 
+The variable RPY_3YR_RT_SUPP measures the percentage of students who entered repayemtn from October 1, 2010 to September 30, 2011, and made progress in the following three years. Repayment rates are generally considered most sensitive than default rates(we study later), which measures only the worse-case scenario for repayment outcomes. 
 
 ```{r,message=FALSE}
 repayment_clean = na.omit(data_clean$RPY_3YR_RT_SUPP)
@@ -629,10 +643,13 @@ summary(repayment_clean)
 qplot(repayment_clean, geom = "histogram")
 ```
 
+From the summary statistics, we see that 50% institutions have 40% of students who were making progress in their repayment. A histogram is also plotted to show the distribution, clearly with a heavy tail. 
 
 
 ####5.1.6.2 3-year Default rate
-The three-year cohort default rate describe the repayment in the opposite of repayment rate. In this dataset, it was calculated using the cohort of borrowers who entered repayment on their federal student loans between Octorber 1, 2010 to September 30, 2011, and who defaulted before September 2012. The median default rate aross all universities is 13%, which means that 50% of universities have 13 out of 100 students defaulted their loan! 
+
+The three-year cohort default rate describes the repayment in the opposite of repayment rate. In this dataset, it was calculated using the cohort of borrowers who entered repayment on their federal student loans between Octorber 1, 2010 to September 30, 2011, and  defaulted before September 2012. 
+
 
 ```{r,message=FALSE}
 default_clean = na.omit(data_clean$CDR3)
@@ -642,7 +659,7 @@ qplot(default_clean, geom = "histogram")
 summary(data_clean$RPY_3YR_RT_SUPP + data_clean$CDR3)
 ```
 
-
+The median default rate aross all universities is 13%, which means that more than 50% of universities have 13 out of 100 students defaulted their loan! 
 
 
 
@@ -773,7 +790,7 @@ From the scatter plot, it is obvious that the MD_FAMINC is in a negative linear 
 ##6.6 cost and median debts with earning
 
 
-Next, we analyze the relationship between the amount the debt and post-graduation earning. There are variable in the dataset to summarize the median amount for student body, one for students who already graduated and one for students who have not completed their study. We decide debts for students who have not completed to study in this problem, since it may can be used as a predictor in the future modeling. First, we use scatter plot to visualize the relationship between earning and the amount of debts, the plot clearly shows a positive relationship. Then we further calculate pearson correlation to confirm our hypothesis. The resulting coefficient 0.44 indicatesa moderate linear relationship between earning and debts. 
+Next, we analyze the relationship between the amount the debt and post-graduation earning. There are two variables in the dataset to summarize the median amount of debt for student body, one for students who already graduated and one for students who have not completed their study. We decide debts for students who have not completed to study in this problem, since it makes more sense for the purpose of prediction.  
 
 ```{r, message=FALSE}
 
@@ -790,11 +807,11 @@ cor(earn_debt$WDRAW_DEBT_MDN,earn_debt$MD_EARN_WNE_P6)
 
 
 ```
-
+First, we use scatter plot to visualize the relationship between earning and the amount of debts, the plot clearly shows a positive relationship. Then we further calculate pearson correlation to confirm our hypothesis. The resulting coefficient 0.44 indicatesa moderate linear relationship between earning and debts.
 
 ##6.7 default with earning
 
-Understanding the relationship between the default rate of load repayment and post-graduation earning on one hand can help federal financial commitee to improve their decision about load granting. If the the default rate increases as the earning increase, the commitee may prefer to grant more financial aid to institution whose students have higher earning. One the other hand, the default rate of repayment for a univeristy can also help predict the post-graduation earning for its students. A scatter plot is created to visualized the relationship between these two variables. From the chart, we see the earning seem to show a decreasing trend as the default rate increases, which shows a negative relationship between earning and default rate. Then we create the correlation coefficient of these two variables. The resulting r = -0.33 shows that correlation between earning and default rate is negative but the relationship is not very strong, this may be due the influences of some outliers. To conclude, the negative relationship between earning and default rate of loan repayment needs larger population or detail data processing to confirm.
+Understanding the relationship between the default rate of load repayment and post-graduation earning on one hand can help federal financial commitee to improve their decision about load granting. If  the default rate decreases as the earning increase, the commitee may prefer to grant more financial aid to institution whose students have higher earning. One the other hand, the default rate of repayment for a univeristy can also help predict the post-graduation earning for its students. 
 
 
 ```{r, message=FALSE}
@@ -809,10 +826,11 @@ data_clean %>% select(CDR3, MD_EARN_WNE_P6) %>%
 cor(earn_default$CDR3,earn_default$MD_EARN_WNE_P6)
 
 ```
+A scatter plot is created to visualize the relationship between these two variables. From the chart, we see the earning seems to show a decreasing trend as the default rate increases, which shows a negative relationship between earning and default rate. Then we calculate the correlation coefficient between these two variables. The resulting r = -0.33 shows that correlation between earning and default rate is negative but the relationship is not very strong, which may be due to the influences of some outliers. To conclude, the negative relationship between earning and default rate of loan repayment needs extra data to confirm.
 
 ##6.8 degree type vs. earning
 
-The higher education one receives, the higher the earning is after graduation. This is an assumption we are making when investing higher education. But is it really the case. In this question, we would like to study if it's worthwhile to invest in higher degree. From the boxplot below, we see that the higher the education, the higher the median earning 2 years after graduation. Especially, a graduate-degree give a hugh rise to one's earning.
+The higher education one receives, the higher the earning is after graduation. This is an assumption we are making when investing higher education. But is it really the case. In this question, we would like to study if it's worthwhile to invest in higher degree. 
 
 
 ```{r, message=FALSE}
@@ -827,6 +845,7 @@ data_clean %>%
 
 ```
 
+From the boxplot below, we see that the higher the education, the higher the median earning 6 years after entry Especially, a graduate-degree gives a hugh rise to one's earning.
 
 
 
