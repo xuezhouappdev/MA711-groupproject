@@ -11,13 +11,7 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
 
 #Table of Contents
 * 1.[Introduction](#Introduction)
-
 * 2.[Goal](#Goal)
-
-College is an investment. It's well-known that a major motivation for students to attend a university is higher post-graduation earning. So will your school make sure you get a return? With collge costs and student-debt levels reaching an all-time high, it's important to know which schools produce the highest earning alumni and what factors can help us predict post-graduate earnings for students in a university.
-
-The goal of our study is to understand what factors are predictive of students' post-graduate earning through individual variable analysis and relationship detection. To this end, we first explore a set of variables that are carefully selected to represent a school's profile, getting to know the distribution of each variable. Then we further analyze how these variables are related, particually the relationship between earning and other variables.
-
 * 3.[Dataset Preparation](#dataprep)
 * 4.[Objective](#objective)
 * 5.[Summary of variables](#variablesummary)
@@ -67,6 +61,10 @@ The College Scorecard project is designed to increase the transparency of the co
 These data are collected by United States Department of Education with the goal of helping students and families make more educated decisions about college and compare vital information easily. 
 
 #2. Goal<a id="Goal"></a>
+College is an investment. It's well-known that a major motivation for students to attend a university is higher post-graduation earning. So will your school make sure you get a return? With collge costs and student-debt levels reaching an all-time high, it's important to know which schools produce the highest earning alumni and what factors can help us predict post-graduate earnings for students in a university.
+
+The goal of our study is to understand what factors are predictive of students' post-graduate earning through individual variable analysis and relationship detection. To this end, we first explore a set of variables that are carefully selected to represent a school's profile, getting to know the distribution of each variable. Then we further analyze how these variables are related, particually the relationship between earning and other variables.
+
 #3. Dataset Preparation<a id="dataprep"></a>
 Our analysis focuses on the data of year 2012 -2013 of 23 variables. We chose the median income 6 years after graduation as our predictor variable, and eliminated many fields with bunch of missing values as well as some fields not pertainig enougn to post-graduation income. We then fosued primarily on a set of 23 variables, including gender, age, ethnic, acedemic costs, family income, completetion rates and replayment rate.  
 
