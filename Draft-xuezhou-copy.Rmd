@@ -1,0 +1,370 @@
+---
+title: "Draft-assinment1"
+author: "Kun Shen, Xiang Li, Xue Zhou"
+date: "February 10, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE,warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE)
+```
+
+# 1. Introduction
+# 2. Objective
+# 3. Dataset Preparation
+Our analysis focuses on the data of year 2012 -2013 of 23 variables. We chose the median income 6 years after graduation as our predictor variable, and eliminated many fields with bunch of missing values as well as some fields not pertainig enougn to post-graduation income. We then fosued primarily on a set of 23 variables, including gender, age, ethnic, acedemic costs, family income, completetion rates and replayment rate.  
+
+
+The following libraries have been used in the analysis: 
+```{r, message=FALSE,warning=FALSE}
+
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(plyr)
+
+```
+
+
+We loaded ScoreCard from the US Dapartment of Education. The main dataset spans nearly 20 years of data and covering multiple sources including IPEDS, NSLDS, and Department of Treasury. To ensure the maximum data accurary and availablity, we choose the subset of year 2012 - 2013 as our analysis sample. 
+```{r, message=FALSE,warning=FALSE}
+
+data = read.csv("MERGED2012_13_PP.csv",header = T, na.strings = "NULL")
+data = read.csv("MERGED2012_13_PP.csv",header = T, na.strings = c("NULL","PrivacySuppressed"))
+
+```
+
+The full dataset contains 1743 variables. 36 variables were intially selected to analyze.
+```{r, message=FALSE,warning=FALSE}
+
+variable = select(data, STABBR, PREDDEG, LOCALE2, MENONLY, WOMENONLY, CONTROL, ADM_RATE, SATMTMID, SATVRMID, SATWRMID, SAT_AVG,
+                  NPT4_PUB,
+                  NPT4_PRIV,
+                  UG,
+                  UG_NRA,
+                  UG_UNKN,
+                  UG_WHITENH,
+                  UG_BLACKNH,
+                  UG_API,
+                  UG_AIANOLD,
+                  UG_HISPOLD,
+                  DEP_STAT_PCT_IND,
+                  PAR_ED_PCT_1STGEN,
+                  MD_FAMINC,
+                  MEDIAN_HH_INC,
+                  POVERTY_RATE,
+                  PCTPELL,
+                  PCTFLOAN,
+                  GRAD_DEBT_MDN,
+                  WDRAW_DEBT_MDN,
+                  APPL_SCH_PCT_GE2,
+                  C150_4,
+                  MD_EARN_WNE_P6,
+                  MD_EARN_WNE_P10,
+                  RPY_3YR_RT_SUPP,
+                  CDR3)
+
+<<<<<<< HEAD
+=======
+
+>>>>>>> 37842095441e9def6a991afaf6c36c8b81d5403c
+```
+
+
+
+
+
+
+After loading the dataset, we change variables to the correct data types. 
+```{r, message=FALSE,warning=FALSE}
+
+
+
+#numeric
+variable[,-c(1,2,6)] %>%
+    apply(2, as.numeric) %>%
+    as.data.frame() %>%
+    {.} -> variable_num
+
+#categorical
+variable$preF=factor(variable$PREDDEG,levels=c(0,1,2,3,4),labels = c("NotClassified","Certificate-degree","Associate's-degree","Bachelor's-degree","Graduate-degree"))
+variable$ctrF=factor(variable$CONTROL,levels = c(1,2,3),labels = c("Public","Private Nonprofit","Private For-profit"))
+
+#combine the three datafram to generate a new dataset. 
+data_new <- cbind(variable_num,variable$preF, variable$ctrF,variable$STABBR)
+
+
+
+dim(data_new)
+
+mean(is.na(data_new$NPT4_PUB))
+
+```
+
+
+
+
+```{r, message=FALSE,warning=FALSE}
+
+for (i in 1:length(data_new$NPT4_PRIV)) {
+   if (is.na(data_new$NPT4_PRIV[i])) {
+       data_new$NPT4_PRIV[i] = data_new$NPT4_PUB[i]
+   }
+}
+mean(is.na(data_new$NPT4_PRIV))
+data_new = data_new[,-9]
+colnames(data_new)[9] <- "NPT4_COMBINE"
+```
+
+In order to choose the variables that have enough valid data related to the topic, we filtered and considered variables with percent missing value less than 25%. The new data set was named as “data_clean” for further analysis. 
+```{r, message=FALSE,warning=FALSE}
+
+data_clean = data_new[,colMeans(is.na(data_new)) < 0.25]
+write.csv(data_clean,"data_clean.csv")
+```
+
+#Variable summary
+For numeric variabls, we calculate the basic summary statistics such as median, min, max, mode and quantile. We also use visualizations such as hisgroms and boxplots to understand the distribution of the values. For categorical variables, we use frequency table to understand the frequcies of each categories.Box chart is used as a visualization tool.
+
+
+=======
+The table below lists the variables that will be used for the further analysis: 12 of them are continuous variables while 3 of them are categorical variables. Our data set now contains 120 rows and 15 columns. 120 rows consist of 20 years’ of data for each of the chosen six countries. The 15 columns consist of country name, country code, year, and the twelve indicators.
+
+
+| Variable Name    | Data Type         | Categorical or Continuous         | Group       |
+| --------------  | ----------------- | --------------------------------- | -------- |
+| NPT4_COMBINE    | Numeric           |  Continuous                       |  Cost    |
+| CDR3             | Numeric           |  Continuous                       | n        |
+| variable$qreF    | Factor            |  Categorical                      |  n       |
+| variable$ctrF    | Factor            |  Categorical                      |   n      |
+| variable$STABBR  | Factor            |  Categorical                      |   n      |
+| DEP_STAT_PCT_IND | Numeric           |  Continuous                       |     Student    |
+| PAR_ED_PCT_1STGEN| Numeric           |  Continuous                       |      Student   |
+| MD_FAMINC        | Numeric           |  Continuous                       |       Student  |
+| PCTPELL          | Numeric           |  Continuous                       |Aid         |
+| PCTFLOAN         | Numeric           |  Continuous                       | Aid        |
+| GRAD_DEBT_MDN    | Numeric           |  Continuous                       |  Aid      |
+| APPL_SCH_PCT_GE2 | Numeric           |  Continuous                       | Student        |
+| WDRAW_DEBT_MDN   | Numeric           |  Continuous                       |    Aid     |
+| MD_EARN_WNE_P6   | Numeric           |  Continuous                       |     Earning    |
+| MD_EARN_WNE_P10  | Numeric           |  Continuous                       |       Earning  |
+| RPY_3YR_RT_SUPP  | Numeric           |  Continuous                       |      Repayment   |
+| CDR3             | Numeric           |  Continuous                       | Repayment        |
+| variable$qreF    | Factor            |  Categorical                      |  School       |
+| variable$ctrF    | Factor            |  Categorical                      |   School      |
+| variable$STABBR  | Factor            |  Categorical                      |   School      |
+
+##School
+
+###1. State
+State variable has 59 levels, which include 55 states in the United States, as well as......... From the following frequncy table, we see that California has the most University-equivalent institutions across the nation, followed by Texas and Ner York. It has about 800 universities! A bar chart is plotted below to show the top states with the most universities. Then summary of frequency table also shows that the state having the least university only has one, and 50% of state has more than 132 universities in the state.
+```{r, message=FALSE}
+
+state_freq = count(data_clean,"variable$STABBR")[order(-count(data_clean,'variable$STABBR')$freq),]
+state_freq[1:15,]
+summary(state_freq)
+state_freq[1:15,] %>% ggplot(aes(x=factor(variable.STABBR), y=freq)) +
+  geom_bar(stat = 'identity')
+
+```
+
+###2. Predominant Degree
+Then we analyze the type of degree universities mainly offer. There are four types of degree taken into accout: Certificate-degree, Associate's degree, Bachelor's degree, and Graduate Degree. About 5% of the population are classified in terms of the predomiant degree they offer.  43.2% offer Certificate degree as their predominant degree, 27.3% predominantly offer Bachelor degree and only 4.23% are classified as Graduate degree predominant.
+
+```{r, message=FALSE}
+prop.table(table(data_clean$`variable$preF`)) * 100
+data_clean %>% ggplot(aes(x=variable$`preF`, fill = 'blue')) + 
+  geom_histogram(stat = "count") +
+  xlab("Degree") 
+```
+
+
+###3. Control of Institution
+In addition to State and predominant degree, control of institution is another categorical variable in the dataset. The label of Control is to indicate whether or not a institution is institution is privately owned and whether or not it is a for-profit organization. There are three levels of this variable: Public, Private Nonprofit, and Private-profit. Public school is assumed to be non-profit so it was not further divided into two subgroups. Below we show the percentage summary of each category and a bar char is plotted to facilitate understanding. About 50% out of all institution are private for-profit university, which is the *most dominant type*. Public and Private Nonprofit are pretty tie in terms of number of observation in each category.
+
+```{r, message=FALSE}
+prop.table(table(data_clean$`variable$ctrF`)) * 100
+data_clean %>% ggplot(aes(x=variable$`ctrF`, fill = 'blue')) + 
+  geom_histogram(stat = "count") +
+  xlab("Degree")
+```
+
+
+
+
+
+
+
+
+##Student
+###3. How many application do students submit?
+The variable APPL_SCH_PCT_GE2 is to describe the percentage of students who list two and more than two institutions when he apply for financial aid when apply for universities. This information is only available to students who submit their applications for federal aid, and not cover the whole student body. Nevertheless, this variable still can provides some useful insights about how many universities a student usually apply to. 
+
+The summry statistics show that median percentage of student submitting two or more than two application is 41.67 across all univerisities. The institution having the least percentage only has 4% of student applying to more than one university, while the school with the highest percent has as high as 90% of student applying to more than one university. The boxplot compare the the percent of student applying to only one university and that of student applying to more than 1. We can clearly see that a larger portion of students only list one instituiton when submitting their application for financial aid.
+```{r, message=FALSE}
+college_app_2_clean = data_clean$APPL_SCH_PCT_GE2[!is.na(data_clean$APPL_SCH_PCT_GE2)]*100
+summary(college_app_2_clean)
+
+college_app_2_clean %>% as.data.frame() %>%
+    mutate(college_app_1 = 100-college_app_2_clean)%>%
+    {.}  -> college_app
+colnames(college_app)[1] <- "two_or_greater"
+
+college_app %>% gather(key = num_app, value = perc_student) %>%
+{.} -> college_app
+
+college_app %>%
+    ggplot(aes(factor(num_app), perc_student)) +
+    geom_boxplot() 
+```
+
+
+
+
+
+
+
+##Cost
+###1.Net Price
+
+
+
+
+
+
+##Aid
+
+
+
+
+
+
+###1. The median debt for students who have completed
+
+
+###2. The median debt for students who have not completed
+WDRAW_DEBT_MDN describe the median number of debt fot students who ahve not completed their study. In other words, they are still attending the university. The summary statistics show that student in 50% of institution have a median debt of 5500.The median debt for attending students can be as much as 27620 for some school and as low as 600 for other. So we also calculate standard deviation to measure the dispenser of the distribution. The standard deviation is 2415.623 about 95% of institution have a median debt ranging from 1167.754  to 10830.246. The histogram that the distribution of the median roughly follows a standard distribution with a sharp peak and slightly heavy tail.
+
+```{r, message=FALSE}
+median_debt_non_null = data_clean$WDRAW_DEBT_MDN[!is.na(data_clean$WDRAW_DEBT_MDN)]
+summary(median_debt_non_null)
+sd(median_debt_non_null)
+
+#plot a ggplot to better illustrate
+data_clean %>% ggplot(aes(x = WDRAW_DEBT_MDN)) +
+                geom_histogram(binwidth = 450) #warning?
+
+ggplot(data=data_clean,
+       aes(x=WDRAW_DEBT_MDN,
+           fill = I('red'))) +
+    geom_density(alpha=0.5) +
+    scale_x_continuous("Median Debt for Students Who Have Completed")
+=======
+we will summarize the data set using dplyr functions in the variables summary section.
+
+#4 Goals
+#5 Summary of variables
+##5.1 Individual variable summary
+
+###5.1.1 Average net price for Title IV institutions(both public and private institutions)
+We are using the code below to summarize the continuous data
+
+```{R, message=FALSE, warinig = FALSE}
+
+
+summarize(group_by(data_clean, variable$STABBR),
+          minNPT4_COMBINE=min(NPT4_COMBINE ,na.rm=TRUE),
+          maxNPT4_COMBINE=max(NPT4_COMBINE,na.rm=TRUE),
+          meanNPT4_COMBINE=mean(NPT4_COMBINE,na.rm=TRUE),
+          medianNPT4_COMBINE=median(NPT4_COMBINE,na.rm=TRUE),
+          sdNPT4_COMBINE = sd(NPT4_COMBINE,na.rm=TRUE))
+
+data_clean %>%
+  group_by(variable$STABBR) %>%
+    summarise(minNPT4_COMBINE=min(NPT4_COMBINE ,na.rm=TRUE),    maxNPT4_COMBINE=max(NPT4_COMBINE,na.rm=TRUE),medianNPT4_COMBINE=median(NPT4_COMBINE,na.rm=TRUE))  %>%
+    arrange(medianNPT4_COMBINE)   %>%
+{.}  ->test
+
+test
+
+#Here is the quartile statistics :
+summary(data_clean$NPT4_COMBINE,na.rm=TRUE)
+quantile(data_clean$NPT4_COMBINE,na.rm=TRUE)
+
+
+
+
+#histogram for NPT_COM
+  ggplot(data=data_clean , aes(NPT4_COMBINE)) + 
+    geom_histogram(breaks=seq(0, 90000, by =2000), 
+                   col="red", 
+                   aes(fill=..count..),na.rm=TRUE)+
+    labs(title="Histogram for NPT_COM") +
+    labs(x="NPT_COM", y="Count")
+>>>>>>> 37842095441e9def6a991afaf6c36c8b81d5403c
+```
+
+
+
+<<<<<<< HEAD
+##Earning
+
+###. Earning after graduation
+
+We selected two variables MD_EARN_WNE_P6, MD_EARN_WNE_P10 in the earning group to study students' post-graduation earning. MD_EARN_WNE_P6 is the median earning for students six years after their entry, which corresponds to two years after gradutaion. Likewise, MD_EARN_WNE_P10 is the median earning ten years after their entry, which corresponds to four years after graduation. These two metrics give us an idea of how much money students are making after their graduation, in both short and medium terms,
+
+In addition to these two variables, a derived variable is also calculated as the difference between the salary 2 years post-graduation and another two years later. The median earning of 50% institutions is below the 25300 below, while the maximum median earining is 120200. After two years, the median earning increase by about $5500. The histogram gives a more clear idea of the earning distribution. Most of institution with students having a median earining between 10000 to 50000 two years after graduation. The distribution of earining 4 years after graduation falls at the right of the distribution of 2 years post-graduation, which means that the earning increases as students' experience increase. Beside, the fout-year post-graduation earning has a wider spread than that of two years. That indicate that the there is a greater gap between who are earning more and who are earning less, which can be confirmed by the increase in standard deviation.
+
+
+```{r,message=FALSE}
+earning = select(data_clean, MD_EARN_WNE_P6, MD_EARN_WNE_P10 )
+earning_clean = na.omit(earning)
+earning_clean %>%
+    mutate(salary_increase = MD_EARN_WNE_P10-MD_EARN_WNE_P6) %>%
+    {.} -> earning_clean
+summary(earning_clean)
+apply(earning_clean, 2, sd) #dispersion increases
+
+earning_clean %>% gather(key = years_from_entry, value = salary) %>%
+    {.} -> earning_clean1
+
+earning_clean1[earning_clean1$years_from_entry != 'salary_increase',] %>% 
+    ggplot(aes(x = salary, fill =years_from_entry )) +
+    geom_density(alpha = 0.5) + 
+    xlim(0, 150000)
+
+
+```
+    
+=======
+
+##5.2 Relationship between variables
+##5.3 Comparison between variables
+
+#6. Findings and Conclusion
+>>>>>>> 37842095441e9def6a991afaf6c36c8b81d5403c
+    
+##Repayment
+
+###1. 3-year Repayment rate
+The variable RPY_3YR_RT_SUPP measure the percentage of student who entered repayemtn from October 1, 2010 to September 30, 2011, and made progress in the following three years. Repayment rates are generally considered most sensitive than default rates(we study later), which measure only the worse-case scenario for repayment outcomes. From the summary statistics, we see that 50% institutions have 40% of students who are making progress in their repayment. A histogram is also plotted to show the distribution, clearly with a heavy tail. 
+
+```{r,message=FALSE}
+repayment_clean = na.omit(data_clean$RPY_3YR_RT_SUPP)
+summary(repayment_clean)
+qplot(repayment_clean, geom = "histogram")
+```
+
+###2. 3-year Default rate
+The three-year cohort default rate describe the repayment in the opposite of repayment rate. In this dataset, it was calculated using the cohort of borrowers who entered repayment on their federal student loans between Octorber 1, 2010 to September 30, 2011, and who defaulted before September 2012. The median default rate aross all universities is 13%, which means that 50% of universities have 13 out of 100 students defaulted their loan! 
+
+```{r,message=FALSE}
+default_clean = na.omit(data_clean$CDR3)
+summary(default_clean)
+qplot(default_clean, geom = "histogram")
+
+summary(data_clean$RPY_3YR_RT_SUPP + data_clean$CDR3)
+```
+HU
+
