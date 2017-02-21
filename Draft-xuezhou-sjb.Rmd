@@ -14,10 +14,6 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE)
 
 * 2.[Goal](#Goal)
 
-College is an investment. It's well-known that a major motivation for students to attend a university is higher post-graduation earning. So will your school make sure you get a return? With collge costs and student-debt levels reaching an all-time high, it's important to know which schools produce the highest earning alumni and what factors can help us predict post-graduate earnings for students in a university.
-
-The goal of our study is to understand what factors are predictive of students' post-graduate earning through individual variable analysis and relationship detection. To this end, we first explore a set of variables that are carefully selected to represent a school's profile, getting to know the distribution of each variable. Then we further analyze how these variables are related, particually the relationship between earning and other variables.
-
 * 3.[Dataset Preparation](#dataprep)
 * 4.[Objective](#objective)
 * 5.[Summary of variables](#variablesummary)
@@ -67,6 +63,11 @@ The College Scorecard project is designed to increase the transparency of the co
 These data are collected by United States Department of Education with the goal of helping students and families make more educated decisions about college and compare vital information easily. 
 
 #2. Goal<a id="Goal"></a>
+
+College is an investment. It's well-known that a major motivation for students to attend a university is higher post-graduation earning. So will your school make sure you get a return? With collge costs and student-debt levels reaching an all-time high, it's important to know which schools produce the highest earning alumni and what factors can help us predict post-graduate earnings for students in a university.
+
+The goal of our study is to understand what factors are predictive of students' post-graduate earning through individual variable analysis and relationship detection. To this end, we first explore a set of variables that are carefully selected to represent a school's profile, getting to know the distribution of each variable. Then we further analyze how these variables are related, particually the relationship between earning and other variables.
+
 #3. Dataset Preparation<a id="dataprep"></a>
 Our analysis focuses on the data of year 2012 -2013 of 23 variables. We chose the median income 6 years after graduation as our predictor variable, and eliminated many fields with bunch of missing values as well as some fields not pertainig enougn to post-graduation income. We then fosued primarily on a set of 23 variables, including gender, age, ethnic, acedemic costs, family income, completetion rates and replayment rate.  
 
@@ -238,7 +239,11 @@ state_freq = count(data_clean,"STABBR_factor")[order(-count(data_clean,'STABBR_f
 state_freq
 summary(state_freq)
 state_freq[1:15,] %>% ggplot(aes(x=STABBR_factor, y=freq)) +
-  geom_bar(stat = 'identity')
+  geom_bar(stat = 'identity') +
+  xlab('State') +
+  ylab('Number of Institution') +
+  ggtitle('Number of Institution in Each State') +
+  theme(plot.title = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=20, hjust=0.5)) 
 
 ```
 The frequency table counts the number of records belonging to each state, since each records represents a institution, each cell also equals to the number of university in that state.
@@ -256,7 +261,10 @@ Then we analyze the type of degree universities mainly offer. There are four typ
 prop.table(table(data_clean$`PREDDEG_factor`)) * 100
 data_clean %>% ggplot(aes(x=PREDDEG_factor, fill = 'blue')) + 
   geom_histogram(stat = "count") +
-  xlab("Degree") 
+  xlab("Degree")  +
+  ylab('Count') +
+  ggtitle('Number of Institution in Each Predominant Degree type') +
+  theme(plot.title = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=20, hjust=0.5)) 
 ```
 From above frequency table, we see that about 5% of the population are unclassified in terms of the predomiant degree they offer.  43.2% offer Certificate degree as their predominant degree, 27.3% predominantly offer Bachelor degree and only 4.23% are classified as Graduate degree predominant.
 
@@ -272,7 +280,10 @@ In addition to State and predominant degree, control of institution is another c
 prop.table(table(data_clean$`Control_factor`)) * 100
 data_clean %>% ggplot(aes(x=Control_factor, fill = 'blue')) + 
   geom_histogram(stat = "count") +
-  xlab("Degree")
+  xlab("Type") +
+  ylab('Count') +
+  ggtitle('Number of Institution in Each School type') +
+  theme(plot.title = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=20, hjust=0.5)) 
 ```
 
 About 50% out of all institution are private for-profit university, which is the *most dominant type*. Public and Private Nonprofit are pretty tiex in terms of the number of observation in each category.
@@ -338,9 +349,17 @@ colnames(college_app)[1] <- "two_or_greater"
 college_app %>% gather(key = num_app, value = perc_student) %>%
 {.} -> college_app
 
+college_app$num_app = as.factor(college_app$num_app)
+levels(college_app$num_app)[levels(college_app$num_app)=="college_app_1"] <- "one"
+
 college_app %>%
     ggplot(aes(factor(num_app), perc_student)) +
-    geom_boxplot() 
+    geom_boxplot() +
+    xlab("Number of application submitted") +
+    ylab("Percentage of Student") +
+    labs(title="Percentage of Students Submitting One/Two or Greater Applications") +
+    theme(plot.title = element_text(hjust = 0.5))
+    
 ```
 
 The summry statistics show that median percentage of student submitting two or more than two application is 41.67% across all univerisities. The institution having the least percentage only has 4% of student applying to more than one university, while the school with the highest percent has as high as 90% of student applying to more than one university. The boxplot compares the the percent of student applying to only one university with that of student applying for more than one. We can clearly see that a larger portion of students only listed one instituiton when submitting their application for financial aid.
@@ -637,7 +656,11 @@ earning_clean %>% gather(key = years_from_entry, value = salary) %>%
 earning_clean1[earning_clean1$years_from_entry != 'salary_increase',] %>% 
     ggplot(aes(x = salary, fill =years_from_entry )) +
     geom_density(alpha = 0.5) + 
-    xlim(0, 150000)
+    xlim(0, 150000) +
+    xlab("Median Earning") +
+    scale_fill_discrete(name="Years from Entry",
+                         breaks=c("MD_EARN_WNE_P10", "MD_EARN_WNE_P6"),
+                         labels=c("10 years", "6 years"))
 
 
 ```
@@ -654,7 +677,12 @@ The variable RPY_3YR_RT_SUPP measures the percentage of students who entered rep
 ```{r,message=FALSE}
 repayment_clean = na.omit(data_clean$RPY_3YR_RT_SUPP)
 summary(repayment_clean)
-qplot(repayment_clean, geom = "histogram")
+qplot(repayment_clean, geom = "histogram") +
+xlab("Repayment Rate") +
+ylab("Count") +
+labs(title="Histogram for Repayment Rate") +
+theme(plot.title = element_text(hjust = 0.5))
+
 ```
 
 From the summary statistics, we see that 50% institutions have 40% of students who were making progress in their repayment. A histogram is also plotted to show the distribution, clearly with a heavy tail. 
@@ -668,7 +696,11 @@ The three-year cohort default rate describes the repayment in the opposite of re
 ```{r,message=FALSE}
 default_clean = na.omit(data_clean$CDR3)
 summary(default_clean)
-qplot(default_clean, geom = "histogram")
+qplot(default_clean, geom = "histogram") +
+xlab("Default Rate") +
+ylab("Count") +
+labs(title="Histogram for Default Rate") +
+theme(plot.title = element_text(hjust = 0.5))
 
 summary(data_clean$RPY_3YR_RT_SUPP + data_clean$CDR3)
 ```
@@ -837,7 +869,7 @@ From the stacked histogram, we can tell that for all the three college type inst
 
 
 
-##6.8 cost and median debts with earning<a id="6.8"></a> 
+##6.8 Median debts with earning<a id="6.8"></a> 
 Next, we analyze the relationship between the amount the debt and post-graduation earning. There are two variables in the dataset to summarize the median amount of debt for student body, one for students who already graduated and one for students who have not completed their study. We decide debts for students who have not completed to study in this problem, since it makes more sense for the purpose of prediction.
 
 
@@ -846,7 +878,9 @@ Next, we analyze the relationship between the amount the debt and post-graduatio
 
 data_clean %>% ggplot(aes(x = WDRAW_DEBT_MDN, y = MD_EARN_WNE_P6)) + 
                 geom_jitter() +
-                geom_smooth(method = "lm", se = FALSE, col = 'red')
+                geom_smooth(method = "lm", se = FALSE, col = 'red') +
+                xlab("Median Amount Debt for Students who have not completed") +
+                ylab("Earning  6 Years from Entry")
 
 data_clean %>% select(WDRAW_DEBT_MDN, MD_EARN_WNE_P6) %>%
       na.omit() %>%
@@ -866,7 +900,9 @@ Understanding the relationship between the default rate of load repayment and po
 ```{r, message=FALSE}
 data_clean %>% ggplot(aes(x = CDR3, y = MD_EARN_WNE_P6)) + 
                 geom_jitter() +
-                geom_smooth(method = "lm", se = FALSE, col = 'red')
+                geom_smooth(method = "lm", se = FALSE, col = 'red')+
+                xlab("Three-year Cohort Default Rate") +
+                ylab("Earning  6 Years from Entry")
 
 data_clean %>% select(CDR3, MD_EARN_WNE_P6) %>%
       na.omit() %>%
@@ -887,11 +923,13 @@ The higher education one receives, the higher the earning is after graduation. T
 data_clean %>%
   ggplot(aes(x=`PREDDEG_factor`,
              y=MD_EARN_WNE_P6)) +
-  geom_boxplot(aes(fill = `PREDDEG_factor`))
+  geom_boxplot(aes(fill = `PREDDEG_factor`)) +
+  xlab("Degree Type") +
+  ylab("Earning  6 Years from Entry") +
+  scale_fill_discrete(name="Degree Type")
 
 
-
-
+S
 ```
 
 From the boxplot below, we see that the higher the education, the higher the median earning 6 years after entry Especially, a graduate-degree gives a hugh rise to one's earning.
@@ -931,7 +969,7 @@ Our team further uses the function xtabs() to calculate the exact number for eac
 ```
 
 
- #6.13 control + earning<a id="6.13"></a> 
+#6.13 control + earning<a id="6.13"></a> 
 The following plot shows one factor variable (control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry). We use the 
 geom_violin() using the default scale = ???area??? argument and geom_boxplot() function to explore the relationship. The plot superimposed with boxplots shows side-by-side violin plots of median earnings of students working and not enrolled 6 years after entry according to different college types.
 
