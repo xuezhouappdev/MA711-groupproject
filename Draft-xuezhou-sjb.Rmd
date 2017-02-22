@@ -279,7 +279,7 @@ About 50% of all institutions are private for-profit university, which is the mo
 
 
 ###5.1.2 Student Body<a id="5.1.2"></a> 
-####5.1.2.1 Percentage first-generation students<a id="5.1.2.1"></a>
+####5.1.2.1 Percentage of First-generation Students<a id="5.1.2.1"></a>
 This element identifies the share of federally aided students at the institution who report that they are the first generaion on the FAFSA (Free Application for Federal Student Aid). First generation students are defined as students whose parents didn't attend a college.
 
 With the following codes, we extracted the institutions with the highest and lowest percentage of first-generation students. Then we observed this varible's basic summary statistics: min, max, mean, median and standard deviation.
@@ -311,7 +311,7 @@ Below is the code to generate a visual representation in the histogram.
     geom_histogram(breaks=seq(0.1, 1, by =0.1), 
                    col="white", 
                    aes(fill=..count..),na.rm=TRUE)+
-    labs(title="Histogram for Percentage first-generation students") +
+    labs(title="Histogram for Percentage First-Generation Students") +
     labs(x="PAR_ED_PCT_1STGEN", y="Count") +
     theme(plot.title = element_text(hjust = 0.5))
 ```
@@ -358,7 +358,7 @@ The summary statistics show that the median percentage of those students submitt
 ###5.1.3 Cost<a id="5.1.3"></a>
 ####5.1.3.1 Average Net Price for Title IV Institutions(both public and private institutions)<a id="5.1.3.1"></a>
 
-With the following codes, we extracted the IV institutions with the highest and lowest average net price. Then we observed this varibles's basic summary statistics: min, max, mean, median and standard deviation.
+With the following codes, we extracted the IV institutions' basic demographic information with the highest and lowest average net price. Then we observed this varibles's basic summary statistics: min, max, mean, median and standard deviation.
  
 ```{R, message=FALSE, warinig = FALSE}
 
@@ -417,7 +417,7 @@ summarize(data_clean,
 
 ```
 
-From the summary results, we learned that the maximum value of the variable is 98.56%(Capella University) while the minimum value is about 0.73% (University of Notre Dame). From the mean value, we can tell that in most colleges, around 56% of the students are financially independent. The standard deviation value 23.3% indicates a relatively high difference among different colleges, which can also be concluded from the difference between the maximum value and the minimum value. Below is the code to generate a visual representation in the histogram
+From the summary results, we learned that the maximum value of the variable is 98.56% (Capella University) while the minimum value is about 0.73% (University of Notre Dame). From the mean value, we can tell that in most colleges, around 56% of the students are financially independent. The standard deviation value 23.3% indicates a relatively high difference among different colleges, which can also be concluded from the difference between the maximum value and the minimum value. Below is the code to generate a visual representation in the histogram
 
 ```{R}
 
@@ -426,7 +426,7 @@ From the summary results, we learned that the maximum value of the variable is 9
     geom_histogram(breaks=seq(0.1, 1, by =0.1), 
                    col="white", 
                    aes(fill=..count..),na.rm=TRUE)+
-    labs(title="Histogram for Percentage of students who are financially independent") +
+    labs(title="Histogram for Percentage of Students Who Are Financially Independent") +
     labs(x="DEP_STAT_PCT_IND", y="Count") +
     theme(plot.title = element_text(hjust = 0.5))
 ```
@@ -438,7 +438,7 @@ From the histogram, we notice that the values between 0.7 to 0.8 are quite frequ
 ###5.1.4 Financial Aid<a id="5.1.4"></a>  
 ####5.1.4.1 Percentage of undergraduates who receive a Pell Grant<a id="5.1.4.1"></a>
 
-This element, pulled from the IPEDS student Financial Aid Component, shows the share of undergraduate students who received Pell Grants in a given year, which is an important measure of the financial aid an institution provides to low-income students. We are using the code below to summarize this variable and extract the institutions with the highest and lowest value. 
+This element, pulled from the IPEDS student Financial Aid Component, shows the share of undergraduate students who received Pell Grants in a given year, which is an important measure of the financial aid an institution provides to low-income students. We are using the code below to summarize this variable(min, max, mean, median and standard deviation) and extract the institutions with the highest and lowest value. 
 
 ```{R, message=FALSE, warinig = FALSE}
 
@@ -466,7 +466,7 @@ From the output, we can tell that the range is between 0 to 100%.	No students in
     geom_histogram(breaks=seq(0, 1, by =0.1), 
                    col="white", 
                    aes(fill=..count..),na.rm=TRUE)+
-    labs(title="Histogram for Percentage of undergraduates who receive a Pell Grant") +
+    labs(title="Histogram for Percentage of Undergraduates Who Receive a Pell Grant") +
     labs(x="PCTPELL", y="Count") +
     theme(plot.title = element_text(hjust = 0.5))
 ```
@@ -475,9 +475,9 @@ From the histogram, we are able to conclude that in most colleges, 40% to 50% of
 
 
 
-####5.1.4.2 Percent of all federal undergraduate students receiving a federal student loan<a id="5.1.4.2"></a>
+####5.1.4.2 Percent of All Federal Undergraduate Students Receiving a Federal Student Loan<a id="5.1.4.2"></a>
 
-This element, as reported in the IPEDs Student Finaicial Aid component, shows the share of undergraduate students who received federal loans in a given year. It can provide important context to figures related to debt, repayment and non-repayment.We are using the code below to summarize this variable and extract the institutions with highest and lowest value. 
+This element, as reported in the IPEDs Student Finaicial Aid component, shows the share of undergraduate students who received federal loans in a given year. It can provide important context to figures related to debt, repayment and non-repayment. We were using the code below to summarize this variable(min, max, mean, median and standard deviation) and extracted the institutions with highest and lowest value. 
 
 ```{R, message=FALSE, warinig = FALSE}
 
@@ -506,7 +506,7 @@ From the output, we can tell that the range is between 0 to 100%.	As we can reca
     geom_histogram(breaks=seq(0, 1, by =0.1), 
                    col="white", 
                    aes(fill=..count..),na.rm=TRUE)+
-    labs(title="Histogram for Percent of all federal undergraduate students receiving a federal student loan") +
+    labs(title="Histogram for Percent of all Federal Undergraduate Students Receiving a Federal Student Loan") +
     labs(x="PCTFLOAN", y="Count") +
     theme(plot.title = element_text(hjust = 0.5))
 ```
@@ -518,7 +518,7 @@ From the histogram, it's obvious that there are two peaks in the graph. The rate
 
 ####5.1.4.3 The median debt for students who have completed<a id="5.1.4.3"></a>
 
-This variable recorded debt for students who have completed the education. We are using the code below to summarize this variable and extracted the institutions with largest and smallest value. 
+This variable recorded debt for students who have completed the education. We were using the code below to summarize this variable(min, max, mean, median and standard deviation) and extracted the institutions with largest and smallest value. 
 
 ```{R, message=FALSE, warinig = FALSE}
 
@@ -691,9 +691,9 @@ The median default rate across all universities is 13%, which means that more th
 
 
 #6. Relationship between variables<a id="6"></a>
-##6.1. The relationship between average net cost for Title IV institutions and State<a id="6.1"></a>
+##6.1. The Relationship between Average Net Cost for Title IV institutions and State<a id="6.1"></a>
 
-To analyze the relationship between the average net cost for Title IV institutions and State, we grouped the data into the state level to take a further look. We would like to investigate the distribution of institutions ' average net price in each state.
+To analyze the relationship between the average net cost for Title IV institutions and State, we grouped the data into state level to take a further analysis on each state's min, max and median value of the Average Net Cost - We would like to investigate the distribution of institutions ' average net price in each state.
 
 ```{R message=FALSE, warinig = FALSE}
 
@@ -730,7 +730,7 @@ From the scatter plot, it is obvious that the NPT4_COMBINE is in a positive line
 
 ##6.3. The relationship between Percentage of Pell Grant and college type(CONTROL)<a id="6.3"></a>
 
-To compare the percentage of Pell Grant in different control types, we grouped the Percentage of Pell Grant data using college type to take a further analysis. 
+To compare the percentage of Pell Grant in different control types, we grouped the Percentage of Pell Grant data using college type to take a further analysis on each college type's min, max and median value of Percentage of Pell Grant. 
 
 ```{R message=FALSE, warinig = FALSE}
 
@@ -761,7 +761,7 @@ From the overlaying histograms, the percentages of students who received the Pel
 
 ##6.4. The relationship between Percentage first-generation students and States<a id="6.4"></a>
 
-To compare the percentage of first-generation students in each states, we grouped data into the state level to take a further analysis. 
+To compare the percentage of first-generation students in each states, we grouped data into the state level to take a further analysis on the min, max and median value of Percentage first-generation students on the state base. The top 5 states as well as the lowest 5 states are extracted. 
 
 ```{R message=FALSE, warinig = FALSE}
 
@@ -779,7 +779,7 @@ PAR_ED_PCT_1STGEN_STATE
 The results show that the universities located in ND, SD, VT, MN and MT have the lowest percentage first-generation students, which indicates that the students in these five states would have a better family education background. The five states with the highest share of first-generation students are LA, NJ, MP, MV, and MH. 
 
 
-##6.5. The relationship between family income and percentage of Pell Grant<a id="6.5"></a>
+##6.5. The relationship between Family Income and Percentage of Pell Grant<a id="6.5"></a>
 
 We hypothesed that colleges with small value of family income would tend to have high percentages of Pell Grant. The following codes are used to generate the scatter plots between these two variables. 
 
@@ -797,7 +797,7 @@ From the scatter plot, it is obvious that the MD_FAMINC is in a negative linear 
 
 ##6.6. The Relationship between the Percentage of Financially-independent Students and Control<a id="6.6"></a>
 
-To compare the percentage of financially-independent students in the institutions with different college type, we grouped the data by the control type(private for-profit, public, private nonprofit) to take a further analysis.
+To compare the percentage of financially-independent students in the institutions with different college type, we grouped the data by the control type(private for-profit, public, private nonprofit) to take a further analysis on the min, max and median value for each type. 
 
 ```{R message=FALSE, warinig = FALSE}
 
@@ -816,7 +816,7 @@ From the result, we can tell the highest median value is in privately for-profit
 
 ##6.7. The Relationship between Percentage of Students Who Receive the Federal Loans and Control.<a id="6.7"></a> 
 
-To compare the percentage of students who receive the federal loans in the given year in each schools control type, we grouped the data by the control type(private for-profit, public, private non-profit) to take a further analysis. A stacked histogram is also used to generate a more visual presentation. 
+To compare the percentage of students who receive the federal loans in the given year in each schools control type, we grouped the data by the control type(private for-profit, public, private non-profit) to take a further analysis on the min, max and median value of the variable seperately. A stacked histogram is also used to generate a more visual presentation. 
 
 ```{R message=FALSE, warinig = FALSE}
 
@@ -842,7 +842,7 @@ data_clean %>%
 
 From the result,  private institutions have a much larger median value than the public institutions. With a much higher costs burden, it makes sense that the low-income students in private institutions are much more likely to seek financial aids than the students in public institutions. 
 
-From the stacked histogram, we can tell that for all  three college types, the most frequent range appears between 0.6 and 0.8, which is consistent with the findings we observe in the individual variable summary section. 
+From the stacked histogram, we can tell that for all three college types, the most frequent range appears between 0.6 and 0.8, which is consistent with the findings we observe in the individual variable summary section. 
 
 
 ##6.8 The Relationsip between Median Debts and Post-Graduation Earnings<a id="6.8"></a> 
@@ -958,7 +958,7 @@ xtabs(formula = ~PREDDEG_factor+Control_factor)
 
 From the graph we can see that for the public type of school, associate degree is mostly awarded and it is in the middle of the distribution, with fewer NotClassified degree and fewer graduate degree in the extremes. But the distribution is symmetric compared with the other two types. For the Private Nonprofit type of school, mostly awarded degrees (Bachelor degree and Graduate degree) are located at the right of the distribution, with fewer NotClassified degree on the left.  The distribution shows a negative skew: the awarded degrees extend to the left farther than they do to the right. For the private for-profit type of school, mostly awarded degree (Certificate degree) is on the left of the distribution, with fewer graduate degree on the right. The distribution shows a positive skew: the awarded degrees extend to the right farther than they do to the left.
 
-#6.13 The Relashionship between Control and Median earnings of Students Working and Not Enrolled 6 Years after Entry<a id="6.13"></a> 
+##6.13 The Relashionship between Control and Median earnings of Students Working and Not Enrolled 6 Years after Entry<a id="6.13"></a> 
 
 The following plot shows one factor variable (control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry).
 
