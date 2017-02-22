@@ -55,9 +55,10 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE,message = FALSE)
        
 
 #1. Introduction<a id="Introduction"></a>
+
 The College Scorecard project was initially designed to increase the transparency of the college data, working as a navigator for students to make informed decisions about their choice for higher education. The information gathered in the dataset also gives students and families more power to differentiate postsecondary institutions and get an idea about how well colleges are preparing their students to be successful. The dataset was created to address the lack of information about college costs, earnings, federal student aid, admission rate, etc. The data provides insights into the performance of institutions that receive federal aid dollars, and the outcomes of the students of those institutions. It also gives extra support for students and families to weigh the tradeoffs on choosing the right colleges according to their own needs and educational goals.
 
-The data was collected by the United States Department of Education, which corresponds to all undergraduate degree-granting institutions of higher education from 1996 through 2016. The dataset is pretty rich and covering a wide range of topics. It has 1743 associated columns, each corresponds to one named data variable. All data variables are divided into 10 categories ranging from Root category to Earnings category. The data type contains integer, string and float. Data elements with an IPEDS value in the Source field are derived directly from the Integrated Postsecondary Education Data System (IPEDS). Further detailed description of the dataset can be found in the CollegeScorecardDataDictionary.xlsx excel file.
+The data was collected by the United States Department of Education, which corresponds to all undergraduate degree-granting institutions of higher education from 1996 through 2016. The dataset is pretty rich and it covers a wide range of topics. It has 1743 associated columns, each corresponding to one named data variable. All data variables are divided into 10 categories including basic information of institution, earnings, financial aid, student body, etc. The data type contains integer, string and float. Data elements with an IPEDS value in the Source field are derived directly from the Integrated Postsecondary Education Data System (IPEDS). Further detailed description of the dataset can be found in the full data documentation.
 
 
 
@@ -68,7 +69,7 @@ College is an investment. It's well-known that a major motivation for students t
 The goal of our study is to understand what factors are predictive of students' post-graduation earnings through individual variable analysis and relationship detection. To this end, we first explored a set of variables that were carefully selected to represent a school's profile and students demographic information, getting to know the distribution of each variable. Then we further analyzed how these variables are related, particually the relationship between earnings and other variables.
 
 #3. Dataset Preparation<a id="dataprep"></a>
-Our analysis focuses on the data of year 2012 -2013 of 38 variables. We chose the median income 6 years after entry as our predictor variable, and eliminated many fields with a bunch of missing values as well as some fields not pertaining enougn to post-graduation income. We then fosued primarily on a set of 23 variables, including age, acedemic costs, family income, completetion rates and repayment rate.  
+Our analysis focuses on the data of year 2012 -2013. We chose the median income 6 years after entry as our response variable, and eliminated many fields with a bunch of missing values as well as some fields not pertaining to post-graduation income. We fosued primarily on a set of 38 variables, including age, academic costs, family income, completetion rates, repayment rate, etc.  
 
 
 The following libraries have been used in the analysis: 
@@ -83,7 +84,7 @@ library(plyr)
 
 ```
 
-The dataset spans nearly 20 years of data and covers multiple sources including IPEDS, NSLDS, and Department of Treasury. Since our goal was to study post-graduation for students in each university, we used 2012-2013 dataset which contains tha most recent earning information.
+The dataset spans nearly 20 years and covers multiple sources including IPEDS, NSLDS, and Department of Treasury. Since our goal was to study post-graduation earnings for students in each university, we used 2012-2013 dataset which contains tha most recent earning information.
 
 ```{r, message=FALSE,warning=FALSE}
 
@@ -91,12 +92,12 @@ data = read.csv("MERGED2012_13_PP.csv",header = T, na.strings = c("NULL","Privac
 
 ```
 
-Considering there is some special characters in the ID column, we first renamed the first column to make it easier to understand.
+Considering there are some special characters in the ID column, we first renamed the first column to make it easier to understand.
 ```{R}
 colnames(data)[1] = 'UNITID'
 ```
 
-The full dataset contains 1743 variables, as we metioned before, 38 variables were intially selected to be analyze.
+The full dataset contains 1743 variables, as we metioned before, 38 variables were intially selected to be analyzed.
 ```{r, message=FALSE,warning=FALSE}
 
 variable = select(data, UNITID, INSTNM, STABBR, PREDDEG, LOCALE2, MENONLY, WOMENONLY, CONTROL, ADM_RATE, SATMTMID, SATVRMID, SATWRMID, SAT_AVG,
@@ -170,7 +171,7 @@ colnames(data_new)[10] <- "NPT4_COMBINE"
 
 ```
 
-In order to choose the variables that have enough valid observations related to the topic, we only considered variables with the percent missing value less than 25%. The new data was named as data_clean. 
+In order to choose the variables that have enough valid observations related to the topic, we only considered variables with the percent of missing value less than 25%. The new data was named as data_clean. 
 ```{r, message=FALSE,warning=FALSE}
 
 data_clean = data_new[,colMeans(is.na(data_new)) < 0.25]
@@ -183,7 +184,7 @@ write.csv(data_clean,"data_clean.csv")
 
 For numerical variables, we calculated the basic summary statistics such as median, min, max, standard deviation and mean. We also used visualizations such as historgams and boxplots to understand the distribution of the values. For categorical variables, we used frequency table to understand the frequencies of each category. 
 
-The table below listed the variables that will be used for the further analysis: 13 of them are continuous variables while 5 of them are categorical variables or Unique ID. After initial data cleaning process, the new data set now contains 18 variables and 7793 observations. 
+The table below lists the variables that will be used for the further analysis: 13 of them are continuous variables while 5 of them are categorical variables or Unique ID. After initial data cleaning process, the new data set contained 18 variables and 7,793 observations. 
 
 
 | Variable Name    | Data Type |  Unit  |  Description                                                          |    Category in Documentation       |
@@ -244,7 +245,7 @@ From the frequncy table, we see that California has the most institutions across
 
 
 ####5.1.1.2. Predominant Degree<a id="5.1.1.2"></a> 
-Then we analyze the type of degree universities mainly offer. There are four types of degree taken into account: certificate degree, associate degree, bachelor degree, and graduate degree. A frequency table in a format of percentage and a histogram are used to help understand the distribution of the predominant degree.
+Then we analyzed the type of degree universities mainly offer. There are four types of degree taken into account: certificate degree, associate degree, bachelor degree, and graduate degree. A frequency table in a format of percentage and a histogram were used to help understand the distribution of the predominant degree.
 
 
 ```{r, message=FALSE}
@@ -262,7 +263,7 @@ From above frequency table, we see that about 5% of the population are unclassif
 
 
 ####5.1.1.3. Control of Institutions <a id="5.1.1.3"></a> 
-In addition to state and predominant degree, control of institution is another categorical variable in the dataset. The label of Control is to indicate whether or not an institution is privately owned and whether or not it is a for-profit organization. There are three levels of this variable: Public, Private Nonprofit, and Private-profit. Public school is assumed to be non-profit so it is not further divided into two subgroups. Below we show the percentage summary of each category and a bar chart is plotted to facilitate understanding.
+In addition to state and predominant degree, control of institution is another categorical variable in the dataset. The label of control is to indicate whether or not an institution is privately owned and whether or not it is a for-profit organization. There are three levels of this variable: public, private non-profit, and private-profit. Public schools are assumed to be non-profit so they are not further divided into two subgroups. Below we show the percentage summary of each category and a bar chart is plotted to facilitate understanding.
 
 
 ```{r, message=FALSE}
@@ -275,14 +276,14 @@ data_clean %>% ggplot(aes(x=Control_factor, fill = 'blue')) +
   theme(plot.title = element_text(family = "Trebuchet MS", color="#666666", face="bold", size=20, hjust=0.5)) 
 ```
 
-About 50% of all institutions are private for-profit university, which is the most dominant type. Public and private nonprofit are pretty tied in terms of the number of observation in each category.
+About 50% of all institutions are private for-profit university, which is the most dominant type. Public and private non-profit are pretty tied in terms of the number of observation in each category.
 
 
 ###5.1.2 Student Body<a id="5.1.2"></a> 
 ####5.1.2.1 Percentage of First-generation Students<a id="5.1.2.1"></a>
-This element identifies the share of federally aided students at the institution who report that they are the first generaion on the FAFSA (Free Application for Federal Student Aid). First generation students are defined as students whose parents didn't attend a college.
+This element identifies the share of federally aided students at the institutions who reported that they were the first generaion on the FAFSA (Free Application for Federal Student Aid). First generation students are defined as students whose parents didn't attend a college.
 
-With the following codes, we extracted the institutions with the highest and lowest percentage of first-generation students. Then we observed this varible's basic summary statistics: min, max, mean, median and standard deviation.
+With the following codes, we extracted the institutions with the highest and lowest percentage of first-generation students. Then we observed this variable's basic summary statistics: min, max, mean, median and standard deviation.
 ```{R, message=FALSE, warinig = FALSE}
 
 #the institions with the highest and lowest percentage of first-generation students
@@ -301,9 +302,9 @@ summarize(data_clean,
 
 
 ```
-From the output, we can tell that the highest value existed in  La Belle Beauty Academy with the value of 95.25%. The lowest value is 6.87%, which existed in Wheaton College. From the mean value of 48.08%, we can tell that for federally aided students in most colleges, around half (50.8%) of the students' parents did not complete the college. The standard deviation value of 12.2% indicated a relatively high difference of this element among different colleges.  
+From the output, we can tell that the highest value existed in La Belle Beauty Academy with the value of 95.25%. The lowest value is 6.87%, which existed in Wheaton College. From the mean value of 48.08%, we can tell that for federally aided students in most colleges, around half (50.8%) of the students' parents did not complete the college. The standard deviation value of 12.2% indicated a relatively high difference of this element among different colleges.  
 
-Below is the code to generate a visual representation in the histogram. 
+Below are the codes to generate a visual representation in the histogram. 
 ```{R}
 
  
@@ -316,14 +317,14 @@ Below is the code to generate a visual representation in the histogram.
     theme(plot.title = element_text(hjust = 0.5))
 ```
 
-From the histogram, we can tell the share of the first-generarion students is most frequently falling into the range between 0.5 and 0.6. The values with the value more than 0.8 are rare. 
+From the histogram, we can tell the share of the first-generarion students is most frequently falling into the range between 0.5 and 0.6. The observations with the value more than 0.8 are rare. 
 
 
 
 
 ####5.1.2.2 Number of applications<a id="5.1.2.2"></a>
 
-The variable APPL_SCH_PCT_GE2 is to describe the percentage of students who list two and more than two institutions when he applied for financial aid when submitting application for university. This information is only available to the students who submitted their applications for federal aid and does not cover the whole student body. Nevertheless, this variable still can provide some useful insights about how many universities a student usually apply for. 
+The variable APPL_SCH_PCT_GE2 is to describe the percentage of students who listed two and more than two institutions when he applied for financial aid when submitting applications for university. This information is only available to the students who submitted their applications for federal aid and does not cover the whole student body. Nevertheless, this variable still can provide some useful insights about how many universities a student usually apply for. 
 
 
 ```{r, message=FALSE}
@@ -351,14 +352,14 @@ college_app %>%
     
 ```
 
-The summary statistics show that the median percentage of those students submitting two or more than two application is 41.67% across all universities. The institution having the least percentage only has 4% of students applying for more than one university, while the school with the highest percent has as high as 90% of students applying for more than one university. The boxplot compares the percent of students applying for only one university with the percent of students applying for more than one. We can clearly see that a larger portion of students only listed one institution when submitting their application for financial aid.
+The summary statistics show that the median percentage of those students submitting two or more than two applications is 41.67% across all universities. The institution having the least percentage only has 4% of students applying for more than one university, while the school with the highest percent has as high as 90% of students applying for more than one university. The boxplot compares the percent of students applying for only one university with the percent of students applying for more than one. We can clearly see that a larger portion of students only listed one institution when submitting their application for financial aid.
 
 
 
 ###5.1.3 Cost<a id="5.1.3"></a>
 ####5.1.3.1 Average Net Price for Title IV Institutions(both public and private institutions)<a id="5.1.3.1"></a>
 
-With the following codes, we extracted the IV institutions' basic demographic information with the highest and lowest average net price. Then we observed this varibles's basic summary statistics: min, max, mean, median and standard deviation.
+With the following codes, we extracted the Title IV institutions' basic demographic information with the highest and lowest average net price. Then we observed this varibles's basic summary statistics: min, max, mean, median and standard deviation.
  
 ```{R, message=FALSE, warinig = FALSE}
 
@@ -377,10 +378,10 @@ summarize(data_clean,
 
 ```
 
-From the summary results, we learned that the maximum value of the variable is $87,414, which is for Aerosim Flight Academy located in FL. while the minimum value is about $-19,360 - the value for Berea College located in KY. Considering the elements are collected from Title IV institutions, we reasoned that the negative values may be due to the fact that some institution's financial supoort can cover the students' all the costs, even overbalancing the cost amount. There are not much differerences between the mean value and the median value, which is around $15,000. We can conclude that the average net price costs for most institutions are falling into  this range. The standard deviation value is $7604.884 which is relatively large, indicating a great spread in the data. 
+From the summary results, we learned that the maximum value of the variable is $87,414, which is for Aerosim Flight Academy located in FL. while the minimum value is about $-19,360, for Berea College located in KY. Considering the elements are collected from Title IV institutions, we reasoned that the negative values may be due to the fact that some institution's financial supoort can cover the students' all the costs, even overbalancing the cost amount. There is not much differerence between the mean value and the median value, which is around $15,000. We can conclude that the average net price costs for most institutions are falling into this range. The standard deviation value is $7604.884 which is relatively large, indicating a great spread in the data. 
 
 
-Below is the histogram for this variable which is able to provide us with a visual distribution presentation. 
+Below shows the histogram for this variable, which is able to provide us with a visual distribution presentation. 
 ```{R}
 
   #histogram for NPT_COM
@@ -393,7 +394,7 @@ Below is the histogram for this variable which is able to provide us with a visu
     theme(plot.title = element_text(hjust = 0.5))
 ```
 
-From the histogram, we notice that the average net cost for IV institutions typically is $16000-$18000. The values between $16000 -$20000 are quite frequent. There were an unsually lagrge number of costs. The institutions with cost of more than $50000 were atypical. Due to the atypical large value, the histogram is abviously right skewed. Without those extreme values, the histogram would be reasonably symmetric. 
+From the histogram, we notice that the average net cost for most IV institutions falls between $16,000-$20,000. There were some unusually large observations. The institutions with cost of more than $50,000 were atypical. Due to the these large values, the histogram is abviously right-skewed. Without those extreme values, the histogram would be reasonably symmetric. 
 
 
 
