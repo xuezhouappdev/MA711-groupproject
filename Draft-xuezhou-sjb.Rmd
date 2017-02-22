@@ -23,6 +23,7 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE,message = FALSE)
   * 5.1.2 Student Body
     * 5.1.2.1 [Percentage First-generation Students](#5.1.2.1)
     * 5.1.2.2 [Number of Applications](#5.1.2.2)
+    * 5.1.2.3 [Median Family Income in Real 2015 Dollars](#5.1.2.3)
   * 5.1.3 Cost 
     * 5.1.3.1 [Average Net Price for Title IV Institutions (Both Public and Private Institutions)](#5.1.3.1)
     * 5.1.3.2 [Percentage of Students Who are Financially Independent](#5.1.3.2)
@@ -32,8 +33,7 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE,message = FALSE)
     * 5.1.4.3 [The Median Debt for Students Who Have Completed](#5.1.4.3)
     * 5.1.4.4 [The Median Debt for Students Who Have not Completed](#5.1.4.4)
   * 5.1.5 Earning
-    * 5.1.5.1 [Median Family Income in real 2015 Dollars](#5.1.5.1)
-    * 5.1.5.2 [Earning after graduation](#5.1.5.2)
+    * 5.1.5.1 [Earning after graduation](#5.1.5.1)
   * 5.1.6 Repayment
     * 5.1.6.1 [3-year Repayment rate](#5.1.6.1)
     * 5.1.6.2 [3-year Default rate](#5.1.6.2)
@@ -50,7 +50,7 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE,message = FALSE)
  * 6.10 [The Relationship between Earning 6 Years from Entry and Degree Type](#6.10)
  * 6.11 [The Relationship among Predominant Degree, College Type(Control) and Earning after 6 year of Entry](#6.11)
  * 6.12 [The Relationship between Predominant Degree and College Type (Control)](#6.12)
- * 6.13 [The Relationship between College Type (Control) and Median earnings of Students Working and Not Enrolled 6 Years after Entry](#6.13)
+ * 6.13 [The Relationship between College Type (Control) and Median Earnings of Students Working and Not Enrolled 6 Years after Entry](#6.13)
 * 7. [Findings and Conclusion](#7)
        
 
@@ -192,7 +192,7 @@ The table below lists the variables that will be used for the further analysis: 
 | NPT4_COMBINE    | Numeric   | $         |average net price for TITLE IV institutions of both public and private.|  Cost                       |
 | DEP_STAT_PCT_IND | Numeric  | %         |Percentage of students who are financially independent                |     Cost                        |
 | PAR_ED_PCT_1STGEN| Numeric  | %         |Percentage first-generation students                                  |      Sudent Body                |
-| MD_FAMINC        | Numeric  | $         |Median family income in real 2015 dollars                             |       Earning                   |
+| MD_FAMINC        | Numeric  | $         |Median family income in real 2015 dollars                             |    Student Body                   |
 | PCTPELL          | Numeric  | %         |Percentage of undergraduates who receive a Pell Grant                 |        Financial Aid            |
 | PCTFLOAN         | Numeric  | %         |Percent of all federal undergraduate students receiving a federal student loan      |  Financial Aid    |
 | GRAD_DEBT_MDN    | Numeric  | $         |The median debt for students who have completed                       |   Financial Aid                 |
@@ -356,6 +356,42 @@ The summary statistics show that the median percentage of those students submitt
 
 
 
+####5.1.2.3 Median family income in real 2015 dollars<a id="5.1.2.3"></a>
+This element is recorded the median family income of students, one of the undergraduate student demographics for earnings cohorts. We are using the code below to summarize this variable(min, max, mean, median and standard deviation). 
+
+```{R, message=FALSE, warinig = FALSE}
+
+data_clean %>%
+ slice(c(which.min(MD_FAMINC),which.max(MD_FAMINC))) %>%
+  select (c(1,2,3,9))
+
+summarize(data_clean,
+          minMD_FAMINC=min(MD_FAMINC ,na.rm=TRUE),
+          maxMD_FAMINC=max(MD_FAMINC,na.rm=TRUE),
+          meanMD_FAMINC=mean(MD_FAMINC,na.rm=TRUE),
+          medianMD_FAMINC=median(MD_FAMINC,na.rm=TRUE),
+          sdMD_FAMINC = sd(MD_FAMINC,na.rm=TRUE))
+
+
+
+```
+
+From the output, we can tell that the highest value is $155,606.6 for Jewish Theological Seminary of America, while the lowest value is $0 for Associated Technical College-Los Angeles. From the median value of $19,262.26, we can tell that among the colleges in the sample, the students in half of them had the family income below $19,262.26. The standard deviation value is $18,824.31, indicating a relatively high difference of this element among different colleges. Below is the code to generate a visual representation in the histogram 
+
+```{R}
+
+ 
+  ggplot(data=data_clean , aes(MD_FAMINC)) + 
+    geom_histogram(breaks=seq(0, 156000, by =3000), 
+                   col="red", 
+                   aes(fill=..count..),na.rm=TRUE)+
+    labs(title="Histogram for Median family income in real 2015 dollars") +
+    labs(x="MD_FAMINC", y="Count") +
+    theme(plot.title = element_text(hjust = 0.5))
+```
+
+From the histogram, we are able to conclude that in most colleges, students' family income fall into the range of $12,000 - $18,000. Due to some atypical large values, the histogram is obviously skewed to right. The values larger than $18,000 are tending to be extreme and the cases larger than $75000 are rare, which means that rare colleges have the students with family income more than $75000.
+
 ###5.1.3 Cost<a id="5.1.3"></a>
 ####5.1.3.1 Average Net Price for Title IV Institutions(both public and private institutions)<a id="5.1.3.1"></a>
 
@@ -475,7 +511,6 @@ From the output, we can tell that the range is between 0 to 100%.	No students in
 From the histogram, we are able to conclude that in most colleges, 40% to 50% of the undergraduate students are able to receive the Pell Grant. With little skewness, the histogram is reasonably symmetric. 
 
 
-
 ####5.1.4.2 Percent of All Federal Undergraduate Students Receiving a Federal Student Loan<a id="5.1.4.2"></a>
 
 This element, as reported in the IPEDs Student Finaicial Aid component, shows the share of undergraduate students who received federal loans in a given year. It can provide important context to figures related to debt, repayment and non-repayment. We were using the code below to summarize this variable(min, max, mean, median and standard deviation) and extracted the institutions with highest and lowest value. 
@@ -582,44 +617,8 @@ We use summary statistics, standard deviation and histogram to understand the di
 
 
 ###5.1.5 Earning<a id="5.1.5"></a> 
-####5.1.5.1 Median family income in real 2015 dollars<a id="5.1.5.1"></a>
-This element is recorded the median family income of students, one of the undergraduate student demographics for earnings cohorts. We are using the code below to summarize this variable(min, max, mean, median and standard deviation). 
 
-```{R, message=FALSE, warinig = FALSE}
-
-data_clean %>%
- slice(c(which.min(MD_FAMINC),which.max(MD_FAMINC))) %>%
-  select (c(1,2,3,9))
-
-summarize(data_clean,
-          minMD_FAMINC=min(MD_FAMINC ,na.rm=TRUE),
-          maxMD_FAMINC=max(MD_FAMINC,na.rm=TRUE),
-          meanMD_FAMINC=mean(MD_FAMINC,na.rm=TRUE),
-          medianMD_FAMINC=median(MD_FAMINC,na.rm=TRUE),
-          sdMD_FAMINC = sd(MD_FAMINC,na.rm=TRUE))
-
-
-
-```
-
-From the output, we can tell that the highest value is $155,606.6 for Jewish Theological Seminary of America, while the lowest value is $0 for Associated Technical College-Los Angeles. From the median value of $19,262.26, we can tell that among the colleges in the sample, the students in half of them had the family income below $19,262.26. The standard deviation value is $18,824.31, indicating a relatively high difference of this element among different colleges. Below is the code to generate a visual representation in the histogram 
-
-```{R}
-
- 
-  ggplot(data=data_clean , aes(MD_FAMINC)) + 
-    geom_histogram(breaks=seq(0, 156000, by =3000), 
-                   col="red", 
-                   aes(fill=..count..),na.rm=TRUE)+
-    labs(title="Histogram for Median family income in real 2015 dollars") +
-    labs(x="MD_FAMINC", y="Count") +
-    theme(plot.title = element_text(hjust = 0.5))
-```
-
-From the histogram, we are able to conclude that in most colleges, students' family income fall into the range of $12,000 - $18,000. Due to some atypical large values, the histogram is obviously skewed to right. The values larger than $18,000 are tending to be extreme and the cases larger than $75000 are rare, which means that rare colleges have the students with family income more than $75000.
-
-
-####5.1.5.2 Earning after graduation<a id="5.1.5.2"></a>
+####5.1.5.1 Earning after graduation<a id="5.1.5.1"></a>
 
 MD_EARN_WNE_P6 and MD_EARN_WNE_P10 are two of the earning varibles we selected to study students' post-graduation earnings. MD_EARN_WNE_P6 is the median earning for students after six years of their entry, which corresponds to two years after graduation for a four-year program. Likewise, MD_EARN_WNE_P10 is the median earning ten years after their entry, which usually corresponds to four years after graduation. These two metrics give us an idea of how much money students are making after their graduation, in both short and medium terms.
 
@@ -792,7 +791,7 @@ ggplot(data_clean, aes(x =MD_FAMINC, y = PCTPELL)) + geom_point(color="red")+  g
       
 ```
 
-From the scatter plot, it is obvious that the MD_FAMINC is in a negative linear relationship with PCTPELL: the data shows a downhill pattern from left to right; As the MD_FAMINC increases, the value of PCTPELL decreases. It makes sense in the real world; for institutions with low percentage of students who receive the Pell Grant, the financial aid like Pell Grant may not be as necessary as they are in the institutions with high value of PCTPELL, since these collges students tend to have a higher median family income. 
+From the scatter plot, it is obvious that the MD_FAMINC is in a negative linear relationship with PCTPELL: the data shows a downhill pattern from left to right; As the MD_FAMINC increases, the value of PCTPELL decreases. It makes sense in the real world; for institutions with low percentage of students who receive the Pell Grant, the financial aid like Pell Grant may not be as necessary as they are in the institutions with high value of PCTPELL, as these college students may have enough median family income to cover their costs.  
 
 
 
@@ -846,7 +845,7 @@ From the result,  private institutions have a much larger median value than the 
 From the stacked histogram, we can tell that for all three college types, the most frequent range appears between 0.6 and 0.8, which is consistent with the findings we observe in the individual variable summary section. 
 
 
-##6.8 The Relationsip between Median Debts and Post-Graduation Earnings<a id="6.8"></a> 
+##6.8 The Relationship between Median Debts and Post-Graduation Earnings<a id="6.8"></a> 
 Next, we analyze the relationship between the amount of the debt and post-graduation earnings. There are two variables in the dataset to summarize the median amount of debt for student body, one for students who already graduated and one for students who have not completed their study. We decided to use debt for students who have not completed their study in this problem, since it makes more sense for the purpose of prediction.
 
 
@@ -996,7 +995,7 @@ We also found that California has the most universities across the nation, with 
 
 Our findings also suggest that the Title IV institutions located in DC, VT, MA, NH, RI have a relatively high amount of average net costs than those in other states. The students in private non-profit institutions and public institutions are less likely to seek a Pell Grant as financial assistance than the students in the private for-profit colleges.In most private for-profit colleges, the students are more likely to be financially independet. 
 
-It indicates that there exists a negative correlation between the percentage of students who receive a Pell Grant and the students' median family income; for institutions with low percentage of students who receive the Pell Grant, the financial aid like the Pell Grant may not be as necessary as they are in the institutions with high value of PCTPELL, thus these college students will tend to have a high median family income after they graduate.
+It indicates that there exists a negative correlation between the percentage of students who receive a Pell Grant and the students' median family income; for institutions with low percentage of students who receive the Pell Grant, the financial aid like the Pell Grant may not be as necessary as they are in the institutions with high value of PCTPELL, since these college students may have sufficient family income to support their education. 
 
 As to the factors that influence post-graduation earnings, we explored the relationship between median earnings six years from entry and other six variables. The analysis suggests that there is a positive relationship between the median debt amount for students who have not completed college and post-graduation earnings. This may be due to the fact that top universities usually have higher tuition but may also indicate that students who are willing to take more debts for their college education are likely to make more money after graduation. In addition, the default rate of student loans is negatively related to post-graduation earnings. This finding is reasonable since students making more money are more likely to pay off their debt. The variable can be used as a school-level predictor to predict overall post-graduation earnings for each university. The degree type, unsurprisingly, has an impact on the earnings students are making after graduation. As the level of education increases, the post-graduate earnings also increase significantly, which suggests that investing in education is worthwhile.
 
