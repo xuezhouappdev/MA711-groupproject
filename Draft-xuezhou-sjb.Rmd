@@ -566,7 +566,7 @@ sd(median_debt_non_null)
 
 #plot a ggplot to better illustrate
 data_clean %>% ggplot(aes(x = WDRAW_DEBT_MDN)) +
-                geom_histogram(binwidth = 450) #warning?
+                geom_histogram(binwidth = 450) 
 
 ggplot(data=data_clean,
        aes(x=WDRAW_DEBT_MDN,
