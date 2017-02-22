@@ -582,7 +582,7 @@ We use summary statistics, standard deviation and histogram to understand the di
 
 ###5.1.5 Earning<a id="5.1.5"></a> 
 ####5.1.5.1 Median family income in real 2015 dollars<a id="5.1.5.1"></a>
-This element is recorded the median family income of students, one of the undergraduate student demographics for earnings cohorts. We are using the code below to summarize this variable. 
+This element is recorded the median family income of students, one of the undergraduate student demographics for earnings cohorts. We are using the code below to summarize this variable(min, max, mean, median and standard deviation). 
 
 ```{R, message=FALSE, warinig = FALSE}
 
@@ -869,7 +869,7 @@ cor(earn_debt$WDRAW_DEBT_MDN,earn_debt$MD_EARN_WNE_P6)
 
 First, we used a scatter plot to visualize the relationship between earnings and the amount of debt, the plot clearly shows a positive relationship. Then we further calculated pearson correlation to confirm our hypothesis. The resulting coefficient 0.44 indicates a moderate linear relationship between earnings and debt.
 
-##6.9 The Relashionship between the Default Rate of Loan Repayment and Post-graduation Earnings<a id="6.9"></a> 
+##6.9 The Relationship between the Default Rate of Loan Repayment and Post-graduation Earnings<a id="6.9"></a> 
 For one thing, understanding the relationship between the default rate of loan repayment and post-graduation earnings can help federal financial committee to improve their decisions about load granting. If the default rate decreases as the earnings increases, the committee may prefer to grant more financial aid to institutions whose students have higher earnings. For another, the default rate of repayment for a university can also help predict the post-graduation earnings for its students. 
 
 
@@ -890,7 +890,7 @@ cor(earn_default$CDR3,earn_default$MD_EARN_WNE_P6)
 
 A scatter plot is created to visualize the relationship between these two variables. From the chart, we see that earnings seems to show a decreasing trend as the default rate increases, which shows a negative relationship between earnings and default rate. Then we calculate the correlation coefficient between these two variables. The resulting r = -0.33 shows that the correlation between earnings and default rate is negative but the relationship is not very strong, which may be due to the influences of some outliers. To conclude, the negative relationship between earnings and default rate of loan repayment needs extra data to validate.
 
-##6.10 The Relashionship between Earning 6 Years from Entry and Degree Type<a id="6.10"></a> 
+##6.10 The Relationship between Earning 6 Years from Entry and Degree Type<a id="6.10"></a> 
 
 The higher education one receives, the higher the earning is after graduation. This is a common assumption we are making when investing higher education, and this is it really the case. In this question, we would like to study if it's worthwhile to invest in higher degree. 
 
@@ -912,7 +912,7 @@ data_clean %>%
 From the boxplot above, we see that the higher the education, the higher the median earning 6 years after entry. Especially, a graduate-degree gives a hugh rise to one's earning.
 
 
-##6.11 The Relashionship among Predominant Degree, Control and Earning after 6 year of Entry<a id="6.11"></a> 
+##6.11 The Relationship among Predominant Degree, Control and Earning after 6 year of Entry<a id="6.11"></a> 
 
 The following plot shows the relationship among two factor variables (predominant degree award variable and control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry).
 
@@ -934,7 +934,7 @@ data_clean %>%
 Mean value of the earnings is more representative for the two categories, predominant degree and control.  According to the plot, we realized that private for-profit colleges whose predominant degree awarded is graduate degree have the lowest average earning with the minimum average value at $3100, while Public colleges whose predominant degree awarded are graduate degree has the highest average earnings with the maximum average value at $45,850.
 
 
-##6.12 The Relashionship between Predominant Degree and Control<a id="6.12"></a> 
+##6.12 The Relationship between Predominant Degree and Control<a id="6.12"></a> 
 
 The following plot shows the relationship between two factor variables (predominant degree award variable and control variable). 
 
@@ -958,7 +958,7 @@ xtabs(formula = ~PREDDEG_factor+Control_factor)
 
 From the graph we can see that for the public type of school, associate degree is mostly awarded and it is in the middle of the distribution, with fewer NotClassified degree and fewer graduate degree in the extremes. But the distribution is symmetric compared with the other two types. For the Private Nonprofit type of school, mostly awarded degrees (Bachelor degree and Graduate degree) are located at the right of the distribution, with fewer NotClassified degree on the left.  The distribution shows a negative skew: the awarded degrees extend to the left farther than they do to the right. For the private for-profit type of school, mostly awarded degree (Certificate degree) is on the left of the distribution, with fewer graduate degree on the right. The distribution shows a positive skew: the awarded degrees extend to the right farther than they do to the left.
 
-##6.13 The Relashionship between Control and Median earnings of Students Working and Not Enrolled 6 Years after Entry<a id="6.13"></a> 
+##6.13 The Relationship between Control and Median earnings of Students Working and Not Enrolled 6 Years after Entry<a id="6.13"></a> 
 
 The following plot shows one factor variable (control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry).
 
