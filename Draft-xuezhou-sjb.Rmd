@@ -246,7 +246,6 @@ From the frequncy table, we see that California has the most institutions across
 
 
 
-
 ####5.1.1.2. Predominant Degree<a id="5.1.1.2"></a> 
 Then we analyze the type of degree universities mainly offer. There are four types of degree taken into account: certificate degree, associate degree, bachelor degree, and graduate degree. A frequency table in a format of percentage and a histogram are used to help understand the distribution of the predominant degree.
 
@@ -262,7 +261,6 @@ data_clean %>% ggplot(aes(x=PREDDEG_factor, fill = 'blue')) +
 ```
 
 From above frequency table, we see that about 5% of the population are unclassified in terms of the predominant degree they offer.  43.2% offer certificate degree as their predominant degree, 27.3% predominantly offer Bachelor degree and only 4.23% offer graduate degree as their predominant degree.
-
 
 
 
@@ -400,14 +398,14 @@ Below is the histogram for this variable which is able to provide us with a visu
     theme(plot.title = element_text(hjust = 0.5))
 ```
 
-From the histogram, we notice that the average net cost for IV institutions typically is $16000-$18000. The values between $16000 -$20000 are quite frequent. 
+From the histogram, we notice that the average net cost for IV institutions typically is $16000-$18000. The values between $16000 -$20000 are quite frequent. There were an unsually lagrge number of costs. The institutions with cost of more than 50000 were atypical. Due to the atypical large value, the histogram is abviously right skewed. Without those extreme values, the histogram would be reasonably symmetric. 
 
 
 
 
 ####5.1.3.2 Percentage of students who are financially independent<a id="5.1.3.2"></a>
 
-With the following codes, we extracted the institutions which have the highest and lowest percentage of students who are financially independent. Then we observed this varible's basic summary statistics: min, max, mean, median and standard deviation.
+With the following codes, we extracted the institutions which have the highest and lowest percentage of students who are financially independent. Then we observed this variable's basic summary statistics: min, max, mean, median and standard deviation.
 ```{R}
 
 data_clean %>%
@@ -626,7 +624,7 @@ From the output, we can tell that the highest value is $155,606.6 for Jewish The
     theme(plot.title = element_text(hjust = 0.5))
 ```
 
-From the histogram, we are able to conclude that in most colleges, students' family income fall into the range of $12,000 - $18,000. Due to the some influential observations, the histogram is obviously skewed to right. The values larger than $18,000 are tend to be extreme and the cases larger than $75000 are rare, which means that rare colleges have the students with family income more than $75000.
+From the histogram, we are able to conclude that in most colleges, students' family income fall into the range of $12,000 - $18,000. Due to some atypical large values, the histogram is obviously skewed to right. The values larger than $18,000 are tend to be extreme and the cases larger than $75000 are rare, which means that rare colleges have the students with family income more than $75000.
 
 
 
@@ -700,7 +698,7 @@ theme(plot.title = element_text(hjust = 0.5))
 summary(data_clean$RPY_3YR_RT_SUPP + data_clean$CDR3)
 ```
 
-The median default rate arosses all universities is 13%, which means that more than 50% of the universities have more than 13 out of 100 students defaulted their loan! 
+The median default rate across all universities is 13%, which means that more than 50% of the universities have more than 13 out of 100 students defaulted their loan! 
 
 
 
@@ -750,7 +748,7 @@ From the scatter plot, it is obvious that the NPT4_COMBINE is in a positive line
 
 ##6.3. The relationship between Percentage of Pell Grant and college type(CONTROL)<a id="6.3"></a>
 
-To compare the percentage of Pell Grant in different control types, we grouped the Percentage of Pell Grant data usubf college type to take a further analysis. 
+To compare the percentage of Pell Grant in different control types, we grouped the Percentage of Pell Grant data using college type to take a further analysis. 
 
 ```{R message=FALSE, warinig = FALSE}
 
@@ -983,7 +981,7 @@ From the graph we can see that for the public type of school, associate degree i
 
 The following plot shows one factor variable (control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry).
 
-We use the ggplot() function to initialize the ggplot object and declare the input data frame for a graphic with x equals Control_factor and y equals Median Earnings. Then, we use the geom_violin() function which shows a compact display of a continuous distribution. The geom_violin() function is a blend of geom_boxplot() and geom_density(), which shows a mirrored density plot. For better visualization, we use geom_boxplot() to create a box and whiskers plot, which shows five summary statistics (the median, two hinges and two whiskers), and all “outlying” points individually. And the summary() function further displays the exact values. The plot superimposed with boxplots shows side-by-side violin plots of median earnings of students working and not enrolled 6 years after entry according to different college types.
+We use the ggplot() function to initialize the ggplot object and declare the input data frame for a graphic with x equals Control_factor and y equals Median Earnings. Then, we use the geom_violin() function which shows a compact display of a continuous distribution. The geom_violin() function is a blend of geom_boxplot() and geom_density(), which shows a mirrored density plot. For better visualization, we use geom_boxplot() to create a box and whiskers plot, which shows five summary statistics (the median, two hinges and two whiskers), and all ???outlying??? points individually. And the summary() function further displays the exact values. The plot superimposed with boxplots shows side-by-side violin plots of median earnings of students working and not enrolled 6 years after entry according to different college types.
 
 ```{r}
   data_clean %>%
