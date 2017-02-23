@@ -32,11 +32,9 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE,message = FALSE)
     * 5.1.4.2 [Percent of all Federal Undergraduate Students Receiving a Federal Student Loan](#5.1.4.2l)
     * 5.1.4.3 [The Median Debt for Students Who Have Completed](#5.1.4.3)
     * 5.1.4.4 [The Median Debt for Students Who Have not Completed](#5.1.4.4)
-  * 5.1.5 Earning
-    * 5.1.5.1 [Earning after graduation](#5.1.5.1)
-  * 5.1.6 Repayment
-    * 5.1.6.1 [3-year Repayment rate](#5.1.6.1)
-    * 5.1.6.2 [3-year Default rate](#5.1.6.2)
+  * 5.1.5 Repayment
+    * 5.1.5.1 [3-year Repayment rate](#5.1.5.1)
+    * 5.1.5.2 [3-year Default rate](#5.1.5.2)
 * 6.Relationship between variables
  * 6.1 [The Relationship between Average Net Cost for Title IV institutions and State](#6.1)
  * 6.2 [The Relationship between Median Debt and Average Net Price for Title IV institutions](#6.2)
@@ -48,9 +46,10 @@ knitr::opts_chunk$set(echo = TRUE,warning=FALSE,message = FALSE)
  * 6.8 [The Relationsip between Median Debts and Post-Graduation Earnings](#6.8)
  * 6.9 [The Relationship between the Default Rate of Loan Repayment and Post-graduation Earnings ](#6.9)
  * 6.10 [The Relationship between Earning 6 Years from Entry and Degree Type](#6.10)
- * 6.11 [The Relationship among Predominant Degree, College Type(Control) and Earning after 6 year of Entry](#6.11)
- * 6.12 [The Relationship between Predominant Degree and College Type (Control)](#6.12)
- * 6.13 [The Relationship between College Type (Control) and Median Earnings of Students Working and Not Enrolled 6 Years after Entry](#6.13)
+ * 6.11 [The Relationship between Earning 6 Years from Entry and 10 Years from Entry](#6.11)
+ * 6.12 [The Relationship among Predominant Degree, College Type(Control) and Earning after 6 year of Entry](#6.12)
+ * 6.13 [The Relationship between Predominant Degree and College Type (Control)](#6.13)
+ * 6.14 [The Relationship between College Type (Control) and Median Earnings of Students Working and Not Enrolled 6 Years after Entry](#6.14)
 * 7. [Findings and Conclusion](#7)
        
 
@@ -454,7 +453,7 @@ summarize(data_clean,
 
 ```
 
-From the summary results, we learned that the maximum value of the variable is 98.56% (Capella University) while the minimum value is about 0.73% (University of Notre Dame). From the mean value, we can tell that in most colleges, around 56% of the students are financially independent. The standard deviation value 23.3% indicates a relatively high difference among different colleges, which can also be concluded from the difference between the maximum value and the minimum value. Below is the code to generate a visual representation in the histogram
+From the summary results, we learned that the maximum value of the variable is 98.56% (Capella University) while the minimum value is about 0.73% (University of Notre Dame). From the mean value, we can tell that in most colleges, around 56% of the students are financially independent. The standard deviation value 23.3% indicates a relatively high difference among different colleges, which can also be concluded from the difference between the maximum value and the minimum value. Below is the code to generate a visual representation in the histogram.
 
 ```{R}
 
@@ -468,14 +467,14 @@ From the summary results, we learned that the maximum value of the variable is 9
     theme(plot.title = element_text(hjust = 0.5))
 ```
 
-From the histogram, we notice that the values between 0.7 to 0.8 are quite frequent. There is no obvious extreme value in the sample, thus the histogram is normally distributed. 
+From the histogram, we notice that the values between 0.7 to 0.8 are quite frequent. There is no obvious extreme value in the sample, and the histogram appears to be normally distributed. 
 
 
 
 ###5.1.4 Financial Aid<a id="5.1.4"></a>  
 ####5.1.4.1 Percentage of undergraduates who receive a Pell Grant<a id="5.1.4.1"></a>
 
-This element, pulled from the IPEDS student Financial Aid Component, shows the share of undergraduate students who received Pell Grants in a given year, which is an important measure of the financial aid an institution provides to low-income students. We are using the code below to summarize this variable(min, max, mean, median and standard deviation) and extract the institutions with the highest and lowest value. 
+This element, pulled from the IPEDS student Financial Aid Component, shows the share of undergraduate students who received the Pell Grant in a given year, which is an important measure of the financial aid an institution provides to low-income students. We were using the code below to summarize this variable(min, max, mean, median and standard deviation) and extract the institutions with the highest and lowest value. 
 
 ```{R, message=FALSE, warinig = FALSE}
 
@@ -494,7 +493,7 @@ summarize(data_clean,
 
 ```
 
-From the output, we can tell that the range is between 0 to 100%.	No students in Thunderbird School of Global Management has received the Pell grant while all of the students in American Conservatory Theater received the Pell Grant. Among the colleges in the sample, half of the colleges have the rate as high as 52.7% (median value of 52.7%), which means more than half of undergraduare students are able to receive the Pell Grant to cover their costs. The standard deviation value is 22.57%,  indicating a relatively high difference of this element among different colleges, which can also be noticed from the largest range (100%). Below is the code to generate a visual representation in the histogram. 
+From the output, we can tell that the range is between 0 to 100%.	No student in Thunderbird School of Global Management has received the Pell grant while all of the students in American Conservatory Theater received the Pell Grant. Among the colleges in the sample, half of the colleges have the rate as high as 52.7% (median value of 52.7%), which means more than half of undergraduare students are able to receive the Pell Grant to cover their costs. The standard deviation value is 22.57%,  indicating a relatively high difference of this element among different colleges, which can also be noticed from the largest range (100%). Below is the code to generate a visual representation in the histogram. 
    
 ```{R}
 
@@ -513,7 +512,7 @@ From the histogram, we are able to conclude that in most colleges, 40% to 50% of
 
 ####5.1.4.2 Percent of All Federal Undergraduate Students Receiving a Federal Student Loan<a id="5.1.4.2"></a>
 
-This element, as reported in the IPEDs Student Finaicial Aid component, shows the share of undergraduate students who received federal loans in a given year. It can provide important context to figures related to debt, repayment and non-repayment. We were using the code below to summarize this variable(min, max, mean, median and standard deviation) and extracted the institutions with highest and lowest value. 
+This element, as reported in the IPEDs Student Finaicial Aid component, shows the share of undergraduate students who received federal loans in a given year. It can provide important context to data related to debt, repayment and non-repayment. We were using the code below to summarize this variable(min, max, mean, median and standard deviation) and extract the institutions with highest and lowest value. 
 
 ```{R, message=FALSE, warinig = FALSE}
 
@@ -532,7 +531,7 @@ summarize(data_clean,
 
 ```
 
-From the output, we can tell that the range is between 0 to 100%.	As we can recall from the previous variable (PCTPELL), Gadsden State Community College has no students receiving federal loans in the given year. Among the colleges in the sample, half of colleges have this rate as high as 60.08% , which means around 60% of undergraduate students received the fedaral student loans in the given year. The standard deviation value is 29.26%,  indicating a relatively high difference of this element among different colleges, which can also be noticed from the largest range (100%). Below is the code to generate a visual representation in the histogram. 
+From the output, we can tell that the range is between 0 to 100%.	As we can recall from the previous variable (PCTPELL), Gadsden State Community College has no student receiving federal loans in the given year. Among the colleges in the sample, half of colleges have this rate as high as 60.08% , which means around 60% of undergraduate students received the fedaral student loans in the given year. The standard deviation value is 29.26%,  indicating a relatively high difference of this element among different colleges, which can also be noticed from the largest range (100%). Below is the code to generate a visual representation in the histogram. 
 
 
 ```{R}
@@ -547,14 +546,14 @@ From the output, we can tell that the range is between 0 to 100%.	As we can reca
     theme(plot.title = element_text(hjust = 0.5))
 ```
 
-From the histogram, it's obvious that there are two peaks in the graph. The rate between 0-10% and the rates between 60% to 80% have similar frequency compared to the other ranges. 
+From the histogram, it's obvious that there are two peaks in the graph. The rate between 0-10% and the rate between 60% to 80% have similar frequency compared to the other ranges. 
  
 
 
 
 ####5.1.4.3 The median debt for students who have completed<a id="5.1.4.3"></a>
 
-This variable recorded debt for students who have completed the education. We were using the code below to summarize this variable(min, max, mean, median and standard deviation) and extracted the institutions with largest and smallest value. 
+This variable recorded debt for students who have completed the education. We were using the code below to summarize this variable(min, max, mean, median and standard deviation) and extract the institutions with largest and smallest value. 
 
 ```{R, message=FALSE, warinig = FALSE}
 
@@ -572,7 +571,7 @@ summarize(data_clean,
 
 ```
 
-From the output, we can tell that the highest value is $48,250, belonging to Southwest University of Visual Arts-Tucson, while the lowest value is 1448, belonging to South Florida Institute of Technology. From the median value of 14000, we can tell that among the colleges in the sample, for students who have completed the education, half of them have  median loan debt of $14000. The standard deviation value is $8020.958,  indicating a relatively high difference of this element among different colleges. Below is the code to generate a visual representation in the histogram. 
+From the output, we can tell that the highest value is $48,250, belonging to Southwest University of Visual Arts-Tucson, while the lowest value is $1,448, belonging to South Florida Institute of Technology. From the median value of $14,000, we can tell that among the colleges in the sample, for students who have completed the education, half of them have median loan debt of $14,000. The standard deviation value is $8,020.958,  indicating a relatively high difference of this element among different colleges. Below is the code to generate a visual representation in the histogram. 
 
 ```{r}
 
@@ -587,7 +586,7 @@ From the output, we can tell that the highest value is $48,250, belonging to Sou
 
 ```
 
-From the histogram, it is obvious that most students in the sample colleges still have $8000 - $10000 debt amount after they completed the education. This amount is related to the federal loan amount provided by each institution. Additionally, it is associated with students' ability to repay the loan during the academic period. For example, for the students who were capable of working through the acedemic years or securing jobs before graduation may have a less value for this variable. 
+From the histogram, it is obvious that most students in the sample colleges still have $8,000 - $10,000 debt amount after they completed the education. This amount is related to the federal loan amount provided by each institution. Additionally, it is associated with students' ability to repay the loan during the academic period. For example, for the students who were capable of working through the acedemic years or securing jobs before graduation may have a less value for this variable. 
 
 
 
@@ -612,15 +611,266 @@ ggplot(data=data_clean,
 
 ```
 
-We use summary statistics, standard deviation and histogram to understand the distribution of this variable. The summary statistics show that students in more than 50% of institutions have a median debt of more than $5500, which is not very unaffordable. The median debt for attending students could be as much as $27620 for some schools and as low as $600 for others, indicating that it may have a large variance. So we also calculate standard deviation to measure the dispersion of the distribution. The standard deviation is $2415.623, which means about 95% of institution have  median debt ranging from $1167.754  to $10830.246. The histogram shows that the distribution of the median roughly follows a standard distribution with a sharp peak and slightly heavy tail.
+We use summary statistics, standard deviation and histogram to understand the distribution of this variable. The summary statistics show that students in more than 50% of institutions have a median debt of $5,500, which is not very unaffordable. The median debt for attending students could be as much as $27,620 for some schools and as low as $600 for others, indicating that it may have a large variance. So we also calculated standard deviation to measure the dispersion of the distribution. The standard deviation is $2,415.623, which means about 95% of institutions' students have  median debt ranging from $1167.754  to $10,830.246. The histogram shows that the distribution of the median roughly follows a normal distribution with a sharp peak and slightly heavy tail.
 
 
 
-###5.1.5 Earning<a id="5.1.5"></a> 
+###5.1.5 Repayment 
 
-####5.1.5.1 Earning after graduation<a id="5.1.5.1"></a>
+####5.1.5.1 3-year Repayment rate<a id="5.1.6.1"></a>
+The variable RPY_3YR_RT_SUPP measures the percentage of students who entered repayment from October 1, 2010 to September 30, 2011 and made progress in the following three years. Repayment rates are generally considered more sensitive than default rates(we will study later), which measures only the worst-case scenario for repayment outcomes. 
 
-MD_EARN_WNE_P6 and MD_EARN_WNE_P10 are two of the earning varibles we selected to study students' post-graduation earnings. MD_EARN_WNE_P6 is the median earning for students after six years of their entry, which corresponds to two years after graduation for a four-year program. Likewise, MD_EARN_WNE_P10 is the median earning ten years after their entry, which usually corresponds to four years after graduation. These two metrics give us an idea of how much money students are making after their graduation, in both short and medium terms.
+```{r,message=FALSE}
+repayment_clean = na.omit(data_clean$RPY_3YR_RT_SUPP)
+summary(repayment_clean)
+qplot(repayment_clean, geom = "histogram") +
+xlab("Repayment Rate") +
+ylab("Count") +
+labs(title="Histogram for Repayment Rate") +
+theme(plot.title = element_text(hjust = 0.5))
+
+```
+
+From the summary statistics, we see that 50% institutions have more than 40% of students who were making progress in their repayment. A histogram is also plotted to show the distribution, clearly with a heavy tail. 
+
+
+####5.1.5.2 3-year Default rate<a id="5.1.6.2"></a>
+
+The three-year cohort default rate describes the repayment in the opposite of repayment rate. In this dataset, it was calculated using the cohort of borrowers who entered repayment on their federal student loans between Octorber 1, 2010 to September 30, 2011, and defaulted before September 2012. 
+
+
+```{r,message=FALSE}
+default_clean = na.omit(data_clean$CDR3)
+summary(default_clean)
+qplot(default_clean, geom = "histogram") +
+xlab("Default Rate") +
+ylab("Count") +
+labs(title="Histogram for Default Rate") +
+theme(plot.title = element_text(hjust = 0.5))
+
+summary(data_clean$RPY_3YR_RT_SUPP + data_clean$CDR3)
+```
+
+The median default rate across all universities is 13%, which means that more than 50% of the universities have more than 13% of the students defaulted their loan! 
+
+
+#6. Relationship between variables<a id="6"></a>
+##6.1. The Relationship between Average Net Cost for Title IV institutions and State<a id="6.1"></a>
+
+To analyze the relationship between the average net cost for Title IV institutions and State, we grouped the data into state level to take a further analysis on each state's min, max and median value of the Average Net Cost; we would like to investigate the distribution of institutions' average net price in each state.
+
+```{R message=FALSE, warinig = FALSE}
+
+data_clean %>%
+  group_by(STABBR_factor) %>%
+    dplyr::summarise(minNPT4_COMBINE=min(NPT4_COMBINE ,na.rm=TRUE),    
+    maxNPT4_COMBINE=max(NPT4_COMBINE,na.rm=TRUE),medianNPT4_COMBINE=median(NPT4_COMBINE,na.rm=TRUE))  %>%
+       arrange(desc(medianNPT4_COMBINE))   %>%
+{.}  ->NPT4_STATE
+
+NPT4_STATE
+
+```
+
+Based on the output, we can see that the highest median value for the avreage net price exists in DC while the lowest median value is in AS(American Samoa). Moreover, we found that the top 5 states are DC, VT, MA, NH, RI, which are the states with certain well-known educational institutions. 
+
+
+##6.2. The relationship between median debt and average net price for Title IV institutions<a id="6.2"></a>
+
+We hypothesized that the students who completed education in colleges with high costs will have a higher value of median debt. We use the following code to generate the scatterplot between these two variables to verify our hypothesis. 
+
+```{R}
+
+
+ggplot(data_clean, aes(x =NPT4_COMBINE, y = GRAD_DEBT_MDN)) + geom_point(color="red")+  geom_smooth(method = "lm", se = TRUE)+
+  labs(title="Scatterplot between median debt and average net price for Title IV institutions ") +
+    theme(plot.title = element_text(hjust = 0.5))
+      
+
+  
+```
+  
+From the scatter plot, it is obvious that the NPT4_COMBINE is in a positive linear relationship with GRAD_DEBT_MDN: the data shows an uphill pattern from left to right. As the average net price for Title IV institutions increases, the value of median debt for students who have completed the college increases as well. 
+
+##6.3. The relationship between Percentage of Pell Grant and college type(CONTROL)<a id="6.3"></a>
+
+To compare the percentage of Pell Grant in different control types, we grouped the Percentage of Pell Grant data using college type to take a further analysis on each college type's min, max and median value of Percentage of Pell Grant. 
+
+```{R message=FALSE, warinig = FALSE}
+
+data_clean %>%
+  group_by(Control_factor ) %>%
+    dplyr::summarise(minPCTPELL=min(PCTPELL ,na.rm=TRUE),    
+    maxPCTPELL=max(PCTPELL,na.rm=TRUE),medianPCTPELL=median(PCTPELL,na.rm=TRUE))  %>%
+       arrange(medianPCTPELL)   %>%
+{.}  ->PCTPELL_CONTROL
+PCTPELL_CONTROL
+
+```
+
+From the result, the private nonprofit institutions and the public institutions both have a low median values while the private for-profit institutions have a higher value. This is reasonable because the private for-profit colleges may have much higher costs than the private nonprofit and public institutions. The low-income students were more likely to seek a Pell Grant as financial assistance. Additionally, in some states, the state financial aid may be sufficient to cover costs at community colleges; thus the students in those schools may not need to seek for additional financial aid like Pell Grant.
+
+Below is the stacked histogram between these two variables. 
+```{r}
+
+ggplot(data_clean, aes(x=PCTPELL, fill=Control_factor)) + geom_histogram(alpha=0.9, position="identity") +
+  labs(title="Stacked Histogram between PCTPELL and Control ") +
+    theme(plot.title = element_text(hjust = 0.5))
+
+
+```
+
+From the overlaying histogram, the percentages of students who received the Pell Grant for private for-profit institutions are quite frequent between 0.7 and 0.75 ; the percentages of students who received the Pell Grant for public institutions and private nonprofit institutions are quite frequent around 0.4. The histogram for private for-profit is slightly left-skewed due to small values near 0. The histogram for public and private non-profit institutions are reasonably symmetric.
+
+
+##6.4. The relationship between Percentage first-generation students and States<a id="6.4"></a>
+
+To compare the percentage of first-generation students in each state, we grouped data into the state level to take a further analysis on the min, max and median value of Percentage first-generation students on the state base. The top 5 states as well as the lowest 5 states are extracted. 
+
+```{R message=FALSE, warinig = FALSE}
+
+data_clean %>%
+  group_by(STABBR_factor ) %>%
+    dplyr::summarise(minPAR_ED_PCT_1STGEN=min(PAR_ED_PCT_1STGEN ,na.rm=TRUE),    
+    maxPAR_ED_PCT_1STGEN=max(PAR_ED_PCT_1STGEN,na.rm=TRUE),medianPAR_ED_PCT_1STGEN=median(PAR_ED_PCT_1STGEN,na.rm=TRUE))  %>%
+       arrange(medianPAR_ED_PCT_1STGEN)   %>%
+{.}  ->PAR_ED_PCT_1STGEN_STATE
+
+PAR_ED_PCT_1STGEN_STATE
+
+```
+
+The results show that the universities located in ND, SD, VT, MN and MT have the lowest percentage of first-generation students, which indicates that the students in these five states would have a better family education background. The five states with the highest share of first-generation students are LA, NJ, MP, MV, and MH. 
+
+
+##6.5. The relationship between Family Income and Percentage of Pell Grant<a id="6.5"></a>
+
+We hypothesized that colleges with small value of family income would tend to have high percentages of Pell Grant. The following codes are used to generate the scatter plot between these two variables. 
+
+```{r}
+
+ggplot(data_clean, aes(x =MD_FAMINC, y = PCTPELL)) + geom_point(color="red")+  geom_smooth(method = "lm", se = TRUE)+
+  labs(title="Scatterplot between MD_FAMINC and PCTPELL ") +
+    theme(plot.title = element_text(hjust = 0.5))
+      
+```
+
+From the scatter plot, it is obvious that the MD_FAMINC is in a negative linear relationship with PCTPELL: the plot shows a downhill pattern from left to right; As the MD_FAMINC increases, the value of PCTPELL decreases. It makes sense in the real world; for institutions with low percentage of students who receive the Pell Grant, the financial aid like Pell Grant may not be as necessary as they are in the institutions with high value of PCTPELL, as these college students may have enough median family income to cover their costs.  
+
+
+
+##6.6. The Relationship between the Percentage of Financially-independent Students and Control<a id="6.6"></a>
+
+To compare the percentage of financially-independent students in the institutions of different college type, we grouped the data by the control type(private for-profit, public, private nonprofit) to take a further analysis on the min, max and median value for each type. 
+
+```{R message=FALSE, warinig = FALSE}
+
+data_clean %>%
+  group_by(Control_factor) %>%
+    dplyr::summarise(minDEP_STAT_PCT_IND=min(DEP_STAT_PCT_IND ,na.rm=TRUE),    
+    maxDEP_STAT_PCT_IND=max(DEP_STAT_PCT_IND,na.rm=TRUE),medianDEP_STAT_PCT_IND=median(DEP_STAT_PCT_IND,na.rm=TRUE))  %>%
+       arrange(desc(medianDEP_STAT_PCT_IND))   %>%
+{.}  ->DEP_STAT_PCT_IND_CONTROL
+
+DEP_STAT_PCT_IND_CONTROL
+
+```
+
+From the result, we can tell that the highest median value is in private for-profit colleges, which means that in most private for-profit colleges, the students are more likely to be financially independent. 
+
+##6.7. The Relationship between Percentage of Students Who Receive the Federal Loans and Control.<a id="6.7"></a> 
+
+To compare the percentage of students who received the federal loans in the given year in each control type, we grouped the data by the control type(private for-profit, public, private non-profit) to take a further analysis on the min, max and median value of the variable seperately. A stacked histogram is also used to generate a more visual presentation. 
+
+```{R message=FALSE, warinig = FALSE}
+
+
+data_clean %>%
+  group_by(Control_factor ) %>%
+    dplyr::summarise(minPCTFLOAN=min(PCTFLOAN ,na.rm=TRUE),    
+    maxPCTFLOAN=max(PCTFLOAN,na.rm=TRUE),medianPCTFLOAN=median(PCTFLOAN,na.rm=TRUE))  %>%
+       arrange(medianPCTFLOAN)   %>%
+{.}  ->PCTFLOAN_CONTROL
+
+PCTFLOAN_CONTROL
+
+
+#stacked histogram
+data_clean %>%
+  ggplot(aes(x=PCTFLOAN)) +
+  labs(title="Stacked histgram between Control and PCTLOAN ")+
+  geom_bar(binwidth=0.1,aes(fill=Control_factor )) + theme(plot.title = element_text(hjust = 0.5))
+
+
+```
+
+From the result,  private institutions have a much larger median value than the public institutions. With a much higher costs burden, it makes sense that the low-income students in private institutions are much more likely to seek financial aid than the students in public institutions. 
+
+From the stacked histogram, we can tell that for all three college types, the most frequent range appears between 0.6 and 0.8, which is consistent with the findings we observe in the individual variable summary section. 
+
+
+##6.8 The Relationship between Median Debts and Post-Graduation Earnings<a id="6.8"></a> 
+Next, we analyzed the relationship between the amount of the debt and post-graduation earnings. There are two variables in the dataset to summarize the median amount of debt for student body, one for students who already graduated and one for students who have not completed their study. We decided to use debt for students who have not completed their study in this problem, since it makes more sense for the purpose of prediction.
+
+
+```{r, message=FALSE}
+
+
+data_clean %>% ggplot(aes(x = WDRAW_DEBT_MDN, y = MD_EARN_WNE_P6)) + 
+                geom_jitter() +
+                geom_smooth(method = "lm", se = FALSE, col = 'red') +
+                xlab("Median Amount Debt for Students who have not completed") +
+                ylab("Earning  6 Years from Entry")
+
+data_clean %>% select(WDRAW_DEBT_MDN, MD_EARN_WNE_P6) %>%
+      na.omit() %>%
+       {.} -> earn_debt
+
+cor(earn_debt$WDRAW_DEBT_MDN,earn_debt$MD_EARN_WNE_P6)
+
+
+```
+
+First, we used a scatter plot to visualize the relationship between earnings and the amount of debt, the plot clearly shows a positive relationship. Then we further calculated pearson correlation to confirm our hypothesis. The resulting coefficient 0.44 indicates a moderate linear relationship between earnings and debt.
+
+##6.9 The Relationship between the Default Rate of Loan Repayment and Post-graduation Earnings<a id="6.9"></a> 
+For one thing, understanding the relationship between the default rate of loan repayment and post-graduation earnings can help federal financial committee to improve their decisions about loan granting. If the default rate decreases as the earnings increases, the committee may prefer to grant more financial aid to institutions whose students have higher earnings. For another, the default rate of repayment for a university can also help predict the post-graduation earnings for its students. 
+
+
+```{r, message=FALSE}
+data_clean %>% ggplot(aes(x = CDR3, y = MD_EARN_WNE_P6)) + 
+                geom_jitter() +
+                geom_smooth(method = "lm", se = FALSE, col = 'red')+
+                xlab("Three-year Cohort Default Rate") +
+                ylab("Earning  6 Years from Entry")
+
+data_clean %>% select(CDR3, MD_EARN_WNE_P6) %>%
+      na.omit() %>%
+       {.} -> earn_default
+
+cor(earn_default$CDR3,earn_default$MD_EARN_WNE_P6)
+
+```
+
+A scatter plot is created to visualize the relationship between these two variables. From the chart, we see that earnings seem to show a decreasing trend as the default rate increases, which shows a negative relationship between earnings and default rate. Then we calculated the correlation coefficient between these two variables. The resulting r = -0.33 shows that the correlation between earnings and default rate is negative but the relationship is not very strong, which may be due to the influences of some outliers. To conclude, the negative relationship between earnings and default rate of loan repayment needs extra data to validate.
+
+##6.10 The Relationship between Earning 6 Years from Entry and Degree Type<a id="6.10"></a>
+
+The higher education one receives, the higher the earning will be after graduation. This is an assumption we are making when investing in higher education. But is it really the case. In this question, we would like to study if it's worthwhile to invest in higher degree.
+```{r,message = FALSE}
+data_clean %>%
+  ggplot(aes(x=`PREDDEG_factor`,
+             y=MD_EARN_WNE_P6)) +
+  geom_boxplot(aes(fill = `PREDDEG_factor`)) +
+  xlab("Degree Type") +
+  ylab("Earning  6 Years from Entry") +
+  scale_fill_discrete(name="Degree Type")
+
+```
+From the boxplot above, we see that the higher the education, the higher the median earning 6 years after entry. Especially, a graduate-degree gives a hugh rise to one's earning.
+
+##6.11 The Relationship between Earning 6 Years from Entry and 10 Years from Entry<a id="6.11"></a>
+MD_EARN_WNE_P6 and MD_EARN_WNE_P10 are two varibles we selected to study students' post-graduation earnings. MD_EARN_WNE_P6 is the median earning for students after six years of their entry, which corresponds to two years after graduation for a four-year program. Likewise, MD_EARN_WNE_P10 is the median earning ten years after their entry, which usually corresponds to four years after graduation. These two metrics give us an idea of how much money students are making after their graduation, in both short and medium terms.
 
 In addition to these two variables, a derived variable is also calculated as the difference between  MD_EARN_WNE_P6 and MD_EARN_WNE_P10. 
 
@@ -648,275 +898,13 @@ earning_clean1[earning_clean1$years_from_entry != 'salary_increase',] %>%
 
 ```
     
-The six-year after-entry median earnings of 50% institutions is below the $25,300, while ten-year-after-entry median earning is higher by about $5,500. The histogram gives us a more clear idea of the earning distribution. Most institutions with students having a median earnings between $10,000 to $50,000 six years after entry. The distribution of ten-year-after-entry falls at the right side of the six-year distribution, which means that the earning increases as students' experience increases. Besides, the ten-year post-graduation earning has a wider spread than that of the six-years. This indicates that there is a greater gap of the earning amount among the different institutions, which can be confirmed by an increase in the standard deviation.
+The six-year after-entry median earnings of 50% institutions are below $25,300, while ten-year after-entry median earnings are higher by about $5,500. The histogram gives us a more clear idea of the earning distribution. Most institutions with students having a median earnings between $10,000 to $50,000 six years after entry. The distribution of ten-year-after-entry falls at the right side of the six-year distribution, which means that the earning increases as students' experience increases. Besides, the ten-year post-graduation earning has a wider spread than that of the six-years. This indicates that there is a greater gap of the earning amount among the different institutions, which can be confirmed by an increase in the standard deviation.
 
+##6.12 The Relationship among Predominant Degree, Control and Earning after 6 year of Entry<a id="6.12"></a> 
 
-###5.1.6 Repayment 
+The following plot shows two factor variables (predominant degree award variable and control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry).
 
-####5.1.6.1 3-year Repayment rate<a id="5.1.6.1"></a>
-The variable RPY_3YR_RT_SUPP measures the percentage of students who entered repayment from October 1, 2010 to September 30, 2011 and made progress in the following three years. Repayment rates are generally considered more sensitive than default rates(we will study later), which measures only the worst-case scenario for repayment outcomes. 
-
-```{r,message=FALSE}
-repayment_clean = na.omit(data_clean$RPY_3YR_RT_SUPP)
-summary(repayment_clean)
-qplot(repayment_clean, geom = "histogram") +
-xlab("Repayment Rate") +
-ylab("Count") +
-labs(title="Histogram for Repayment Rate") +
-theme(plot.title = element_text(hjust = 0.5))
-
-```
-
-From the summary statistics, we see that 50% institutions have more than 40% of students who were making progress in their repayment. A histogram is also plotted to show the distribution, clearly with a heavy tail. 
-
-
-####5.1.6.2 3-year Default rate<a id="5.1.6.2"></a>
-
-The three-year cohort default rate describes the repayment in the opposite of repayment rate. In this dataset, it was calculated using the cohort of borrowers who entered repayment on their federal student loans between Octorber 1, 2010 to September 30, 2011, and defaulted before September 2012. 
-
-
-```{r,message=FALSE}
-default_clean = na.omit(data_clean$CDR3)
-summary(default_clean)
-qplot(default_clean, geom = "histogram") +
-xlab("Default Rate") +
-ylab("Count") +
-labs(title="Histogram for Default Rate") +
-theme(plot.title = element_text(hjust = 0.5))
-
-summary(data_clean$RPY_3YR_RT_SUPP + data_clean$CDR3)
-```
-
-The median default rate across all universities is 13%, which means that more than 50% of the universities have more than 13 out of 100 students defaulted their loan! 
-
-
-#6. Relationship between variables<a id="6"></a>
-##6.1. The Relationship between Average Net Cost for Title IV institutions and State<a id="6.1"></a>
-
-To analyze the relationship between the average net cost for Title IV institutions and State, we grouped the data into state level to take a further analysis on each state's min, max and median value of the Average Net Cost - We would like to investigate the distribution of institutions ' average net price in each state.
-
-```{R message=FALSE, warinig = FALSE}
-
-data_clean %>%
-  group_by(STABBR_factor) %>%
-    dplyr::summarise(minNPT4_COMBINE=min(NPT4_COMBINE ,na.rm=TRUE),    
-    maxNPT4_COMBINE=max(NPT4_COMBINE,na.rm=TRUE),medianNPT4_COMBINE=median(NPT4_COMBINE,na.rm=TRUE))  %>%
-       arrange(desc(medianNPT4_COMBINE))   %>%
-{.}  ->NPT4_STATE
-
-NPT4_STATE
-
-```
-
-Based on the output, we can see that the highest median value for the avreage net price exists in DC while the lowest median value is in AS(American Samoa). Moreover, we found that the top 5 states are DC, VT, MA, NH, RI, which are the states with certain well-known educational institutions. 
-
-
-##6.2. The relationship between median debt and average net price for Title IV institutions<a id="6.2"></a>
-
-We hypothesised that the students who completed education in colleges with high costs will have a higher value of median debt. We use the following code to generate the scatterplot between these two variables to verify our hypothesis. 
-
-```{R}
-
-
-ggplot(data_clean, aes(x =NPT4_COMBINE, y = GRAD_DEBT_MDN)) + geom_point(color="red")+  geom_smooth(method = "lm", se = TRUE)+
-  labs(title="Scatterplot between median debt and average net price for Title IV institutions ") +
-    theme(plot.title = element_text(hjust = 0.5))
-      
-
-  
-```
-  
-From the scatter plot, it is obvious that the NPT4_COMBINE is in a positive linear relationship with GRAD_DEBT_MDN: the data shows an uphill pattern from left to right; As the average net price for Title IV institutions increases, the value of median debt for students who have completed the college increases as well. 
-
-##6.3. The relationship between Percentage of Pell Grant and college type(CONTROL)<a id="6.3"></a>
-
-To compare the percentage of Pell Grant in different control types, we grouped the Percentage of Pell Grant data using college type to take a further analysis on each college type's min, max and median value of Percentage of Pell Grant. 
-
-```{R message=FALSE, warinig = FALSE}
-
-data_clean %>%
-  group_by(Control_factor ) %>%
-    dplyr::summarise(minPCTPELL=min(PCTPELL ,na.rm=TRUE),    
-    maxPCTPELL=max(PCTPELL,na.rm=TRUE),medianPCTPELL=median(PCTPELL,na.rm=TRUE))  %>%
-       arrange(medianPCTPELL)   %>%
-{.}  ->PCTPELL_CONTROL
-PCTPELL_CONTROL
-
-```
-
-From the result, the private nonprofit institutions and the public institutions both have a low median values while the private for-profit institutions have a higher value. This is reasonable because the private for-profit colleges may have much higher costs than the private nonprofit and public institutions. The low-income students were more likely to seek a Pell Grant as assistance. Additionally, in some states, state financial aid may be sufficient to cover costs at community colleges; thus the students in those schools may not need to seek for additional financial aid like Pell Grant.
-
-Below is the stacked histogram between these two variables. 
-```{r}
-
-ggplot(data_clean, aes(x=PCTPELL, fill=Control_factor)) + geom_histogram(alpha=0.9, position="identity") +
-  labs(title="Stacked Histogram between PCTPELL and Control ") +
-    theme(plot.title = element_text(hjust = 0.5))
-
-
-```
-
-From the overlaying histograms, the percentages of students who received the Pell Grant for private for-profit institutions are quite frequent between 0.7 and 0.75 ; the percentages of students who receive the Pell Grant for public institutions and private nonprofit institutions are quite frequent around 0.4. The histogram for private for-profit is slightly left skewed due to small values near 0. The histogram for public and private non-profit institutions are reasonably symmetric.
-
-
-##6.4. The relationship between Percentage first-generation students and States<a id="6.4"></a>
-
-To compare the percentage of first-generation students in each states, we grouped data into the state level to take a further analysis on the min, max and median value of Percentage first-generation students on the state base. The top 5 states as well as the lowest 5 states are extracted. 
-
-```{R message=FALSE, warinig = FALSE}
-
-data_clean %>%
-  group_by(STABBR_factor ) %>%
-    dplyr::summarise(minPAR_ED_PCT_1STGEN=min(PAR_ED_PCT_1STGEN ,na.rm=TRUE),    
-    maxPAR_ED_PCT_1STGEN=max(PAR_ED_PCT_1STGEN,na.rm=TRUE),medianPAR_ED_PCT_1STGEN=median(PAR_ED_PCT_1STGEN,na.rm=TRUE))  %>%
-       arrange(medianPAR_ED_PCT_1STGEN)   %>%
-{.}  ->PAR_ED_PCT_1STGEN_STATE
-
-PAR_ED_PCT_1STGEN_STATE
-
-```
-
-The results show that the universities located in ND, SD, VT, MN and MT have the lowest percentage first-generation students, which indicates that the students in these five states would have a better family education background. The five states with the highest share of first-generation students are LA, NJ, MP, MV, and MH. 
-
-
-##6.5. The relationship between Family Income and Percentage of Pell Grant<a id="6.5"></a>
-
-We hypothesed that colleges with small value of family income would tend to have high percentages of Pell Grant. The following codes are used to generate the scatter plots between these two variables. 
-
-```{r}
-
-ggplot(data_clean, aes(x =MD_FAMINC, y = PCTPELL)) + geom_point(color="red")+  geom_smooth(method = "lm", se = TRUE)+
-  labs(title="Scatterplot between MD_FAMINC and PCTPELL ") +
-    theme(plot.title = element_text(hjust = 0.5))
-      
-```
-
-From the scatter plot, it is obvious that the MD_FAMINC is in a negative linear relationship with PCTPELL: the data shows a downhill pattern from left to right; As the MD_FAMINC increases, the value of PCTPELL decreases. It makes sense in the real world; for institutions with low percentage of students who receive the Pell Grant, the financial aid like Pell Grant may not be as necessary as they are in the institutions with high value of PCTPELL, as these college students may have enough median family income to cover their costs.  
-
-
-
-##6.6. The Relationship between the Percentage of Financially-independent Students and Control<a id="6.6"></a>
-
-To compare the percentage of financially-independent students in the institutions with different college type, we grouped the data by the control type(private for-profit, public, private nonprofit) to take a further analysis on the min, max and median value for each type. 
-
-```{R message=FALSE, warinig = FALSE}
-
-data_clean %>%
-  group_by(Control_factor) %>%
-    dplyr::summarise(minDEP_STAT_PCT_IND=min(DEP_STAT_PCT_IND ,na.rm=TRUE),    
-    maxDEP_STAT_PCT_IND=max(DEP_STAT_PCT_IND,na.rm=TRUE),medianDEP_STAT_PCT_IND=median(DEP_STAT_PCT_IND,na.rm=TRUE))  %>%
-       arrange(desc(medianDEP_STAT_PCT_IND))   %>%
-{.}  ->DEP_STAT_PCT_IND_CONTROL
-
-DEP_STAT_PCT_IND_CONTROL
-
-```
-
-From the result, we can tell the highest median value is in privately for-profit colleges, which means that in most private for-profit colleges, the students are more likely to be financially independent. 
-
-##6.7. The Relationship between Percentage of Students Who Receive the Federal Loans and Control.<a id="6.7"></a> 
-
-To compare the percentage of students who receive the federal loans in the given year in each schools control type, we grouped the data by the control type(private for-profit, public, private non-profit) to take a further analysis on the min, max and median value of the variable seperately. A stacked histogram is also used to generate a more visual presentation. 
-
-```{R message=FALSE, warinig = FALSE}
-
-
-data_clean %>%
-  group_by(Control_factor ) %>%
-    dplyr::summarise(minPCTFLOAN=min(PCTFLOAN ,na.rm=TRUE),    
-    maxPCTFLOAN=max(PCTFLOAN,na.rm=TRUE),medianPCTFLOAN=median(PCTFLOAN,na.rm=TRUE))  %>%
-       arrange(medianPCTFLOAN)   %>%
-{.}  ->PCTFLOAN_CONTROL
-
-PCTFLOAN_CONTROL
-
-
-#stacked histogram
-data_clean %>%
-  ggplot(aes(x=PCTFLOAN)) +
-  labs(title="Stacked histgram between Control and PCTLOAN ")+
-  geom_bar(binwidth=0.1,aes(fill=Control_factor )) + theme(plot.title = element_text(hjust = 0.5))
-
-
-```
-
-From the result,  private institutions have a much larger median value than the public institutions. With a much higher costs burden, it makes sense that the low-income students in private institutions are much more likely to seek financial aids than the students in public institutions. 
-
-From the stacked histogram, we can tell that for all three college types, the most frequent range appears between 0.6 and 0.8, which is consistent with the findings we observe in the individual variable summary section. 
-
-
-##6.8 The Relationship between Median Debts and Post-Graduation Earnings<a id="6.8"></a> 
-Next, we analyze the relationship between the amount of the debt and post-graduation earnings. There are two variables in the dataset to summarize the median amount of debt for student body, one for students who already graduated and one for students who have not completed their study. We decided to use debt for students who have not completed their study in this problem, since it makes more sense for the purpose of prediction.
-
-
-```{r, message=FALSE}
-
-
-data_clean %>% ggplot(aes(x = WDRAW_DEBT_MDN, y = MD_EARN_WNE_P6)) + 
-                geom_jitter() +
-                geom_smooth(method = "lm", se = FALSE, col = 'red') +
-                xlab("Median Amount Debt for Students who have not completed") +
-                ylab("Earning  6 Years from Entry")
-
-data_clean %>% select(WDRAW_DEBT_MDN, MD_EARN_WNE_P6) %>%
-      na.omit() %>%
-       {.} -> earn_debt
-
-cor(earn_debt$WDRAW_DEBT_MDN,earn_debt$MD_EARN_WNE_P6)
-
-
-```
-
-First, we used a scatter plot to visualize the relationship between earnings and the amount of debt, the plot clearly shows a positive relationship. Then we further calculated pearson correlation to confirm our hypothesis. The resulting coefficient 0.44 indicates a moderate linear relationship between earnings and debt.
-
-##6.9 The Relationship between the Default Rate of Loan Repayment and Post-graduation Earnings<a id="6.9"></a> 
-For one thing, understanding the relationship between the default rate of loan repayment and post-graduation earnings can help federal financial committee to improve their decisions about load granting. If the default rate decreases as the earnings increases, the committee may prefer to grant more financial aid to institutions whose students have higher earnings. For another, the default rate of repayment for a university can also help predict the post-graduation earnings for its students. 
-
-
-```{r, message=FALSE}
-data_clean %>% ggplot(aes(x = CDR3, y = MD_EARN_WNE_P6)) + 
-                geom_jitter() +
-                geom_smooth(method = "lm", se = FALSE, col = 'red')+
-                xlab("Three-year Cohort Default Rate") +
-                ylab("Earning  6 Years from Entry")
-
-data_clean %>% select(CDR3, MD_EARN_WNE_P6) %>%
-      na.omit() %>%
-       {.} -> earn_default
-
-cor(earn_default$CDR3,earn_default$MD_EARN_WNE_P6)
-
-```
-
-A scatter plot is created to visualize the relationship between these two variables. From the chart, we see that earnings seems to show a decreasing trend as the default rate increases, which shows a negative relationship between earnings and default rate. Then we calculate the correlation coefficient between these two variables. The resulting r = -0.33 shows that the correlation between earnings and default rate is negative but the relationship is not very strong, which may be due to the influences of some outliers. To conclude, the negative relationship between earnings and default rate of loan repayment needs extra data to validate.
-
-##6.10 The Relationship between Earning 6 Years from Entry and Degree Type<a id="6.10"></a> 
-
-The higher education one receives, the higher the earning is after graduation. This is a common assumption we are making when investing higher education, and this is it really the case. In this question, we would like to study if it's worthwhile to invest in higher degree. 
-
-
-```{r, message=FALSE}
-
-data_clean %>%
-  ggplot(aes(x=`PREDDEG_factor`,
-             y=MD_EARN_WNE_P6)) +
-  geom_boxplot(aes(fill = `PREDDEG_factor`)) +
-  xlab("Degree Type") +
-  ylab("Earning  6 Years from Entry") +
-  scale_fill_discrete(name="Degree Type")
-
-
-
-```
-
-From the boxplot above, we see that the higher the education, the higher the median earning 6 years after entry. Especially, a graduate-degree gives a hugh rise to one's earning.
-
-
-##6.11 The Relationship among Predominant Degree, Control and Earning after 6 year of Entry<a id="6.11"></a> 
-
-The following plot shows the relationship among two factor variables (predominant degree award variable and control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry).
-
-For the R code, we first grouped the dataset by PREDDEG factor and Control factor. Then, we summarized the average earnings. After that, we set the aesthetic mapping between Control_factor and PREDDEG_factor as the horizontal axis and the vertical axis. Then, we use the function geom_tile()[ggplot2 package] to create a heat map to visualize the correlation between variables. The default color scheme maps a very dark blue color for the lowest abundance values, up to a very light blue for the highest abundance values.
+For the R code, we first group the dataset by PREDDEG factor and Control factor. Then, we summarize the average earnings. After that, we set the aesthetic mapping between Control_factor and PREDDEG_factor as the horizontal axis and the vertical axis. Then, we use the function geom_tile()[ggplot2 package] to create a heat map to visualize the correlation between variables. The default color scheme maps a very dark blue color for the lowest abundance values, up to a very light blue for the highest abundance values.
 
 
 ```{r}
@@ -931,12 +919,12 @@ data_clean %>%
 
 ```
 
-Mean value of the earnings is more representative for the two categories, predominant degree and control.  According to the plot, we realized that private for-profit colleges whose predominant degree awarded is graduate degree have the lowest average earning with the minimum average value at $3100, while Public colleges whose predominant degree awarded are graduate degree has the highest average earnings with the maximum average value at $45,850.
+The mean value of the earning is more representative for the two categories: predominant degree factor and control factor. According to the plot’s color contrast, we realize that private for-profit colleges whose predominant degree awarded are certificate degree have the lowest average earning, while both the public colleges and private nonprofit colleges whose predominant degree awarded is graduate degree have the highest average earning.
 
 
-##6.12 The Relationship between Predominant Degree and Control<a id="6.12"></a> 
+##6.13 The Relationship between Predominant Degree and Control<a id="6.13"></a> 
 
-The following plot shows the relationship between two factor variables (predominant degree award variable and control variable). 
+The following plot shows the relationship between two factor variables (predominant degree variable and control variable). 
 
 For the R code, our team first set the aesthetic mapping on Control_factor as the horizontal axis. Then, we used the function geom_bar() to fill different control types using the counting values of PREDDEG, which created bars based on a grouped frequency distribution. After that, we used the function xtabs() to calculate the exact number for each predominant degree awarded by different types of colleges.
 
@@ -947,18 +935,15 @@ ggplot(aes(x=Control_factor))+
 geom_bar(aes(fill=PREDDEG_factor), position = 'dodge')+
 ggtitle("Bar plot between PREDDEG and Control Factor")
 
-```
 
-
-```{R}
 data_clean %>%
 xtabs(formula = ~PREDDEG_factor+Control_factor)
 
 ```
 
-From the graph we can see that for the public type of school, associate degree is mostly awarded and it is in the middle of the distribution, with fewer NotClassified degree and fewer graduate degree in the extremes. But the distribution is symmetric compared with the other two types. For the Private Nonprofit type of school, mostly awarded degrees (Bachelor degree and Graduate degree) are located at the right of the distribution, with fewer NotClassified degree on the left.  The distribution shows a negative skew: the awarded degrees extend to the left farther than they do to the right. For the private for-profit type of school, mostly awarded degree (Certificate degree) is on the left of the distribution, with fewer graduate degree on the right. The distribution shows a positive skew: the awarded degrees extend to the right farther than they do to the left.
+From the graph we can see that for the public schools, associate degree is mostly awarded, with fewer NotClassified degree and fewer graduate degree. But the distribution is symmetric compared with the other two types. For the private nonprofit schools, mostly awarded degrees are bachelor degree and graduate degree. The distribution shows a negative skew. For the private for-profit type of school, mostly awarded degree is certificate degree. 
 
-##6.13 The Relationship between Control and Median earnings of Students Working and Not Enrolled 6 Years after Entry<a id="6.13"></a> 
+##6.14 The Relationship between Control and Median earnings of Students Working and Not Enrolled 6 Years after Entry<a id="6.14"></a> 
 
 The following plot shows one factor variable (control variable) associated with one numeric variable (MD_EARN_WNE_P6: Median earnings of students working and not enrolled 6 years after entry).
 
@@ -971,8 +956,7 @@ We used the ggplot() function to initialize the ggplot object and declared the i
   geom_boxplot(aes(fill=Control_factor), width = 0.25, outlier.size = 1.25)+
   ggtitle("Violin plot between Control Factor and Median Earnings")
 
-```
-```{r}
+
 summary(data_clean$MD_EARN_WNE_P6[data_clean$Control_factor=="Public"])
 summary(data_clean$MD_EARN_WNE_P6[data_clean$Control_factor=="Private Nonprofit"])
 summary(data_clean$MD_EARN_WNE_P6[data_clean$Control_factor=="Private For-profit"])
@@ -980,28 +964,26 @@ summary(data_clean$MD_EARN_WNE_P6[data_clean$Control_factor=="Private For-profit
 
 All the three types of schools have far out values above, which can be explored further. Obvious differences were contained in these three boxplots. The boxplot of public college is comparatively short, while the boxplot of private nonprofit is comparatively tall. The private for-profit college has the lowest median earning.
 
-For Public type of school, the earnings has a high density around the level of $25,000. From the box plot summary, we realize that half of the public school student earnings are between  $21,880 and $30,320. Also, a larger mean value than median value indicates a positive skew distribution.
+For public type of school, the earnings has a high density around the level of $25,000. From the box plot summary, we realize that half of the public school student earnings are between $21,880 and $30,320. Also, a larger mean value than median value indicates a positive-skewed distribution.
 
-For the Private Nonprofit type of school, the earnings has a high density around the level of $31,250. From the box plot summary, we realize that half of the private nonprofit school student earnings are between $13,000 and $35,800. Also, a lower mean value than median value indicates a negative skew distribution.
+For the private nonprofit type of school, the earnings has a high density around the level of $31,250. From the box plot summary, we realize that half of the private nonprofit school student earnings are between $13,000 and $35,800. Also, a lower mean value than median value indicates a negative-skewed distribution.
 
-For the Private For-profit type of school, the earnings has a high density around the level of $18,750. The distribution is not symmetric. From the box plot summary, we realize that half of the private for-profit school student earnings are between $12,080 and $24,700. Also, a lower mean value than median value indicates a negative skew distribution.
+For the private for-profit type of school, the earnings has a high density around the level of $18,750. The distribution is not symmetric. From the box plot summary, we realize that half of the private for-profit school student earnings are between $12,080 and $24,700. Also, a lower mean value than median value indicates a negative-skewed distribution.
 
 
 #7. Findings and Conclusion<a id="7"></a> 
 
 Through the process of summarizing these variables and analyzing the relationship between these variables, we found that for federally-aided students in most colleges, around half of the students' parents did not complete colleges.The average net price costs for most institutions are falling into the range between $16000 - $20000. Among the 7703 institution samples, more than 50% of the students received a Pell Grant or Federal Loan as means of finanical support, and on average, 60% of students are financially independent. In most colleges, the students are able to reach the family income between $12000 and $18000 after they graduate.
 
-We also found that California has the most universities across the nation, with 797 institutions. In terms of predominant degrees offered, 43.2% are classified as a certificate degree predominant institution, which is the most prevalent type. 
-
-Our findings also suggest that the Title IV institutions located in DC, VT, MA, NH, RI have a relatively high amount of average net costs than those in other states. The students in private non-profit institutions and public institutions are less likely to seek a Pell Grant as financial assistance than the students in the private for-profit colleges.In most private for-profit colleges, the students are more likely to be financially independet. 
+We also found that California has the most universities across the nation, with 797 institutions. In terms of predominant degrees offered, 43.2% are classified as a certificate degree predominant institution, which is the most prevalent type. It is also suggested that the Title IV institutions located in DC, VT, MA, NH, RI have a relatively high amount of average net costs than those in other states. The students in private non-profit institutions and public institutions are less likely to seek a Pell Grant as financial assistance than the students in the private for-profit colleges.In most private for-profit colleges, the students are more likely to be financially independet. 
 
 It indicates that there exists a negative correlation between the percentage of students who receive a Pell Grant and the students' median family income; for institutions with low percentage of students who receive the Pell Grant, the financial aid like the Pell Grant may not be as necessary as they are in the institutions with high value of PCTPELL, since these college students may have sufficient family income to support their education. 
 
-As to the factors that influence post-graduation earnings, we explored the relationship between median earnings six years from entry and other six variables. The analysis suggests that there is a positive relationship between the median debt amount for students who have not completed college and post-graduation earnings. This may be due to the fact that top universities usually have higher tuition but may also indicate that students who are willing to take more debts for their college education are likely to make more money after graduation. In addition, the default rate of student loans is negatively related to post-graduation earnings. This finding is reasonable since students making more money are more likely to pay off their debt. The variable can be used as a school-level predictor to predict overall post-graduation earnings for each university. The degree type, unsurprisingly, has an impact on the earnings students are making after graduation. As the level of education increases, the post-graduate earnings also increase significantly, which suggests that investing in education is worthwhile.
+As to the factors that influence post-graduation earnings, the analysis suggests that there is a positive relationship between the median debt amount for students who have not completed college and post-graduation earnings. This may be due to the fact that top universities usually have higher tuition but may also indicate that students who are willing to take more debts for their college education are likely to make more money after graduation. In addition, the default rate of student loans is negatively related to post-graduation earnings. This finding is reasonable since students making more money are more likely to pay off their debt. 
 
-When it comes to relationship between control of institution and earning, private for-profit institutions whose predominant degree awarded is graduate degree has the lowest average earnings with the minimum average value at $3100. Public institutions whose predominant degree awarded is graduate degree has the highest average earning with the maximum average value at $45850. Although the graduate degree awarded by public colleges shows the least frequency, it contains the most value because those students (working and not enrolled 6 years after entry) graduating from public colleges holding the graduate degree show the highest average earnings compared with students holding other degrees awarded by different institutions.Also, students graduate from Private Nonprofit institution generally has a higher earning than those students graduate from other types of institutions.
+When it comes to relationship between control of institution and earning, private for-profit institutions whose predominant degree awarded is graduate degree has the lowest average earnings with the minimum average value at $3,100. Public institutions whose predominant degree awarded is graduate degree has the highest average earning with the maximum average value at $45,850. Although the graduate degree awarded by public colleges shows the least frequency, it contains the most value because those students (working and not enrolled 6 years after entry) graduating from public colleges holding the graduate degree show the highest average earnings compared with students holding other degrees awarded by different institutions.Also, students graduate from Private Nonprofit institution generally has a higher earning than those students graduate from other types of institutions.
 
-According to all analysis, we conclude that the attributes such as percentage of students who receive a Pell Grant, median earning six years from entry, amount of debt, default rate for student loans and predominant degree type can be used to predict the students' post-graudation earnings.
+According to all analysis, we conclude that the attributes such as percentage of students who receive a Pell Grant, median earning six years from entry, amount of debt, default rate for student loans and predominant degree type can be used to predict the students' post-graudation earnings in the further analysis. 
     
 
 
