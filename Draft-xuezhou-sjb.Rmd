@@ -217,7 +217,7 @@ Over the year, many students see college as an investment to help them earn more
 Our objective at this stage is to conduct an exploratory data analysis on the CollegeScore dataset, investigating the individual variables' summary statistics and the relationship between these variabls, so as to better prepare for further analaysis on the factors affecting students' post college earnings with some advanced data mining techniques. The summary statistics, dplyr function, ggplot functions as well as some visualization techniques were mainly used in this project. 
 
 
-#5. Summary of variables<a id="5"></a>
+#5. Summary of variables<a id="variablesummary"></a>
 ##5.1 Individual variable summary<a id="5.1"></a> 
 ###5.1.1 School<a id="5.1.1"></a> 
 ####5.1.1.1. State<a id="5.1.1.1"></a> 
