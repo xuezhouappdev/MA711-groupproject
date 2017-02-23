@@ -950,7 +950,7 @@ data_clean %>%
 
 ```
 
-Mean value of the earnings is more representative for the two categories, predominant degree and control According to the plot, we realized that private for-profit colleges whose predominant degree awarded is graduate degree has the lowest average earning with the minimum average value at $3100, while Public college whose predominant degree awarded is graduate degree has the highest average earnings with the maximum average value at $45,850.
+Mean value of the earning is more representative for the two categories, predominant degree factor and control factor. According to the plot’s color contrast, we realize that private for-profit college whose predominant degree award is certificate degree has the lowest average earning, while both the public college and private nonprofit college whose predominant degree award is graduate degree has the highest average earning.
 
 
 ##6.12 predominant degree + control (count)<a id="6.12"></a> 
@@ -975,7 +975,8 @@ xtabs(formula = ~PREDDEG_factor+Control_factor)
 
 ```
 
-From the graph we can see that for the public type of school, associate degree is mostly awarded and it is in the middle of the distribution, with fewer NotClassified degree and fewer graduate degree in the extremes. But the distribution is symmetric compared with the other two types. For the Private Nonprofit type of school, mostly awarded degrees (Bachelor degree and Graduate degree) are located at the right of the distribution, with fewer NotClassified degree on the left.  The distribution shows a negative skew: the awarded degrees extend to the left farther than they do to the right. For the private for-profit type of school, mostly awarded degree (Certificate degree) is on the left of the distribution, with fewer graduate degree on the right. The distribution shows a positive skew: the awarded degrees extend to the right farther than they do to the left.
+From the graph we can see that, for the public type of school, Associate degree is mostly awarded and it is in the middle of the distribution, with fewer NotClassified degree and fewer Graduate degree in the extremes. But the distribution is symmetric compared with the other two types. For the Private Nonprofit type of school, mostly awarded degrees (Bachelor degree and Graduate degree) are located at the right of the distribution, with fewer NotClassified degree on the left.  The distribution shows a negative skew: the awarded degrees extend to the left farther than they do to the right. For the Private For-profit type of school, mostly awarded degree (Certificate degree) is on the left of the distribution, with fewer Graduate degree on the right. The distribution shows a positive skew: the awarded degrees extend to the right farther than they do to the left.
+
 
 #6.13 control + earning<a id="6.13"></a> 
 
@@ -997,13 +998,14 @@ summary(data_clean$MD_EARN_WNE_P6[data_clean$Control_factor=="Private Nonprofit"
 summary(data_clean$MD_EARN_WNE_P6[data_clean$Control_factor=="Private For-profit"])
 ```
 
-All the three types of school have far out values above, which can be explored further. Obvious differences contain in these three boxplots. The boxplot of public college is comparatively short, while the boxplot of private nonprofit is comparatively tall. The private for-profit college has the lowest median earning.
+All the three types of school have far out values above, which can be explored further. Obvious differences contain in these three boxplots. The boxplot of Public college is comparatively short, while the boxplot of Private Nonprofit is comparatively tall. The Private For-profit college has the lowest median earning.
 
-For Public type of school, the earnings has a high density around the level of $25,000. From the box plot summary, we realize that half of the public school student earnings are between  $21,880 and $30,320. Also, a larger mean value than median value indicates a positive skew distribution.
+For public type of school, the earnings have a high density around the level of $25,000. From the boxplot summary, we realize that half of the public school student earnings are between $22,700 and $30,900. Also, a larger mean value than median value indicates a positive skew distribution.
 
-For the Private Nonprofit type of school, the earnings has a high density around the level of $31,250. From the box plot summary, we realize that half of the private nonprofit school student earnings are between $13,000 and $35,800. Also, a lower mean value than median value indicates a negative skew distribution.
+For the Private Nonprofit type of school, the earnings have a high density around the level of $31,250. From the boxplot summary, we realize that half of the private nonprofit school student earnings are between $25,400 and $38,100. Also, it shows a positive skew distribution with a larger mean value at $33,350 than the median value at $31,900.
 
-For the Private For-profit type of school, the earnings has a high density around the level of $18,750. The distribution is not symmetric. From the box plot summary, we realize that half of the private for-profit school student earnings are between $12,080 and $24,700. Also, a lower mean value than median value indicates a negative skew distribution.
+For the Private For-profit type of school, the earnings have a high density around the level of $18,750. The distribution is not symmetric. From the boxplot summary, we realize that half of the private for-profit school student earnings are between $17,000 and $27,300. Also, the mean value at $22,610 higher than median value indicates a positive skew distribution.
+
 
 
 #7. Findings and Conclusion<a id="7"></a> 
