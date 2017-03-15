@@ -919,7 +919,7 @@ data_clean %>%
 
 ```
 
-The mean value of the earning is more representative for the two categories: predominant degree factor and control factor. According to the plot’s color contrast, we realize that private for-profit colleges whose predominant degree awarded are certificate degree have the lowest average earning, while both the public colleges and private nonprofit colleges whose predominant degree awarded is graduate degree have the highest average earning.
+The mean value of the earning is more representative for the two categories: predominant degree factor and control factor. According to the plot???s color contrast, we realize that private for-profit colleges whose predominant degree awarded are certificate degree have the lowest average earning, while both the public colleges and private nonprofit colleges whose predominant degree awarded is graduate degree have the highest average earning.
 
 
 ##6.13 The Relationship between Predominant Degree and Control<a id="6.13"></a> 
